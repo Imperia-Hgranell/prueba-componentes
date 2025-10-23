@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build-log": "ng build > build-log.txt 2>&1"
+    "build-log": "ng build > build-log.txt 2>&1",
+    "clean-build-log": "node scripts/clean-build-log.js"
   },
   "private": true,
   "dependencies": {

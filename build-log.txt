@@ -5,7 +5,8 @@ Building entry point '@imperiascm/scp-components/imp-arrow-controls'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-arrow-controls
 
 ------------------------------------------------------------------------------
@@ -13,7 +14,8 @@ Building entry point '@imperiascm/scp-components/directives'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/directives
 
 ------------------------------------------------------------------------------
@@ -21,7 +23,8 @@ Building entry point '@imperiascm/scp-components/imp-input-calendar'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-input-calendar
 
 ------------------------------------------------------------------------------
@@ -29,7 +32,8 @@ Building entry point '@imperiascm/scp-components/imp-date-range-filter-selector'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-date-range-filter-selector
 
 ------------------------------------------------------------------------------
@@ -37,7 +41,8 @@ Building entry point '@imperiascm/scp-components/imp-progress-bar'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-progress-bar
 
 ------------------------------------------------------------------------------
@@ -45,7 +50,8 @@ Building entry point '@imperiascm/scp-components/imp-toggle'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-toggle
 
 ------------------------------------------------------------------------------
@@ -53,7 +59,8 @@ Building entry point '@imperiascm/scp-components/imp-overlay'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
 ✔ Compiling with Angular sources in Ivy partial compilation mode.
-✔ Generating FESM bundles
+- Writing FESM bundles
+✔ Writing FESM bundles
 ✔ Built @imperiascm/scp-components/imp-overlay
 
 ------------------------------------------------------------------------------
