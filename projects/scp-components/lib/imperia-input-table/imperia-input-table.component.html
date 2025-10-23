@@ -1,0 +1,175 @@
+<ng-container *ngIf="{ disabled: disabled | async } as vm">
+  <!-- OVERLAY -->
+  <ng-container *ngIf="container == 'overlay'">
+    <div class="input-icon-container ellipsis">
+      <input
+        #input
+        type="text"
+        (focus)="toggleOverlay($event, input)"
+        (click)="toggleOverlay($event, input)"
+        [value]="valueToShow"
+        [readonly]="true"
+      />
+      <div class="icons-separation">
+        <imperia-icon-button
+          *ngIf="valueToShow && dataInfo.allowDelete"
+          type="button"
+          [containerSize]="33"
+          icon="x"
+          (focus)="deleteSelection()"
+          (click)="deleteSelection()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          style="color: #0f447d !important"
+          type="button"
+          [containerSize]="33"
+          primeNGIconClass="pi-ellipsis-h"
+          (focus)="toggleOverlay($event, input)"
+          (click)="toggleOverlay($event, input)"
+        ></imperia-icon-button>
+      </div>
+    </div>
+
+    <p-overlayPanel
+      #overlay
+      [style]="containerStyle || { width: '640px', height: '360px' }"
+      styleClass="imperia-input-table-overlay"
+      (onShow)="emitResizeEvent('show'); dataInfo.overlayOpen.next(true)"
+      (onHide)="dataInfo.overlayOpen.next(false)"
+    >
+      <ng-container *ngTemplateOutlet="imperiaTable"></ng-container>
+      <div class="w-full flex justify-content-end align-items-center">
+        <imperia-icon-button
+          icon="save"
+          type="button"
+          [text]="translate.translation.IMPERIA_TABLE_INPUT.footer.accept"
+          (onClick)="confirmSelection()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          icon="x"
+          type="button"
+          [text]="translate.translation.IMPERIA_TABLE_INPUT.footer.cancel"
+          (onClick)="cancelSelection()"
+        ></imperia-icon-button>
+      </div>
+    </p-overlayPanel>
+  </ng-container>
+
+  <!-- MODAL -->
+  <ng-container *ngIf="container == 'modal'">
+    <div class="div-input" *ngIf="!vm.disabled">
+      <div
+        class="value-to-show-container icons-separation ellipsis"
+        (focus)="openModal()"
+        (click)="openModal()"
+      >
+        <ng-container
+          *ngTemplateOutlet="modalItemSelectedTemplate"
+        ></ng-container>
+      </div>
+      <div class="icons-separation">
+        <imperia-icon-button
+          *ngIf="valueToShow && dataInfo.allowDelete"
+          type="button"
+          [containerSize]="27"
+          (focus)="deleteSelection()"
+          (click)="deleteSelection()"
+          icon="x"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          type="button"
+          [containerSize]="27"
+          primeNGIconClass="pi-ellipsis-h"
+          (focus)="openModal()"
+          (click)="openModal()"
+        ></imperia-icon-button>
+      </div>
+    </div>
+
+    <div class="div-input disabled" *ngIf="vm.disabled">
+      <ng-container
+        *ngTemplateOutlet="modalItemSelectedTemplate"
+      ></ng-container>
+
+      <imperia-icon-button
+        type="button"
+        [containerSize]="27"
+        primeNGIconClass="pi-ellipsis-h"
+        [disabled]="true"
+      ></imperia-icon-button>
+    </div>
+
+    <imp-dialog
+      [visible]="(visible | async) ?? false"
+      (visibleChange)="visible.next(!visible.value)"
+      [scrollableContent]="false"
+      height="80%"
+      width="60%"
+      (onShow)="emitResizeEvent('show'); dataInfo.overlayOpen.next(true)"
+      (onClose)="dataInfo.overlayOpen.next(false)"
+      (onResizeEnd)="emitResizeEvent('onResizeEnd')"
+      (onMaximize)="emitResizeEvent('maximize')"
+      (onAccept)="confirmSelection()"
+      (onCancel)="cancelSelection()"
+    >
+      <!-- No se por que no aparece el contenido si lo pongo dentro de ng-template#content -->
+      <!-- <ng-template #content> -->
+      <ng-container *ngTemplateOutlet="imperiaTable"></ng-container>
+      <!-- </ng-template> -->
+    </imp-dialog>
+  </ng-container>
+</ng-container>
+
+<ng-template #modalItemSelectedTemplate>
+  <!-- PLANTILLA PARA CUANDO SE SELECCIONA UN OBJETO -->
+  <ng-container
+    *ngIf="itemSelectedTemplate && selection; else itemNotYetSelected"
+  >
+    <ng-container
+      *ngTemplateOutlet="
+        itemSelectedTemplate;
+        context: { $implicit: selection }
+      "
+    ></ng-container>
+  </ng-container>
+  <!-- PLANTILLA PARA CUANDO NO HAY NINGUN OBJETO SELECCIONADA -->
+  <ng-template #itemNotYetSelected>
+    <span>
+      <ng-container
+        *ngIf="noItemSelectedTemplate; else itemNotYetSelectedDefault"
+      >
+        <ng-container *ngTemplateOutlet="noItemSelectedTemplate"></ng-container>
+      </ng-container>
+      <ng-template #itemNotYetSelectedDefault>
+        {{ placeholder ?? valueToShow }}
+      </ng-template>
+    </span>
+  </ng-template>
+</ng-template>
+
+<!-- TABLE TEMPLATE -->
+<ng-template #imperiaTable>
+  <imperia-table
+    *ngIf="dataInfo$ | async as dataInfo"
+    [value]="(value$ | async) ?? []"
+    [columns]="(columns$ | async) ?? []"
+    [dataKey]="dataInfo.dataKey"
+    [disableFilters]="!dataInfo.endpoint.hasFilters"
+    [filterOnInit]="true"
+    [disableScrollEvents]="!dataInfo.scrollEvents"
+    [enableSelection]="true"
+    [enableColumnReorder]="false"
+    [enableColumnResize]="false"
+    [disableBookmark]="true"
+    [pageSize]="dataInfo.pageSize"
+    [selectionMode]="dataInfo.selectionMode"
+    [scrollHeight]="tableScrollHeight"
+    (captionVisibility)="tableCaptionVisibility = $event"
+    (onRowDblClick)="onRowDblClick($event)"
+    (onSearch)="onSearch($event)"
+    (onFilter)="onFilter($event)"
+    (onSort)="onSort($event)"
+    (onScrollComplete)="onScrollComplete($event)"
+    (selectionChange)="onSelectionChange($event)"
+  ></imperia-table>
+</ng-template>

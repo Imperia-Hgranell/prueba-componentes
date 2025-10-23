@@ -1,0 +1,29 @@
+.toggle-container {
+  width: 40px !important;
+}
+.toggle-bg {
+  border-radius: 30px;
+  height: 21px;
+  width: 40px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+
+  .toggle {
+    width: 0.9rem;
+    height: 0.9rem;
+    display: inline-block;
+    background-color: white;
+    margin: 0.1rem;
+    border-radius: 100%;
+  }
+}
+
+.toggle-disabled {
+  opacity: 0.7;
+  cursor: auto;
+}
+
+.toggle-on {
+  background-color: var(--primary);
+}

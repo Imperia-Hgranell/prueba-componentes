@@ -1,0 +1,52 @@
+table.to-copy-cells {
+  display: block;
+  position: absolute;
+  height: 0;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.overlay-container {
+  position: absolute;
+  z-index: 1;
+  transition: opacity 250ms ease-in-out;
+
+  &.loading-or-blocked {
+    opacity: 0;
+  }
+
+  &.top-left {
+    transform: translate(12px, calc(-100% + 12px));
+  }
+
+  &.top-right {
+    transform: translate(-12px, calc(-100% + 12px));
+  }
+
+  &.bottom-left {
+    transform: translate(12px, calc(100% - 12px));
+  }
+
+  &.bottom-right {
+    transform: translate(-12px, calc(100% - 12px));
+  }
+}
+
+.overlay {
+  background-color: white;
+  border: 1px solid #a19f9d;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.content-scroller {
+  overflow: auto;
+}
+
+.content {
+  height: max-content;
+  width: max-content;
+}

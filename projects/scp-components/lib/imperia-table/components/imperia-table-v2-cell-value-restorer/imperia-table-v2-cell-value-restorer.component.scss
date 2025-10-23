@@ -1,0 +1,72 @@
+.title {
+  line-height: 1rem;
+  padding: 0.5rem 0;
+  font-weight: 500;
+}
+
+.edition-info-table {
+  table-layout: fixed;
+  width: 320px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #e6e6e6;
+}
+
+.edition-info-header-row {
+  height: 29px;
+  background-color: rgb(236, 238, 240);
+  color: #505c6d;
+  font-size: 9pt;
+}
+
+.edition-info-header-cell {
+  font-weight: normal;
+  border-left: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  background-color: rgb(236, 238, 240);
+  padding: 0 0.5rem;
+  vertical-align: middle;
+  text-align: left;
+
+  &.number {
+    text-align: right;
+  }
+}
+
+.editon-info-body-row {
+  height: 34px;
+  color: rgb(33, 33, 33);
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #f6f7f8;
+  animation: fadein 0.2s ease-in-out;
+}
+
+.editon-info-body-cell {
+  border-left: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  background-color: #f6f7f8;
+  padding: 0 12px;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.number {
+    text-align: right;
+  }
+
+  &.toRestore {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

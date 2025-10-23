@@ -1,0 +1,120 @@
+<imperia-icon-button
+  type="button"
+  icon="list-edit"
+  [text]="title"
+  [title]="title"
+  [disabled]="(disabledButton | async) ?? false"
+  (onClick)="toggleModalVisibility.next(true)"
+></imperia-icon-button>
+
+<imp-dialog
+  [visible]="(modalVisible$ | async) ?? false"
+  [maximizable]="false"
+  [showCancelButton]="false"
+  height="80%"
+  width="50%"
+  maxWidth="800px"
+  [closeOnAccept]="false"
+  [acceptButtonDisabled]="(acceptButtonDisabled$ | async) ?? false"
+  (onAccept)="onAcceptModalRowsToConfigure.next()"
+  (onCancel)="onCloseRowsConfigurator()"
+>
+  <ng-template
+    #content
+    *ngIf="{
+      rowsToConfigure: rowsToConfigure$ | async,
+      isSomeRowSelected: isSomeRowSelected$ | async,
+    } as vm"
+  >
+    <imperia-table-v2
+      [columns]="COLUMNS"
+      [value]="vm.rowsToConfigure"
+      [title]="title"
+      [allowEdit]="$allowEdit()"
+      dataKey="keyValue"
+      (onCellSave)="onCellSave.next($event)"
+      [loading]="loading$ | async"
+    >
+      <imperia-table-v2-row-selection
+        (selectionChange)="selection.next($event)"
+      ></imperia-table-v2-row-selection>
+
+      <imp-menu-v2-item-group position="right">
+        <imperia-icon-button
+          *impMenuV2Item
+          type="button"
+          icon="eye"
+          [text]="showAllLabel"
+          (onClick)="showAllRows.next()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *impMenuV2Item
+          type="button"
+          icon="eye-off"
+          [text]="hideAllLabel"
+          (onClick)="hideAllRows.next()"
+        ></imperia-icon-button>
+
+        <imperia-icon-button
+          *impMenuV2Item
+          type="button"
+          [text]="resetLabel"
+          (onClick)="reset.next()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *impMenuV2Item
+          [disabled]="!vm.isSomeRowSelected"
+          type="button"
+          icon="chevron-down"
+          (onClick)="
+            move.next({
+              direction: 'down',
+              rows: vm.rowsToConfigure ?? [],
+            })
+          "
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *impMenuV2Item
+          [disabled]="!vm.isSomeRowSelected"
+          type="button"
+          icon="chevron-up"
+          (onClick)="
+            move.next({ direction: 'up', rows: vm.rowsToConfigure ?? [] })
+          "
+        ></imperia-icon-button>
+      </imp-menu-v2-item-group>
+
+      <ng-template imperiaTableBodyCell="visible" let-data>
+        <div
+          class="h-full flex justify-content-center align-items-center cell-template-padding"
+        >
+          <imperia-icon-button
+            type="button"
+            [containerSize]="34"
+            [primeNGIconClass]="
+              data.row.data.Visible ? 'pi-eye' : 'pi-eye-slash'
+            "
+            (onClick)="
+              toggleVisibility.next({
+                rows: vm.rowsToConfigure ?? [],
+                rowSelected: data.row.data,
+              })
+            "
+          ></imperia-icon-button>
+        </div>
+      </ng-template>
+
+      <!-- EXTERNAL TEMPLATES -->
+      <ng-container *ngFor="let bodyCellTemplate of bodyCellTemplates">
+        <ng-template [imperiaTableBodyCell]="bodyCellTemplate.field" let-ctx>
+          <ng-container
+            *ngTemplateOutlet="
+              bodyCellTemplate.template;
+              context: { $implicit: $any(ctx) }
+            "
+          ></ng-container>
+        </ng-template>
+      </ng-container>
+    </imperia-table-v2>
+  </ng-template>
+</imp-dialog>

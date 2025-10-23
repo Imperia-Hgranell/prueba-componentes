@@ -1,0 +1,89 @@
+<ng-container *ngIf="{ collapsed: (collapsed$ | async) ?? false } as vm">
+  <!-- ITEMS LOOP -->
+  <ng-template #menuItemsTemplate>
+    <div
+      class="imp-menu-item"
+      *ngFor="
+        let menuItem of menuItems$ | async;
+        let $first = first;
+        let $last = last
+      "
+    >
+      <div
+        *ngIf="
+          $first && vm.collapsed
+            ? false
+            : ['before', 'both'].includes(menuItem.separators)
+        "
+        class="separator mx-2"
+        [class.horizontal]="vm.collapsed"
+      ></div>
+      <ng-container *ngTemplateOutlet="menuItem.template"></ng-container>
+      <div
+        *ngIf="
+          $last && vm.collapsed
+            ? false
+            : ['after', 'both'].includes(menuItem.separators)
+        "
+        class="separator mx-2"
+        [class.horizontal]="vm.collapsed"
+      ></div>
+    </div>
+  </ng-template>
+  <!-- EXPANDED MENU -->
+  <div
+    #menuContainer
+    class="imp-menu-container"
+    [ngClass]="{
+      collapsed: vm.collapsed,
+      'border-bottom': borders == 'bottom',
+      'border-top': borders == 'top',
+      'border-both': borders == 'both',
+    }"
+  >
+    <div
+      #menuItemsWrapper
+      class="imp-menu-items-wrapper"
+      [ngClass]="{
+        collapsed: vm.collapsed,
+        'align-left': alignment == 'left',
+        'align-right': alignment == 'right',
+        'align-center': alignment == 'center',
+      }"
+    >
+      <ng-container *ngTemplateOutlet="menuItemsTemplate"></ng-container>
+    </div>
+  </div>
+  <!-- COLLAPSED MENU BUTTON -->
+  <div
+    *ngIf="vm.collapsed"
+    class="imp-collapsed-menu-button"
+    [ngClass]="{
+      'align-left': alignment == 'left',
+      'align-right': alignment == 'right',
+      'align-center': alignment == 'center',
+    }"
+  >
+    <div
+      *ngIf="['before', 'both'].includes(separators)"
+      class="separator pl-2"
+    ></div>
+    <imperia-icon-button
+      type="button"
+      [cdkMenuTriggerFor]="collapsedMenu"
+      [icon]="icon"
+      [text]="text"
+    >
+    </imperia-icon-button>
+    <div
+      *ngIf="['after', 'both'].includes(separators)"
+      class="separator pr-2"
+    ></div>
+  </div>
+  <!-- COLLAPSED MENU -->
+  <ng-template #collapsedMenu>
+    <div class="imp-menu-collapsed-items-container shadow-3" cdkMenu>
+      <ng-container *ngTemplateOutlet="menuItemsTemplate"></ng-container>
+    </div>
+  </ng-template>
+</ng-container>

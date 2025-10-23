@@ -1,0 +1,349 @@
+@if (hiddenColumnsGrouppedByTag$ | async) {}
+<!--#region BUTTON TEMPLATE -->
+<imperia-icon-button
+  type="button"
+  icon="columns-configurator"
+  [text]="TRANSLATIONS.caption.modify_columns"
+  (onClick)="modal.open()"
+></imperia-icon-button>
+<!--#endregion BUTTON TEMPLATE -->
+
+<!--#region DIALOG TEMPLATE -->
+@let modalState = (modal.state$ | async) ?? { visible: false };
+<imp-dialog
+  [visible]="modalState.visible"
+  [scrollableContent]="false"
+  [maximizable]="false"
+  [showCancelButton]="false"
+  width="75%"
+  height="90%"
+  [showAcceptButton]="false"
+  (onClose)="modal.close()"
+>
+  <div header class="dialog-title">
+    {{ TRANSLATIONS.columns_configurator.title }}
+  </div>
+  <div class="menu">
+    <div class="flex flex-1"></div>
+    <div class="separator"></div>
+    <imperia-icon-button
+      type="button"
+      [containerSize]="29"
+      icon="autorenew"
+      (onClick)="reset.next()"
+      [text]="TRANSLATIONS.columns_configurator.buttons.reset"
+    >
+    </imperia-icon-button>
+  </div>
+
+  <div class="cols-container">
+    @let columns = (columnsToConfigure$ | async) ?? [];
+    @let leftFrozenCols = (frozenLeftColumns$ | async) ?? [];
+    @let nonFrozenCols = (nonFrozenColumns$ | async) ?? [];
+    @let rightFrozenCols = (frozenRightColumns$ | async) ?? [];
+    @let hiddenColumnsGroupped =
+      (hiddenColumnsGrouppedByTag$ | async) ?? {} | entries;
+
+    <!--#region DRAG AND DROP COLUMNS -->
+    <div class="drag-columns-group">
+      <!--#region FROZEN LEFT-->
+      <section>
+        <div class="title">
+          {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns_section.frozenLeft }}
+        </div>
+        <div
+          id="leftFrozenColumns"
+          #leftFrozenColumns
+          cdkDropList
+          class="cols-drag-section"
+          #leftFrozen="cdkDropList"
+          [cdkDropListConnectedTo]="[nonFrozen, rightFrozen]"
+          [cdkDropListData]="leftFrozenCols"
+          (cdkDropListDropped)="drop.next($event)"
+        >
+          @if (leftFrozenCols.length === 0) {
+            <ng-template *ngTemplateOutlet="emptyColSection"></ng-template>
+          }
+          @for (col of leftFrozenCols; track $index; let last = $last) {
+            <div
+              cdkDrag
+              [cdkDragData]="col"
+              class="row"
+              [cdkDragDisabled]="!col.configurable"
+              [class.last]="last"
+            >
+              <div class="column name">
+                <imperia-icon-button
+                  type="button"
+                  [buttonStyle]="{ cursor: 'grab' }"
+                  cdkDragHandle
+                  [disabled]="!col.configurable"
+                  icon="drag-indicator"
+                >
+                </imperia-icon-button>
+                <span>{{ col.header }}</span>
+              </div>
+              <div class="column visibility">
+                <imperia-icon-button
+                  [disabled]="!col.configurable"
+                  [imp-tooltip]="
+                    !col.configurable
+                      ? TRANSLATIONS.columns_configurator.tooltip
+                          .columnNoEditable
+                      : ''
+                  "
+                  type="button"
+                  icon="eye"
+                  (onClick)="
+                    toggleVisibility.next({ columns, columnSelected: col })
+                  "
+                ></imperia-icon-button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+      <!--#endregion FROZEN LEFT-->
+
+      <!--#region NON FROZEN-->
+      <section>
+        <div class="title">
+          {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns_section.nonFrozen }}
+        </div>
+        <div
+          id="nonFrozenColumns"
+          #nonFrozenColumns
+          cdkDropList
+          class="cols-drag-section"
+          #nonFrozen="cdkDropList"
+          [cdkDropListConnectedTo]="[leftFrozen, rightFrozen]"
+          [cdkDropListData]="nonFrozenCols"
+          (cdkDropListDropped)="drop.next($event)"
+        >
+          @if (nonFrozenCols.length === 0) {
+            <ng-template *ngTemplateOutlet="emptyColSection"></ng-template>
+          }
+          @for (col of nonFrozenCols; track $index; let last = $last) {
+            <div cdkDrag [cdkDragData]="col" class="row" [class.last]="last">
+              <div class="column name">
+                <imperia-icon-button
+                  [buttonStyle]="{ cursor: 'grab' }"
+                  type="button"
+                  cdkDragHandle
+                  icon="drag-indicator"
+                >
+                </imperia-icon-button>
+                <span>{{ col.header }}</span>
+              </div>
+              <div class="column visibility">
+                <imperia-icon-button
+                  [disabled]="!col.configurable"
+                  [imp-tooltip]="
+                    !col.configurable
+                      ? TRANSLATIONS.columns_configurator.tooltip
+                          .columnNoEditable
+                      : ''
+                  "
+                  type="button"
+                  icon="eye"
+                  (onClick)="
+                    toggleVisibility.next({ columns, columnSelected: col })
+                  "
+                ></imperia-icon-button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+      <!--#endregion NON FROZEN-->
+
+      <!--#region FROZEN RIGHT-->
+      <section>
+        <div class="title">
+          {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns_section.frozenRight }}
+        </div>
+        <div
+          id="rightFrozenColumns"
+          #rightFrozenColumns
+          cdkDropList
+          #rightFrozen="cdkDropList"
+          class="cols-drag-section"
+          [cdkDropListConnectedTo]="[nonFrozen, leftFrozen]"
+          [cdkDropListData]="rightFrozenCols"
+          (cdkDropListDropped)="drop.next($event)"
+        >
+          @if (rightFrozenCols.length === 0) {
+            <ng-template *ngTemplateOutlet="emptyColSection"></ng-template>
+          }
+          @for (col of rightFrozenCols; track $index; let last = $last) {
+            <div cdkDrag [cdkDragData]="col" class="row" [class.last]="last">
+              <div class="column name">
+                <imperia-icon-button
+                  type="button"
+                  [buttonStyle]="{ cursor: 'grab' }"
+                  cdkDragHandle
+                  icon="drag-indicator"
+                >
+                </imperia-icon-button>
+                <span>{{ col.header }}</span>
+              </div>
+              <div class="column visibility">
+                <imperia-icon-button
+                  [disabled]="!col.configurable"
+                  [imp-tooltip]="
+                    !col.configurable
+                      ? TRANSLATIONS.columns_configurator.tooltip
+                          .columnNoEditable
+                      : ''
+                  "
+                  type="button"
+                  icon="eye"
+                  (onClick)="
+                    toggleVisibility.next({ columns, columnSelected: col })
+                  "
+                ></imperia-icon-button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+      <!--#endregion FROZEN RIGHT-->
+    </div>
+    <!--#endregion DRAG AND DROP COLUMNS -->
+
+    <!--#region HIDDEN COLUMNS-->
+    @let selectedColGroup = selectedGroup$ | async;
+
+    @if (hiddenColumnsGroupped.length === 0) {
+      <ng-template *ngTemplateOutlet="emptyColSection"></ng-template>
+    }
+    <cdk-accordion class="hidden-cols-section">
+      @for (
+        colGroup of hiddenColumnsGroupped;
+        track colGroup[0];
+        let index = $index
+      ) {
+        <cdk-accordion-item
+          #accordionItem="cdkAccordionItem"
+          class="group-section"
+          [class.h-full]="selectedColGroup === colGroup[0]"
+          [ngClass]="
+            selectedColGroup === colGroup[0]
+              ? 'overflow-auto'
+              : 'overflow-hidden'
+          "
+        >
+          <div
+            class="title-container"
+            (click)="selectedGroup.next(colGroup[0])"
+          >
+            <span class="title">
+              {{
+                colGroup[0] === "default"
+                  ? COLUMNS_CONFIGURATOR_TRANSLATIONS.columns_section.hidden
+                  : colGroup[0]
+              }}
+            </span>
+
+            <imperia-icon-button
+              [icon]="
+                selectedColGroup === colGroup[0] ? 'chevron-up' : 'chevron-down'
+              "
+            ></imperia-icon-button>
+          </div>
+          @if (selectedColGroup === colGroup[0]) {
+            <div @expandVertically class="content">
+              <ng-template
+                *ngTemplateOutlet="hiddenColumnsTableHeader"
+              ></ng-template>
+              <div class="hidden-rows-container">
+                @for (col of colGroup[1]; track $index; let last = $last) {
+                  <div
+                    @fadeInFadeOut
+                    class="row hidden-col"
+                    [class.last]="last"
+                  >
+                    <div class="column name ml-2">
+                      <span>{{ col.header }}</span>
+                    </div>
+                    <div class="column visibility">
+                      <imperia-icon-button
+                        type="button"
+                        icon="eye-off"
+                        (onClick)="
+                          toggleVisibility.next({
+                            columns,
+                            columnSelected: col,
+                          })
+                        "
+                      ></imperia-icon-button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </cdk-accordion-item>
+      }
+    </cdk-accordion>
+
+    <ng-template #hiddenColumnsTableHeader>
+      <div class="header-col-container">
+        <div>
+          {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns.header.header }}
+        </div>
+        <div>
+          {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns.addColumn.header }}
+        </div>
+      </div>
+    </ng-template>
+    <!--#endregion HIDDEN COLUMNS-->
+  </div>
+</imp-dialog>
+<!--#endregion DIALOG TEMPLATE -->
+
+<!--#region HEADER COLUMN BUTTONS TEMPLATE -->
+<ng-template #columnPositionActions let-col>
+  @if (col.configurable) {
+    <imperia-icon-button
+      type="button"
+      icon="arrow-left"
+      [text]="TRANSLATIONS.columns_configurator.buttons.moveLeft"
+      [containerSize]="29"
+      [textPosition]="'left'"
+      (onClick)="swap.next({ col, swapWith: 'previous' })"
+    ></imperia-icon-button>
+    <imperia-icon-button
+      type="button"
+      icon="arrow-right"
+      [containerSize]="29"
+      [text]="TRANSLATIONS.columns_configurator.buttons.moveRight"
+      [textPosition]="'left'"
+      (onClick)="swap.next({ col, swapWith: 'next' })"
+    >
+    </imperia-icon-button>
+  }
+</ng-template>
+
+<ng-template #columnVisibilityActions let-col>
+  <!--todo: queda buscar donde se oculta el colapsable del tooltip del header para cerrarlo cuando se hideee o se mueva la columna-->
+  @if (col.configurable) {
+    <imperia-icon-button
+      type="button"
+      icon="eye"
+      [containerSize]="29"
+      [text]="TRANSLATIONS.columns_configurator.buttons.hideColumn"
+      [textPosition]="'left'"
+      (onClick)="toggleVisibility.next({ columns, columnSelected: col })"
+    ></imperia-icon-button>
+  }
+</ng-template>
+<!--#endregion HEADER COLUMN BUTTONS TEMPLATE -->
+
+<!--#region TEMPLATES HELPERS -->
+<ng-template #emptyColSection>
+  <div @fadeInFadeOut class="empty-msg">
+    {{ COLUMNS_CONFIGURATOR_TRANSLATIONS.columns_section.emptyColumnSection }}
+  </div>
+</ng-template>
+<!--#endregion TEMPLATES HELPERS -->

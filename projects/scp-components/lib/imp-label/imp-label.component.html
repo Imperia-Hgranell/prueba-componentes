@@ -1,0 +1,54 @@
+<div
+  class="form-control-container"
+  [class.top]="labelPosition == 'top'"
+  [class.bottom]="labelPosition == 'bottom'"
+>
+  <div
+    *ngIf="label"
+    class="form-control-label"
+    [style]="labelStyle"
+    tooltip-on-hover
+  >
+    <div class="label-container">
+      <span>
+        @if (labelTemplate$ | async; as labelTemplate) {
+          <ng-container
+            *ngTemplateOutlet="labelTemplate; context: { $implicit: label }"
+          ></ng-container>
+        } @else {
+          <span>{{ label }}</span>
+        }
+        <span *ngIf="required">*</span>
+      </span>
+      <ng-container *ngIf="hasInfoDisclaimer">
+        <imperia-icon-button
+          [cdkMenuTriggerFor]="infoContainer"
+          class="info-button"
+          type="button"
+          [containerSize]="15"
+          icon="info"
+        ></imperia-icon-button>
+        <ng-template #infoContainer>
+          <ng-container *ngIf="onParentScroll$ | async"></ng-container>
+          <div class="info-container" cdkMenu>
+            <div>
+              <span class="info-title">{{ infoTitle }}</span>
+            </div>
+            <span class="info-message">{{ infoMessage }}</span>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+  <div class="form-control-input" [style]="contentStyle">
+    <div
+      class="input-container"
+      [class]="type"
+      [ngStyle]="{
+        'padding-left': label ? '0.5rem' : 0,
+      }"
+    >
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

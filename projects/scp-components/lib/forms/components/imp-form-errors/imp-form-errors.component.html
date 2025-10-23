@@ -1,0 +1,77 @@
+<ng-template #errorsTemplate imp-form-errors-template let-ctx>
+  <div class="text-center">
+    <span class="error-description mb-2" *ngFor="let error of ctx.formErrors">
+      {{ error }}
+    </span>
+  </div>
+  <div
+    class="separator horizontal my-2"
+    *ngIf="ctx.formErrors.length && ctx.controlsWithErrors.length"
+  ></div>
+  <ng-container *ngFor="let control of ctx.controlsWithErrors">
+    @if (showErrorsLabel) {
+      <imp-label
+        [label]="control.label"
+        [labelStyle]="{ width: '100%' }"
+        [contentStyle]="{ width: 'fit-content', maxWidth: '600px' }"
+      >
+        <div *ngFor="let error of control.errors">
+          <ng-container
+            *ngTemplateOutlet="errorTemplate; context: { error: error }"
+          ></ng-container>
+        </div>
+      </imp-label>
+    } @else {
+      <div *ngFor="let error of control.errors">
+        <ng-container
+          *ngTemplateOutlet="errorTemplate; context: { error: error }"
+        ></ng-container>
+      </div>
+    }
+  </ng-container>
+
+  @if (ctx.confirmMessage) {
+    <span class="confirm-message">
+      {{ ctx.confirmMessage }}
+    </span>
+  }
+</ng-template>
+
+<ng-template let-error="error" #errorTemplate>
+  <span class="error-description">
+    @switch (error.name) {
+      @case ("required") {
+        {{ "IMP_FORM_ERRORS.required" | impTranslate }}
+      }
+      @case ("email") {
+        {{ "IMP_FORM_ERRORS.email" | impTranslate }}
+      }
+      @case ("max") {
+        {{
+          "IMP_FORM_ERRORS.numbers.max"
+            | impTranslate
+              : {
+                  num: error.value.max | number: "1.0-0" : LOCALE,
+                  actual: error.value.actual | number: "1.0-0" : LOCALE,
+                }
+        }}
+      }
+      @case ("min") {
+        {{
+          "IMP_FORM_ERRORS.numbers.min"
+            | impTranslate
+              : {
+                  num: error.value.min | number: "1.0-0" : LOCALE,
+                  actual: error.value.actual | number: "1.0-0" : LOCALE,
+                }
+        }}
+      }
+      @case ("canNotBeZero") {
+        {{ "IMP_FORM_ERRORS.canNotBeZero" | impTranslate }}
+      }
+      @default {
+        {{ error.value }}
+      }
+    }
+  </span>
+</ng-template>

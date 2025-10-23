@@ -1,0 +1,370 @@
+<div
+  class="container"
+  [@componentOpenClose]="(opened$ | async) ? 'open' : 'closed'"
+>
+  <!-- HEADER -->
+  <div class="imperia-table-filter-header">
+    <div class="header-title">
+      {{ "IMPERIA_TABLE_FILTERS.headerTitle" | impTranslate }}
+    </div>
+    <imperia-icon-button
+      type="button"
+      icon="back-arrow"
+      [containerSize]="30"
+      (onClick)="toggleOpened.next()"
+    ></imperia-icon-button>
+  </div>
+  <div class="separator horizontal"></div>
+  <!-- CONFIGURATION -->
+  <ng-container>
+    <div class="configuration-container">
+      <imperia-icon-button
+        class="toggle-configuration-panel-button"
+        type="button"
+        icon="configuration"
+        [containerSize]="30"
+        [text]="
+          'IMPERIA_TABLE_FILTERS.configuration.toggleButtonText' | impTranslate
+        "
+        [active]="configurationPanelVisibility$ | async"
+        (onClick)="toggleConfigurationPanel.next()"
+      ></imperia-icon-button>
+      <div
+        class="configuration-panel-container"
+        [@panelOpenClose]="
+          (configurationPanelVisibility$ | async) ? 'open' : 'closed'
+        "
+      >
+        <div class="configuration-panel">
+          <imperia-icon-button
+            type="button"
+            [containerSize]="30"
+            [icon]="(applyFiltersAutomatically$ | async) ? 'check' : 'x'"
+            iconPosition="right"
+            containerClass="justify-content-between"
+            [text]="
+              'IMPERIA_TABLE_FILTERS.configuration.applyFiltersAutomatically'
+                | impTranslate
+            "
+            (onClick)="toggleApplyFiltersAutomatically.next()"
+          ></imperia-icon-button>
+          <imperia-icon-button
+            type="button"
+            [containerSize]="30"
+            [icon]="(crossHierarchyFilters$ | async) ? 'check' : 'x'"
+            iconPosition="right"
+            containerClass="justify-content-between"
+            [text]="
+              'IMPERIA_TABLE_FILTERS.configuration.crossHierarchyFilters'
+                | impTranslate
+            "
+            (onClick)="toggleCrossHierarchyFilters.next()"
+          ></imperia-icon-button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <div class="separator horizontal"></div>
+  <!-- FILTERS TO ADD -->
+  <ng-container *ngIf="unselectedFilters$ | async as unselectedFilters">
+    <div
+      class="filters-to-add-container"
+      #filtersToAddContainer
+      cdkMonitorSubtreeFocus
+      (cdkFocusChange)="addFilterPanelFocusChange.next($event)"
+      tabindex="0"
+    >
+      <imperia-icon-button
+        class="toggle-filters-to-add-panel-button"
+        type="button"
+        icon="plus"
+        [containerSize]="30"
+        [text]="'IMPERIA_TABLE_FILTERS.addFilter' | impTranslate"
+        [active]="addFilterPanelVisibility$ | async"
+        [disabled]="!unselectedFilters.length"
+        (onClick)="toggleAddFilterPanel.next()"
+      ></imperia-icon-button>
+      <div
+        class="filters-to-add-panel-container"
+        [@panelOpenClose]="
+          (addFilterPanelVisibility$ | async) ? 'open' : 'closed'
+        "
+      >
+        <div class="filters-to-add-searcher">
+          <imperia-icon-button
+            icon="search"
+            [containerSize]="30"
+          ></imperia-icon-button>
+          <input
+            type="text"
+            [ngModel]="filtersToAddSearch | async"
+            (ngModelChange)="filtersToAddSearch.next($event)"
+          />
+          <imperia-icon-button
+            type="button"
+            icon="x"
+            [containerSize]="30"
+            [disabled]="!(filtersToAddSearch | async)"
+            (onClick)="filtersToAddSearch.next('')"
+          ></imperia-icon-button>
+        </div>
+        <ng-container *ngIf="filtersToAdd$ | async as filtersToAdd">
+          <ng-container *ngIf="filtersToAdd.length; else noFilterToAddFound">
+            <div
+              class="filters-to-add-panel"
+              [@horizontalListElementEnterLeave]="filtersToAdd"
+            >
+              <div
+                *ngFor="let col of filtersToAdd; trackBy: filterTrackByFn"
+                class="flex align-items-center justify-content-between"
+              >
+                <imperia-icon-button
+                  type="button"
+                  icon="plus"
+                  [text]="col.header"
+                  [disabled]="col.disabledAsFilter"
+                  [containerSize]="30"
+                  containerClass="justify-content-start"
+                  (onClick)="addFilter.next(col.filterName)"
+                ></imperia-icon-button>
+                <imperia-icon-button
+                  *ngIf="col.disabledAsFilter"
+                  type="icon"
+                  icon="info"
+                  [text]="col.disabledAsFilterText"
+                  [containerSize]="30"
+                  containerClass="justify-content-start"
+                ></imperia-icon-button>
+              </div></div
+          ></ng-container>
+        </ng-container>
+        <ng-template #noFilterToAddFound>
+          <div class="no-filter-to-add-found">
+            {{ "IMPERIA_TABLE_FILTERS.noFilterToAddFound" | impTranslate }}
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+  <div class="separator horizontal"></div>
+  <!-- APPLY FILTERS MANUALLY -->
+  <ng-container
+    *ngIf="{
+      automatically: applyFiltersAutomatically$ | async,
+      alreadyApplied: toApplyAndLastAppliedAreEqual$ | async,
+      debounce: applyFiltersDebounce$ | async,
+    } as applyFiltersVM"
+  >
+    <div
+      class="apply-filters-container"
+      *ngIf="!applyFiltersVM.automatically"
+      [@horizontalElementEnterLeave]="applyFiltersVM.automatically"
+    >
+      <imperia-icon-button
+        type="button"
+        [containerSize]="30"
+        [text]="'IMPERIA_TABLE_FILTERS.applyFilters' | impTranslate"
+        [disabled]="applyFiltersVM.debounce"
+        (onClick)="applyFilters.next()"
+      >
+      </imperia-icon-button>
+      <div class="separator horizontal"></div>
+    </div>
+  </ng-container>
+  <!-- FILTERS SELECTED -->
+  <ng-container
+    *ngIf="{
+      selected: selectedFilters$ | async,
+      hierarchy: (hierarchyFilters$ | async) ?? [],
+    } as filters"
+  >
+    <div
+      class="filters-container"
+      [@horizontalListElementEnterLeave]="filters.selected"
+    >
+      <ng-container *ngIf="filtersChanges$ | async as filtersValue">
+        <ng-container
+          *ngFor="
+            let col of filters.selected;
+            let index = index;
+            trackBy: filterTrackByFn
+          "
+        >
+          <div class="filter">
+            <div class="flex justify-content-between">
+              <imperia-icon-button
+                type="button"
+                icon="x"
+                [text]="col.header"
+                [containerSize]="30"
+                (onClick)="
+                  removeFilter.next(col.filterName); col.updateFilterValue(null)
+                "
+              ></imperia-icon-button>
+              <imperia-icon-button
+                *ngIf="col.hasFilterConfigurator"
+                type="button"
+                icon="configuration"
+                [containerSize]="30"
+                [active]="col.filterConfiguratorVisibility$ | async"
+                (onClick)="col.toggleFilterConfigurator.next()"
+              ></imperia-icon-button>
+            </div>
+            <!-- STRING -->
+            <input
+              *ngIf="col.dataInfo.type == 'string'"
+              pInputText
+              type="text"
+              class="w-full"
+              (paste)="onPaste($event, col)"
+              [ngModel]="filtersValue[index].Value"
+              (ngModelChange)="col.updateFilterValue($event)"
+            />
+            <!-- STRING WITH HELP -->
+            <imp-input-help-v2
+              *ngIf="col.dataInfo.type == 'string-with-help'"
+              [async]="col.dataInfo.async"
+              [optionLabel]="col.dataInfo.optionLabel"
+              [optionValue]="col.dataInfo.optionValue"
+              [addQuotationsForExactFilter]="
+                col.dataInfo.addQuotationsForExactFilter ?? true
+              "
+              [endpoint]="col.dataInfo.endpoint"
+              [body]="col.dataInfo.body"
+              [hasFilters]="col.dataInfo.hasFilters"
+              [filters]="
+                filters.hierarchy | filter: 'Column' : col.filterName : 'not'
+              "
+              [options]="col.dataInfo.options"
+              [valueMapper]="col.dataInfo.valueMapper"
+              (onPaste)="onPaste($event, col)"
+              [ngModel]="filtersValue[index].Value"
+              (ngModelChange)="col.updateFilterValue($event)"
+            ></imp-input-help-v2>
+            <!-- SELECT -->
+            <p-dropdown
+              *ngIf="col.dataInfo.type == 'select'"
+              #dropdown
+              appendTo="body"
+              styleClass="w-full"
+              panelStyleClass="imperia-table-filters-dropdown-panel"
+              [panelStyle]="{
+                'min-width': dropdown.el.nativeElement.offsetWidth + 'px',
+              }"
+              [options]="
+                col.dataInfo.options | stringParse: col.dataInfo.keyProperty
+              "
+              [optionLabel]="col.dataInfo.labelProperty"
+              [optionValue]="col.dataInfo.keyProperty"
+              [autoDisplayFirst]="false"
+              [ngModel]="filtersValue[index].Value"
+              (ngModelChange)="col.updateFilterValue($event)"
+            ></p-dropdown>
+            <!-- BOOLEAN -->
+            <p-dropdown
+              *ngIf="col.dataInfo.type === 'boolean'"
+              appendTo="body"
+              styleClass="w-full"
+              [showClear]="true"
+              [placeholder]="' '"
+              [options]="[
+                {
+                  label:
+                    'IMPERIA_TABLE_FILTERS.types.boolean.options.1'
+                    | impTranslate,
+                  value: '1',
+                },
+                {
+                  label:
+                    'IMPERIA_TABLE_FILTERS.types.boolean.options.0'
+                    | impTranslate,
+                  value: '0',
+                },
+              ]"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="filtersValue[index].Value"
+              (ngModelChange)="col.updateFilterValue($event)"
+            ></p-dropdown>
+            <!-- DATE -->
+            <div *ngIf="col.dataInfo.type == 'date'">
+              <imp-input-filter-date
+                [col]="col"
+                (operatorChange)="col.updateFilterOperator($event)"
+                (onValueChanges)="col.updateFilterValue($event)"
+                [filterValue]="filtersValue[index].Value"
+                [filterOperator]="filtersValue[index].Operator"
+              >
+              </imp-input-filter-date>
+            </div>
+            <!-- NUMBER -->
+            <div *ngIf="col.dataInfo.type == 'number'">
+              <imp-input-filter-number
+                [col]="col"
+                (operatorChange)="col.updateFilterOperator($event)"
+                (onValueChanges)="col.updateFilterValue($event)"
+                [filterValue]="filtersValue[index].Value"
+                [filterOperator]="filtersValue[index].Operator"
+              >
+              </imp-input-filter-number>
+            </div>
+          </div>
+          <div class="filter-configuration-container">
+            <ng-container *ngIf="col.hasFilterConfigurator">
+              <div
+                [@panelOpenClose]="
+                  (col.filterConfiguratorVisibility$ | async)
+                    ? 'open'
+                    : 'closed'
+                "
+                class="filter-configuration-panel-container"
+              >
+                <div class="filter-configuration-panel">
+                  <imp-label
+                    [labelStyle]="{ minWidth: '80%' }"
+                    [contentStyle]="{ minWidth: '20%' }"
+                    [label]="
+                      'IMPERIA_TABLE_FILTERS.filter_configuration.Exclude'
+                        | impTranslate
+                    "
+                    [type]="'boolean'"
+                  >
+                    <p-inputSwitch
+                      [ngModel]="
+                        filtersValue[index].Operator === differentOperator
+                      "
+                      (ngModelChange)="
+                        col.updateFilterOperator(
+                          !!$event ? differentOperator : equalOperator
+                        )
+                      "
+                    ></p-inputSwitch>
+                  </imp-label>
+                </div>
+                <div
+                  class="separator horizontal"
+                  [style]="{ width: '100%' }"
+                ></div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+<!--#region HEADER CELL ICONS TEMPLATE -->
+<ng-template #headerCellIconsTemplate imperiaTableHeaderCellIcons let-ctx>
+  <div
+    class="icons"
+    *ngIf="{
+      isFiltered: ctx.col.isFiltered$ | async,
+    } as icons"
+  >
+    <imperia-icon-button
+      *ngIf="icons.isFiltered"
+      icon="full-filter"
+    ></imperia-icon-button>
+  </div>
+</ng-template>
+<!--#endregion HEADER CELL ICONS TEMPLATE -->

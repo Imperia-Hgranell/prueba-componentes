@@ -1,0 +1,26 @@
+.arrow__container {
+  width: fit-content;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+  .minus {
+    padding: 4px;
+    border-radius: 4px 0 0 4px;
+    &:hover {
+      background: #f2f2f2;
+    }
+  }
+
+  .plus {
+    padding: 4px;
+    border-radius: 0 4px 4px 0;
+
+    &:hover {
+      background: #f2f2f2;
+    }
+  }
+
+  .disabled {
+    cursor: not-allowed;
+  }
+}

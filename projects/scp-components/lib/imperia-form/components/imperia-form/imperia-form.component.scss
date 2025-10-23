@@ -1,0 +1,48 @@
+@media only screen and (max-width: 768px) {
+  .mobile {
+    display: flex;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .mobile {
+    display: none !important;
+  }
+}
+
+.menu {
+  display: flex;
+  height: 40px;
+  width: 100%;
+  border-top: 1px solid #d3d6da;
+  border-bottom: 1px solid #d3d6da;
+  font-size: 10.5pt;
+  font-family: "Segoe UI", "Segoe WP Light", device-segoe-light,
+    "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, "Segoe UI TT", Tahoma, Helvetica,
+    Arial, sans-serif !important;
+  font-style: normal !important;
+  color: #212121;
+}
+
+.title-content-container {
+  font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light,
+    "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, "Segoe UI Light TT", Tahoma, Helvetica,
+    Arial, sans-serif !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  font-size: 22.5pt !important;
+  margin-bottom: 5px;
+  color: #212121;
+}
+
+.form-buttons-container {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.form-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

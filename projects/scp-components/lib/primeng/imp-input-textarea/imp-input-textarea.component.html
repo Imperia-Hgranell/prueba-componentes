@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="flex">
+    <textarea
+      pInputTextarea
+      [ngModel]="vm.value"
+      (ngModelChange)="value.next($event)"
+      [disabled]="vm.disabled"
+      [style.resize]="resize"
+      [autoResize]="autoResize"
+      [style.height.px]="height"
+    ></textarea>
+    <div *ngIf="showExpandButton">
+      <imperia-icon-button
+        type="button"
+        [class.disabled]="vm.disabled"
+        [containerSize]="28"
+        [primeNGIconClass]="vm.expanded ? 'pi-minus' : 'pi-plus'"
+        (onClick)="expanded.next(!vm.expanded)"
+      ></imperia-icon-button>
+    </div>
+  </div>
+</ng-container>

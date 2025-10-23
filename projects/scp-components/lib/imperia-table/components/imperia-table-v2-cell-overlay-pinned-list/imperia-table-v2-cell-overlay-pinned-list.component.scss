@@ -1,0 +1,26 @@
+:host {
+  overflow: auto;
+}
+
+.cell-overlay-pinned-container {
+  position: relative;
+  border-bottom: 1px solid #a19f9d;
+  padding: 3rem 0.25rem 0.25rem 0.25rem;
+  min-width: min-content;
+
+  .title {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+
+  imperia-icon-button.unpin {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    z-index: 2;
+  }
+}

@@ -1,0 +1,56 @@
+<ng-template imperia-table-v3-sort-template="buttons" let-col>
+  <ng-container
+    *ngIf="{
+      direction: col.sort$ | async,
+      isSorted: col.isSorted$ | async,
+    } as sort"
+  >
+    <imperia-icon-button
+      type="button"
+      icon="arrow-up"
+      [containerSize]="29"
+      [text]="
+        (sort.direction === 'ASC'
+          ? 'IMPERIA_TABLE_V2_SORT.context_menu.header_cell.unsort'
+          : 'IMPERIA_TABLE_V2_SORT.context_menu.header_cell.sort_asc'
+        ) | impTranslate
+      "
+      [active]="sort.direction === 'ASC'"
+      [disabled]="!col.sortable"
+      [textPosition]="'left'"
+      (onClick)="sortASC.next(col)"
+    ></imperia-icon-button>
+    <imperia-icon-button
+      type="button"
+      icon="arrow-down"
+      [text]="
+        (sort.direction === 'DESC'
+          ? 'IMPERIA_TABLE_V2_SORT.context_menu.header_cell.unsort'
+          : 'IMPERIA_TABLE_V2_SORT.context_menu.header_cell.sort_desc'
+        ) | impTranslate
+      "
+      [active]="sort.direction === 'DESC'"
+      [containerSize]="29"
+      [disabled]="!col.sortable"
+      [textPosition]="'left'"
+      (onClick)="sortDESC.next(col)"
+    ></imperia-icon-button>
+  </ng-container>
+</ng-template>
+
+<ng-template imperia-table-v3-sort-template="icons" let-col>
+  <ng-container
+    *ngIf="{
+      direction: col.sort$ | async,
+    } as sort"
+  >
+    <imperia-icon-button
+      *ngIf="sort.direction === 'ASC'"
+      icon="arrow-up"
+    ></imperia-icon-button>
+    <imperia-icon-button
+      *ngIf="sort.direction === 'DESC'"
+      icon="arrow-down"
+    ></imperia-icon-button>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,77 @@
+.overlay-container {
+  position: absolute;
+  z-index: 20;
+  padding: 0.5rem;
+}
+
+.overlay {
+  position: relative;
+  background-color: white;
+  border: 1px solid #a19f9d;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  min-width: 52px;
+  min-height: 26px;
+  padding: 3rem 0.5rem 0.5rem 0.5rem;
+
+  .title {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+
+  imperia-icon-button.pin {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+  }
+}
+
+.content-scroller {
+  overflow: auto;
+}
+
+.content {
+  height: min-content;
+  width: min-content;
+}
+
+.caret {
+  position: absolute;
+  z-index: 2;
+  height: 30px;
+  width: 30px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 60%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-top: 1px solid #a19f9d;
+  border-left: 1px solid #a19f9d;
+  &.top-left {
+    top: -16px;
+    left: 15px;
+    transform: rotate(45deg);
+  }
+  &.top-right {
+    top: -16px;
+    right: 15px;
+    transform: rotate(45deg);
+  }
+  &.bottom-left {
+    bottom: -16px;
+    left: 15px;
+    transform: rotate(-135deg);
+  }
+  &.bottom-right {
+    bottom: -16px;
+    right: 15px;
+    transform: rotate(-135deg);
+  }
+}

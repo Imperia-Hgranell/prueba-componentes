@@ -1,0 +1,15 @@
+:host {
+  flex: 1 0 auto;
+}
+.imp-select-button {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 0 auto;
+  imperia-icon-button {
+    flex: 1 0 0px;
+  }
+}
+
+.vertical{
+  flex-direction: column;
+}

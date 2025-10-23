@@ -1,0 +1,172 @@
+<ng-container
+  *ngIf="{
+    disabled: (disabled$ | async) ?? false,
+    loading: (loading$ | async) ?? false,
+    allowCustomValue: (allowCustomValue | async) ?? false,
+    value: value$ | async,
+    valueToShow: valueToShow$ | async,
+    searchValue: searchValue$ | async,
+    optionsModal: (dropdownModalVisibility$ | async) ?? {
+      visible: false,
+    },
+    allowMultipleValues: (allowMultipleValues$ | async) ?? true,
+  } as vm"
+>
+  <!--#region INPUT CONTAINER-->
+  <div
+    class="imp-input-help-container"
+    [class.disabled]="vm.disabled"
+    [class.overlay-opened]="vm.optionsModal.visible"
+    #container
+  >
+    <div class="input-container" (click)="onOpenDropdownModal.next()">
+      <ng-container *ngIf="vm.allowCustomValue; else customValuesNotAllowed">
+        <input
+          (paste)="onPasteEmitter.emit($event)"
+          type="text"
+          class="input"
+          [ngModel]="vm.valueToShow"
+          (ngModelChange)="onInputValueChange.next($event)"
+          [disabled]="vm.disabled"
+          [placeholder]="placeholder"
+          [class.showing-placeholder]="!vm.valueToShow"
+        />
+      </ng-container>
+      <ng-template #customValuesNotAllowed>
+        <div
+          class="input"
+          [class.disabled]="vm.disabled"
+          [class.showing-placeholder]="!vm.valueToShow"
+        >
+          {{ vm.valueToShow || placeholder }}
+        </div>
+      </ng-template>
+    </div>
+    <imperia-icon-button
+      type="button"
+      [loading]="vm.loading"
+      [disabled]="vm.disabled"
+      [containerSize]="29"
+      [icon]="!vm.optionsModal.visible ? 'chevron-down' : 'chevron-up'"
+      (onClick)="
+        !vm.optionsModal.visible
+          ? onOpenDropdownModal.next()
+          : onCloseDropdownModal.next()
+      "
+    ></imperia-icon-button>
+    <imperia-icon-button
+      *ngIf="allowClearValue"
+      type="button"
+      icon="x"
+      imgClass="skip-selected"
+      [containerSize]="29"
+      [disabled]="!vm.value || vm.disabled"
+      (onClick)="onInputValueChange.next('')"
+    ></imperia-icon-button>
+  </div>
+  <!--#endregion INPUT CONTAINER-->
+
+  <!--#region OVERLAY TEMPLATE-->
+  <ng-template #overlay let-ctx>
+    <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+  </ng-template>
+  <!--#endregion OVERLAY TEMPLATE-->
+
+  <!--#region DROPDOWN TEMPLATE-->
+  <ng-template #dropdown>
+    <ng-container
+      *ngIf="{
+        options: dropdownVM$ | async,
+        searchValue: searchValue$ | async,
+        disabled: (disabled$ | async) ?? false,
+      } as dropdownVM"
+    >
+      <ng-container *ngIf="dropdownVM.options">
+        <div class="imp-input-help-options-container shadow-3">
+          <div *ngIf="allowSearch" class="imp-input-help-container m-2">
+            <div class="input-container">
+              <input
+                type="text"
+                class="input"
+                [ngModel]="dropdownVM.searchValue"
+                (ngModelChange)="searchValue.next($event)"
+                [disabled]="dropdownVM.disabled"
+              />
+            </div>
+            <imperia-icon-button
+              icon="search"
+              [loading]="vm.loading"
+            ></imperia-icon-button>
+            <imperia-icon-button
+              type="button"
+              icon="x"
+              [containerSize]="29"
+              [disabled]="!dropdownVM.searchValue || dropdownVM.disabled"
+              (onClick)="searchValue.next('')"
+            ></imperia-icon-button>
+          </div>
+          <div class="imp-input-help-options-wrapper">
+            <ng-container *ngTemplateOutlet="options"> </ng-container>
+            <ng-template #options>
+              <ng-container
+                *ngIf="
+                  dropdownVM.options.options.length > 0;
+                  else noOptionsTemplate
+                "
+              >
+                <cdk-virtual-scroll-viewport
+                  #virtualScrollViewport
+                  class="imp-input-help-virtual-scroll"
+                  [maxBufferPx]="600"
+                  [minBufferPx]="400"
+                  [itemSize]="29"
+                  [ngStyle]="{ height: dropdownVM.options.scrollHeight + 'px' }"
+                >
+                  <div
+                    tooltip-on-hover
+                    class="imp-input-help-option"
+                    *cdkVirtualFor="
+                      let option of dropdownVM.options.options;
+                      trackBy: trackByIndex;
+                      templateCacheSize: 0
+                    "
+                    [class.disabled]="isDisabled(option)"
+                    (click)="
+                      onSelect.next({
+                        option: option,
+                        currentValue: vm.value ?? '',
+                        currentValueToShow: vm.valueToShow ?? '',
+                      })
+                    "
+                  >
+                    @if (vm.allowMultipleValues) {
+                      <div class="mr-1">
+                        <input type="checkbox" [ngModel]="option.selected" />
+                      </div>
+                    }
+                    <span> {{ option.label }}</span>
+                  </div>
+                </cdk-virtual-scroll-viewport>
+              </ng-container>
+              <ng-template #noOptionsTemplate>
+                <ng-container *ngIf="dropdownVM.options.loading">
+                  <div class="loading-options-container">
+                    <p-skeleton height="100%" width="100%"></p-skeleton>
+                  </div>
+                </ng-container>
+                <div
+                  *ngIf="!dropdownVM.options.loading"
+                  tooltip-on-hover
+                  class="no-available-options-container"
+                >
+                  <span>{{ TRANSLATIONS.noAvailableOptions }}</span>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+  <!--#endregion DROPDOWN TEMPLATE-->
+</ng-container>

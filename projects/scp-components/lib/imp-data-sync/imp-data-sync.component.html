@@ -1,0 +1,84 @@
+<ng-template #statesTemplate>
+  <div class="separator mr-2"></div>
+  <ng-container *ngIf="dataSyncState$ | async as dataSyncState">
+    <ng-container *ngIf="dataSyncState == 'saving'">
+      <span class="pr-2 message-container">
+        {{ typedTranslateService.translation.IMPERIA_TABLE.caption.saving }}
+      </span>
+      <p-progressSpinner
+        [style]="{ width: '30px', height: '30px' }"
+      ></p-progressSpinner>
+    </ng-container>
+    <ng-container *ngIf="dataSyncState == 'saved'">
+      <span class="pr-2 message-container">
+        {{ typedTranslateService.translation.IMPERIA_TABLE.caption.saved }}
+      </span>
+      <imperia-icon-button icon="check"></imperia-icon-button>
+    </ng-container>
+    <ng-container *ngIf="dataSyncState == 'unsaved'">
+      <span class="pr-2 message-container">{{
+        typedTranslateService.translation.IMPERIA_TABLE.caption.unsaved
+      }}</span>
+      <imperia-icon-button icon="info"></imperia-icon-button>
+    </ng-container>
+    <ng-container *ngIf="dataSyncState == 'error'">
+      <span class="pr-2 message-container">{{
+        typedTranslateService.translation.IMPERIA_TABLE.caption.error
+      }}</span>
+      <imperia-icon-button icon="info"></imperia-icon-button>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #formErrorsTemplate>
+  <ng-container *ngIf="errors | async as errors">
+    <div class="text-center">
+      <span class="error-description" *ngFor="let error of errors.form">
+        {{ error }}
+      </span>
+    </div>
+    <div
+      class="separator horizontal my-2"
+      *ngIf="errors.controls.length && errors.form.length"
+    ></div>
+    <ng-container *ngFor="let control of errors.controls">
+      <imp-label
+        [label]="control.label"
+        [labelStyle]="{ width: '100%' }"
+        [contentStyle]="{ width: 'fit-content', maxWidth: '600px' }"
+      >
+        <div *ngFor="let error of control.errors">
+          <span class="error-description" [ngSwitch]="error.name">
+            <ng-container *ngSwitchCase="'required'">
+              {{ TRANSLATION.form_validation_errors.required }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'email'">
+              {{ TRANSLATION.form_validation_errors.email }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'max'">
+              {{
+                replaceMinMaxNumbers(
+                  TRANSLATION.form_validation_errors.max,
+                  error.value.actual | number: "1.0-0" : LOCALE,
+                  error.value.max | number: "1.0-0" : LOCALE
+                )
+              }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'min'">
+              {{
+                replaceMinMaxNumbers(
+                  TRANSLATION.form_validation_errors.min,
+                  error.value.actual | number: "1.0-0" : LOCALE,
+                  error.value.min | number: "1.0-0" : LOCALE
+                )
+              }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'canNotBeZero'">
+              {{ TRANSLATION.form_validation_errors.canNotBeZero }}
+            </ng-container>
+          </span>
+        </div>
+      </imp-label>
+    </ng-container>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,36 @@
+<ng-container
+  *ngIf="{
+    value: value$ | async,
+    dateStart: dateStart$ | async,
+    dateEnd: dateEnd$ | async,
+    onDateChanges: onDateChanges$ | async,
+  } as vm"
+>
+  <div class="input-date-filter-form">
+    <div class="input-label">{{ TRANSLATIONS.from }}</div>
+    <div class="input-date">
+      <imp-input-calendar
+        appendTo="body"
+        [useUtc]="true"
+        dateFormat="dd/mm/yy"
+        [firstDayOfWeek]="1"
+        [(ngModel)]="vm.dateStart"
+        (ngModelChange)="dateStartChanges.next($event)"
+      ></imp-input-calendar>
+    </div>
+  </div>
+  <div class="input-date-filter-form">
+    <div class="input-label">{{ TRANSLATIONS.to }}</div>
+    <div class="input-date">
+      <imp-input-calendar
+        appendTo="body"
+        [useUtc]="true"
+        [minDate]="vm.dateStart"
+        dateFormat="dd/mm/yy"
+        [firstDayOfWeek]="1"
+        [(ngModel)]="vm.dateEnd"
+        (ngModelChange)="dateEndChanges.next($event)"
+      ></imp-input-calendar>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,67 @@
+.cdk-overlay-pane {
+  transition-property: height, width;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.imp-dialog-wrapper {
+  position: relative;
+  background-color: white;
+  border: 1px solid #ccc;
+  height: 100%;
+  width: 100%;
+  &.dragging,
+  &.resizing {
+    user-select: none;
+  }
+  .imp-dialog-header {
+    padding-top: 0.5rem;
+    display: block;
+    height: 54px;
+    cursor: move;
+    background-color: white;
+  }
+  .imp-dialog-content {
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+  .imp-dialog-footer {
+    display: block;
+    height: 54px;
+    background-color: white;
+  }
+}
+
+.header-buttons-wrapper {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.footer-buttons-wrapper {
+  display: flex;
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+}
+
+.resize-handler {
+  position: absolute;
+  background-color: #ccc;
+  border-radius: 2px;
+  &.right {
+    cursor: ew-resize;
+    height: 40%;
+    width: 4px;
+    bottom: 30%;
+    right: 2px;
+  }
+  &.bottom {
+    cursor: ns-resize;
+    height: 4px;
+    width: 40%;
+    bottom: 2px;
+    right: 30%;
+  }
+}

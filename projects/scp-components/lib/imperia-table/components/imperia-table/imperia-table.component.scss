@@ -1,0 +1,528 @@
+/*
+ESTA HOJA DE ESTILOS TAMBIEN AFECTA AL COMPONENTE DE imperia-table-filter
+*/
+
+:host ::ng-deep cdk-virtual-scroll-viewport {
+  height: 100%;
+  &.verticalScrollDisabled {
+    .cdk-virtual-scroll-content-wrapper,
+    .cdk-virtual-scroll-spacer {
+      height: 100% !important;
+    }
+  }
+  &.horizontalScrollDisabled {
+    .cdk-virtual-scroll-content-wrapper,
+    .cdk-virtual-scroll-spacer {
+      width: 100% !important;
+    }
+  }
+}
+
+.caption-border-bottom-placeholder {
+  border-top: 1px solid #a19f9d;
+}
+
+.imperia-table-caption {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #e1dfdd;
+  border-bottom: 1px solid #a19f9d;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  background-color: transparent;
+  height: 40px;
+  min-height: 40px;
+  font-size: 10.5pt;
+  font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+    Tahoma, Helvetica, Arial, sans-serif;
+  padding: 0;
+  .title-registerName {
+    flex: 1 0 auto;
+    margin-left: 0.5rem;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+  .caption-start {
+    flex: 1 0 0px;
+  }
+}
+.imperia-table-container {
+  transition-property: height, width;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+  width: 100%;
+  position: relative;
+  overflow-y: hidden;
+  .imperia-table {
+    height: 100%;
+    width: 100%;
+    border-spacing: 0px;
+    &.resizing {
+      user-select: none;
+    }
+    &.with-footer {
+      .imperia-table-body-row:last-of-type {
+        .imperia-table-body-cell {
+          border-bottom-width: 0;
+        }
+      }
+    }
+    .imperia-table-header-row {
+      display: flex;
+      &.group {
+        height: 34px;
+      }
+      .imperia-table-header-cell {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        padding: 6px 12px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #e6e6e6;
+        border-right: 1px solid #e6e6e6;
+        font-weight: 400;
+        height: 56px;
+        color: #505c6d;
+        font-size: 9pt;
+        background-color: rgb(236, 238, 240);
+        &:first-child {
+          border-left: 1px solid #e6e6e6 !important;
+        }
+        &.cdk-table-sticky-border-elem-left {
+          border-right: 1px solid #a19f9d;
+        }
+        &.cdk-table-sticky-border-elem-right {
+          border-left: 1px solid #a19f9d;
+        }
+        .column-header-icons-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: 2px;
+          height: 100%;
+        }
+        .no-group-template-container {
+          height: 100%;
+          width: 100%;
+          padding: 6px 12px;
+          display: flex;
+          align-items: center;
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 4px;
+          background-color: transparent;
+          transition: background-color 0.5s ease-in-out;
+        }
+        &.focused {
+          &::before {
+            background-color: #00437e;
+          }
+        }
+        &.group {
+          height: 34px;
+          padding: 0px;
+        }
+        span {
+          width: 100%;
+          word-wrap: break-word;
+          white-space: pre-line;
+          text-align: left;
+          &.boolean {
+            text-align: center;
+          }
+          &.number {
+            text-align: right;
+          }
+        }
+      }
+    }
+    .imperia-table-body-row,
+    .imperia-table-footer-row {
+      display: flex;
+      height: 34px;
+      &.selected {
+        .loading-cell-container ::ng-deep p-skeleton .p-skeleton {
+          background-color: #00437e !important;
+        }
+        .imperia-table-body-cell,
+        .imperia-table-footer-cell {
+          background-color: #00437e !important;
+          color: white !important;
+          ::ng-deep .link {
+            color: white !important;
+          }
+          &.editable {
+            font-weight: normal !important;
+            color: white !important;
+            background-color: #00437e !important;
+          }
+        }
+      }
+      &.cdk-table-sticky-border-elem-bottom {
+        border-top: 1px solid #a19f9d;
+      }
+
+      .imperia-table-body-cell,
+      .imperia-table-footer-cell {
+        border-bottom: 1px solid #e6e6e6;
+        border-right: 1px solid #e6e6e6;
+        color: rgb(33, 33, 33);
+        font-size: 14px;
+        font-weight: 400;
+        background-color: #f6f7f8;
+        &:first-child {
+          border-left: 1px solid #e6e6e6 !important;
+        }
+        &.cdk-table-sticky-border-elem-left {
+          border-right: 1px solid #a19f9d;
+        }
+        &.cdk-table-sticky-border-elem-right {
+          border-left: 1px solid #a19f9d;
+        }
+        &.editable {
+          font-weight: normal !important;
+          color: rgb(33, 33, 33) !important;
+          background-color: white !important;
+        }
+        &.editable-cell__loading {
+          position: relative;
+          &::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            width: 6px;
+            top: 3px;
+            right: 3px;
+            border: 2px solid #a6e0a6;
+            border-bottom-color: transparent;
+            border-radius: 100%;
+            animation: rotation 1s linear infinite;
+          }
+        }
+        &.editable-cell__ok {
+          position: relative;
+          &::before {
+            content: "";
+            position: absolute;
+            height: 11px;
+            width: 2px;
+            background-color: #a6e0a6;
+            top: 2px;
+            right: 5px;
+            transform: rotate(45deg);
+            animation: fadeout 2s linear infinite;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            height: 5px;
+            width: 2px;
+            background-color: #a6e0a6;
+            top: 7px;
+            right: 10px;
+            transform: rotate(-45deg);
+            animation: fadeout 2s linear infinite;
+          }
+        }
+        &.editable-cell__error {
+          position: relative;
+          &::before {
+            content: "";
+            position: absolute;
+            height: 12px;
+            width: 2px;
+            background-color: red;
+            top: 2px;
+            right: 6px;
+            transform: rotate(45deg);
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            height: 12px;
+            width: 2px;
+            background-color: red;
+            top: 2px;
+            right: 6px;
+            transform: rotate(-45deg);
+          }
+        }
+        &.editing {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+        }
+        :focus {
+          outline: none;
+          box-shadow: none;
+        }
+        .cell-content-container {
+          height: 100%;
+          .no-template-container {
+            height: 100%;
+            width: 100%;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            &.boolean {
+              justify-content: center;
+            }
+            &.number {
+              justify-content: flex-end;
+            }
+          }
+        }
+        span {
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        input[type="checkbox"] {
+          height: 14px;
+          width: 14px;
+        }
+        ::ng-deep {
+          input {
+            height: 100%;
+            width: 100%;
+            border: none !important;
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+          p-dropdown,
+          .p-dropdown {
+            height: 100%;
+            width: 100%;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0;
+            span {
+              text-align: center;
+              margin: auto;
+            }
+          }
+        }
+
+        .cell-margin {
+          margin: 0 12px;
+        }
+      }
+    }
+  }
+}
+
+.loading-cell-effect-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border: 4px solid #f6f7f8;
+  background: rgb(236, 238, 240);
+  .loading-cell-effect {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(236, 238, 240, 1) 0%,
+      rgba(246, 247, 248, 1) 40%,
+      rgba(246, 247, 248, 1) 60%,
+      rgba(236, 238, 240, 1) 100%
+    );
+    animation: loading-cell-bg 1s ease-in-out infinite;
+  }
+}
+
+.fill-column {
+  flex: 1 100 0px !important;
+  padding: 0 !important;
+}
+
+:host ::ng-deep {
+  .p-menubar {
+    color: rgb(33, 33, 33) !important;
+    border: 0 !important;
+    border-radius: 0;
+    background-color: transparent;
+    height: 38px;
+    font-size: 10.5pt;
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+      Tahoma, Helvetica, Arial, sans-serif;
+    padding: 0;
+    .p-menuitem-link {
+      max-height: 38px;
+      &:hover {
+        background-color: #d9f0f2 !important;
+      }
+      &:focus {
+        box-shadow: none !important;
+      }
+      &:active,
+      &.editingActive {
+        background-color: #a4dce0 !important;
+      }
+    }
+    .p-menuitem-icon {
+      color: var(--teal-500) !important;
+    }
+  }
+  .p-component {
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+      Tahoma, Helvetica, Arial, sans-serif;
+  }
+  .p-inputtext {
+    padding: 0.2rem;
+    border-radius: 0;
+  }
+  .active {
+    background-color: #a4dce0 !important;
+  }
+  .imperia-table-body-cell-calendar {
+    height: 100%;
+  }
+
+  .p-overlaypanel .p-overlaypanel-content {
+    padding: 0;
+  }
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  padding: 0 !important;
+  border: none;
+  max-width: 0px;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+  margin: 0;
+  height: 38px;
+
+  &.show {
+    margin: 0 0.5rem;
+    max-width: 200px;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .search-bar {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    font-size: 10.5pt;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.context-menu-item {
+  display: flex;
+  padding: 5px 10px;
+  line-height: 30px;
+  cursor: pointer;
+  color: #000;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fff;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+  &.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    &:hover {
+      background-color: #fff;
+    }
+    .context-menu-icon {
+      color: #ccc;
+    }
+  }
+}
+
+.context-menu-icon {
+  display: grid;
+  place-items: center;
+  margin-right: 5px;
+}
+
+@keyframes loading-cell-bg {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+//Change ICON color to white when row is selected
+:host ::ng-deep .imperia-table-body-row {
+  &.selected {
+    .imperia-table-body-cell {
+      img[src$=".svg"] {
+        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(1%)
+          hue-rotate(137deg) brightness(103%) contrast(101%);
+      }
+    }
+  }
+}
+//Change ICON color to white when footer row is selected
+:host ::ng-deep .imperia-table-footer-row {
+  &.selected {
+    .imperia-table-footer-cell {
+      img[src$=".svg"] {
+        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(1%)
+          hue-rotate(137deg) brightness(103%) contrast(101%);
+      }
+    }
+  }
+}
+
+.cdk-drop-list-dragging {
+  cursor: grabbing;
+}
+
+.cdk-drag:not(.cdk-drag-disabled) {
+  cursor: grab;
+}

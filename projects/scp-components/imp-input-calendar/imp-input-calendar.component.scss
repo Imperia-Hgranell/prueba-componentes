@@ -1,0 +1,6 @@
+::ng-deep.p-datepicker {
+  width: 350px !important;
+}
+.invalid-date ::ng-deep.p-calendar input {
+  background-color: lightcoral;
+}

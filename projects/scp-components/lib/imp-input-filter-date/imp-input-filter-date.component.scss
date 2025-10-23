@@ -1,0 +1,42 @@
+input,
+p-calendar ::ng-deep span input,
+p-dropdown ::ng-deep .p-dropdown {
+    width: 100%;
+    height: 29px;
+    padding: 0.25rem 0.5rem;
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma, Helvetica, Arial, sans-serif;
+    border: 1px solid rgb(141, 149, 160);
+    border-radius: 0;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 10.5pt !important;
+    color: #212121;
+
+    &:focus,
+    &.p-focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    &.operator {
+        border-left: none;
+    }
+
+    &.operator-left {
+        border-right: none;
+    }
+}
+
+p-calendar ::ng-deep span input,
+imp-input-number ::ng-deep p-inputnumber ::ng-deep span input {
+    border-left: none;
+}
+
+p-dropdown ::ng-deep .p-dropdown {
+    padding: 0;
+    border-radius: 0;
+
+    span {
+        padding: 0.25rem 0.5rem;
+    }
+}

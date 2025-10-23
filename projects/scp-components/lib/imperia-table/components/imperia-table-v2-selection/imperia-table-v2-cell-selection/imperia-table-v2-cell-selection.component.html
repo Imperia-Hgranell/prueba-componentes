@@ -1,0 +1,181 @@
+<ng-container
+  *ngIf="{
+    selection: (selection$ | async)!,
+    copying: (copyingCells$ | async)!,
+    selectedCellsCount: (selectedCellsCount$ | async)!,
+  } as vm"
+>
+  <ng-template #copyTemplate imperiaTableBodyCellContextMenuTemplate let-ctx>
+    <!-- COPY ROW -->
+    <ng-container
+      *ngTemplateOutlet="
+        copyButtonTemplate;
+        context: {
+          $implicit: vm,
+          config: {
+            text: 'IMPERIA_TABLE.cells.context_menu.copy_cell' | impTranslate,
+            items: {
+              col: ctx.col,
+              row: ctx.row,
+            },
+            from: 'cell',
+          },
+        }
+      "
+    ></ng-container>
+    <div class="separator horizontal my-1"></div>
+    <!-- COPY SELECTED ROWS -->
+    <ng-container
+      *ngTemplateOutlet="
+        copyButtonTemplate;
+        context: {
+          $implicit: vm,
+          config: {
+            text:
+              !!vm.copying.state && vm.copying.from == 'selection'
+                ? ('IMPERIA_TABLE.cells.context_menu.copying_selection'
+                  | impTranslate
+                    : {
+                        totalCellsToCopy: vm.copying.totalCellsToCopy,
+                      })
+                : ('IMPERIA_TABLE.cells.context_menu.copy_selection'
+                  | impTranslate
+                    : {
+                        selectedCellsNumber: vm.selectedCellsCount,
+                      }),
+            items: vm.selection,
+            from: 'selection',
+          },
+        }
+      "
+    ></ng-container>
+  </ng-template>
+
+  <ng-template
+    #copyButtonTemplate
+    imperiaTableV2CellSelectionContextMenuButtonTemplate
+    let-ctx
+    let-config="config"
+  >
+    <imperia-icon-button
+      type="button"
+      [icon]="
+        ctx.copying.result == null
+          ? 'copy'
+          : ctx.copying.from == config.from
+            ? ctx.copying.result
+              ? 'check'
+              : 'x'
+            : null
+      "
+      [containerSize]="29"
+      [loading]="!!ctx.copying.state && ctx.copying.from == config.from"
+      [disabled]="
+        ctx.copying.state ||
+        !ctx.selection.size ||
+        (ctx.copying.result != null && ctx.copying.from == config.from)
+      "
+      [text]="config.text"
+      (onClick)="
+        onCopyCells.next({
+          items: config.items,
+          from: config.from,
+        })
+      "
+    ></imperia-icon-button>
+  </ng-template>
+
+  <table #tableToCopyCells class="to-copy-cells">
+    <ng-container *ngIf="tableToCopyCellsVM$ | async as tableToCopyCellsVM">
+      <ng-container *ngIf="tableToCopyCellsVM.from != null">
+        <tr *ngIf="rowToCopyRendered$ | async as row">
+          <td
+            *ngFor="
+              let col of tableToCopyCellsVM.columns;
+              let colIndex = index;
+              trackBy: table.colTrackByFn
+            "
+            [attr.data-field]="col.field"
+          >
+            <ng-container
+              *ngIf="vm.selection.get(row.dataKeyValue)?.includes(col.field)"
+            >
+              <ng-container
+                *ngIf="{
+                  col: col,
+                  row: row,
+                  cell: row.cells[col.field],
+                } as ctx"
+              >
+                <ng-template
+                  *ngTemplateOutlet="
+                    ctx.col.bodyCellTemplate ?? table.bodyCellContentTemplate;
+                    context: { $implicit: $any(ctx) }
+                  "
+                ></ng-template>
+              </ng-container>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </table>
+</ng-container>
+
+<ng-template #overlay let-ctx>
+  <!-- cdkDrag
+  cdkDragPreviewContainer="parent"
+  cdkDragBoundary=".filters-table-container" -->
+  <div
+    *ngIf="showOverlay"
+    class="overlay-container"
+    [class.loading-or-blocked]="loadingOrBlocked$ | async"
+    [class]="ctx.name"
+    [style.top.px]="ctx.top"
+    [style.left.px]="ctx.left"
+    [style.bottom.px]="ctx.bottom"
+    [style.right.px]="ctx.right"
+  >
+    <div class="overlay">
+      <div @fadeIn *ngIf="!ctx.withContent" class="flex">
+        <ng-container
+          *ngTemplateOutlet="
+            (contextTemplate$ | async) ?? defaultButtonTemplate;
+            context: {
+              $implicit: { open: openContentTemplate(ctx) },
+            }
+          "
+        ></ng-container>
+        <ng-template #defaultButtonTemplate>
+          <imperia-icon-button
+            [containerSize]="24"
+            type="button"
+            icon="list-edit"
+            (onClick)="ctx.withContent = true"
+          ></imperia-icon-button>
+        </ng-template>
+      </div>
+      <div
+        [@expandFadeInCollapse]="ctx.withContent ? 'expanded' : 'collapsed'"
+        class="content-scroller"
+        [style.max-height.px]="ctx.maxHeight - 16"
+        [style.max-width.px]="ctx.maxWidth - 16"
+      >
+        <div class="content">
+          <ng-container
+            *ngTemplateOutlet="
+              (contentTemplate$ | async) ??
+                (defaultContentTemplate$ | async) ??
+                noContentTemplate;
+              context: {
+                $implicit: { open: openContentTemplate(ctx) },
+              }
+            "
+          ></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noContentTemplate> </ng-template>

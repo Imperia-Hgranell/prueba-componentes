@@ -1,0 +1,69 @@
+<ng-container
+  *ngIf="{
+    modal: (modal.state$ | async),
+    request: (onDelete$.state$| async),
+  } as states"
+>
+  <imp-dialog
+    [visible]="withConfirmation && states.modal?.visible ?? false"
+    [maximizable]="false"
+    [closable]="false"
+    (onAccept)="accept()"
+    (onCancel)="cancel()"
+    (onClose)="modal.close()"
+  >
+    <div header class="font-bold p-2">
+      {{ translation.modalTitle }}
+    </div>
+    <div class="pt-0 px-2 pb-2">
+      {{ confirmationMessage ?? translation.confirmationMessage }}
+    </div>
+  </imp-dialog>
+  <imp-dialog
+    [visible]="
+      states.request?.ok === true && !!(result | async)?.params?.withDialog
+    "
+    [maximizable]="false"
+    [closable]="false"
+    [showCancelButton]="false"
+    (onClose)="modal.close()"
+  >
+    <div header class="font-bold p-2">
+      {{ translation.modalTitle }}
+    </div>
+    <div class="pt-2">
+      {{ translation.deletionSuccessMessage }}
+    </div>
+  </imp-dialog>
+  <imp-dialog
+    [visible]="
+      states.request?.ok === false && !!(result | async)?.params?.withDialog
+    "
+    [maximizable]="false"
+    [closable]="false"
+    (onClose)="onDelete$.reset()"
+  >
+    <div header class="font-bold p-2">
+      {{ translation.modalTitle }}
+    </div>
+    <div class="pt-2">
+      {{ translation.deletionErrorMessage }}
+    </div>
+  </imp-dialog>
+  <imp-dialog
+    [visible]="
+      states.request?.canceled === true && !!(_cancel | async)?.withDialog
+    "
+    [maximizable]="false"
+    [closable]="false"
+    [showCancelButton]="false"
+    (onClose)="onDelete$.reset()"
+  >
+    <div header class="font-bold p-2">
+      {{ translation.modalTitle }}
+    </div>
+    <div class="pt-2">
+      {{ translation.deletionCancelMessage }}
+    </div>
+  </imp-dialog>
+</ng-container>

@@ -1,0 +1,2152 @@
+<ng-container
+  *ngIf="{ loading: (loading$ | async)!, blocked: (blocked$ | async)! } as vm"
+>
+  <div
+    #container
+    class="component-container"
+    [ngClass]="{
+      'is-shift-pressed': isShiftPressed$ | async,
+    }"
+    [imp-loading-blocker]="vm.blocked.state"
+  >
+    <ng-container *ngIf="{ pasting: pasting$ | async } as blockerMsgVM">
+      <span imp-loading-blocker-msg-element style="width: 33%">
+        <ng-container
+          *ngIf="blockerMsgVM.pasting && vm.blocked.from === 'paste'"
+        >
+          <imp-progress-bar
+            [label]="
+              'IMPERIA_TABLE.blocked_messages.paste'
+                | impTranslate
+                  : {
+                      current:
+                        blockerMsgVM.pasting.current + 1 >
+                        blockerMsgVM.pasting.count
+                          ? blockerMsgVM.pasting.count
+                          : blockerMsgVM.pasting.current + 1,
+                      count: blockerMsgVM.pasting.count,
+                    }
+            "
+            [current]="blockerMsgVM.pasting.current"
+            [total]="blockerMsgVM.pasting.count"
+          ></imp-progress-bar>
+        </ng-container>
+        <ng-container *ngIf="vm.blocked.from === 'outside'">
+          <ng-container
+            *ngTemplateOutlet="
+              outsideBlockerTemplate?.template ?? noOutsideBlockerTemplate
+            "
+          ></ng-container>
+          <ng-template #noOutsideBlockerTemplate>
+            {{ vm.blocked.msg }}
+          </ng-template>
+        </ng-container>
+      </span>
+    </ng-container>
+
+    <div
+      *ngIf="
+        (captionMenuVisible$ | async) ||
+        title ||
+        addAllowed ||
+        editAllowed ||
+        searchAllowed
+      "
+      class="imperia-table-caption"
+    >
+      <imp-menu-v2 #captionMenu>
+        <imp-menu-v2-item-group>
+          <ng-container
+            *ngIf="{
+              searchBarVisible: (searchBarIsVisible$ | async) ?? false,
+              clearButtonVisible: (clearButtonIsVisible$ | async) ?? false,
+              searchBarValue: onSearchChanges$ | async,
+              editMode: (editMode$ | async) ?? false,
+            } as captionStartVM"
+          >
+            <ng-container *ngIf="title">
+              <div
+                *impMenuV2Item="
+                  '';
+                  name: 'title';
+                  collapseOrder: 0;
+                  neverCollapse: true
+                "
+                class="title-container"
+              >
+                <span tooltip-on-hover>{{ title }}</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="searchAllowed">
+              <div
+                *impMenuV2Item="
+                  '';
+                  name: 'search';
+                  collapseOrder: 0;
+                  neverCollapse: true
+                "
+                class="search-container"
+                cdkMonitorSubtreeFocus
+                (cdkFocusChange)="onSearchBarFocusChange.next($event)"
+                tabindex="0"
+              >
+                <imperia-icon-button
+                  type="button"
+                  icon="search"
+                  [active]="captionStartVM.searchBarVisible"
+                  (onClick)="openSearchBar.next(searchBar)"
+                ></imperia-icon-button>
+                <div
+                  class="search-bar-collapser"
+                  [ngClass]="{
+                    visible: captionStartVM.searchBarVisible,
+                  }"
+                >
+                  <input
+                    #searchBar
+                    class="search-bar"
+                    type="text"
+                    [placeholder]="
+                      'IMPERIA_TABLE.caption.search_bar_placeholder'
+                        | impTranslate
+                    "
+                    [ngModel]="captionStartVM.searchBarValue"
+                    (ngModelChange)="onSearch.next($event)"
+                  />
+                  <imperia-icon-button
+                    *ngIf="captionStartVM.clearButtonVisible"
+                    type="button"
+                    icon="x"
+                    [disabled]="!captionStartVM.searchBarValue"
+                    (onClick)="clearSearchBar.next(searchBar)"
+                  ></imperia-icon-button>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container
+              *ngIf="{
+                active: adding | async,
+                loading: addButtonLoading | async,
+              } as addVM"
+            >
+              <ng-container *ngIf="addAllowed">
+                <imperia-icon-button
+                  *impMenuV2Item="''; name: 'add'; collapseOrder: 0"
+                  type="button"
+                  icon="plus"
+                  [active]="addVM.active"
+                  [loading]="addVM.loading"
+                  [disabled]="addVM.active"
+                  [text]="'IMPERIA_TABLE.caption.add_row_m' | impTranslate"
+                  (onClick)="onClickAddButtonEmitter.emit()"
+                ></imperia-icon-button>
+                <div class="separator"></div>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="editAllowed">
+              <imperia-icon-button
+                *impMenuV2Item="''; name: 'edit'; collapseOrder: 0"
+                type="button"
+                icon="list-edit"
+                [text]="'IMPERIA_TABLE.caption.enter_edit_mode' | impTranslate"
+                [active]="captionStartVM.editMode"
+                (onClick)="editMode.next(!captionStartVM.editMode)"
+              ></imperia-icon-button>
+              <div class="separator"></div>
+            </ng-container>
+            <ng-container *ngIf="deleteAllowed">
+              <ng-container
+                *ngIf="
+                  imperiaTableV2DeletionComponent | async as deletionComponent
+                "
+              >
+                <imperia-icon-button
+                  *impMenuV2Item="''; name: 'delete'; collapseOrder: 0"
+                  type="button"
+                  icon="trash"
+                  [loading]="deletionComponent.loading$ | async"
+                  [disabled]="deletionComponent.disabled$ | async"
+                  [text]="'IMPERIA_TABLE.caption.delete' | impTranslate"
+                  (onClick)="deletionComponent.delete()"
+                ></imperia-icon-button>
+                <div class="separator"></div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </imp-menu-v2-item-group>
+
+        <imp-menu-v2-item-group
+          position="right"
+          collapsedBtnIcon="configuration"
+        >
+          <ng-container *ngIf="adjustColumnsToContentAllowed$ | async">
+            <ng-container
+              *ngIf="
+                adjustColumnsToContentFn$ | async as adjustColumnsToContentFn
+              "
+            >
+              <imperia-icon-button
+                *impMenuV2Item="''; name: 'adjustColumnsToContentBtn'"
+                type="button"
+                [text]="
+                  'IMPERIA_TABLE.caption.adjust_columns_to_content'
+                    | impTranslate
+                "
+                (onClick)="adjustColumnsToContentFn()"
+              ></imperia-icon-button>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="hasColumnsConfigurator$ | async">
+            <ng-content
+              *impMenuV2Item="''; name: 'columnsConfigurator'"
+              select="imperia-table-v3-columns-configurator"
+            ></ng-content>
+          </ng-container>
+          <ng-container *ngIf="hasRowsConfigurator$ | async">
+            <ng-content
+              *impMenuV2Item="''; name: 'rowsConfigurator'"
+              select="imperia-table-v2-rows-configurator"
+            ></ng-content>
+          </ng-container>
+          <ng-container *ngIf="hasImperiaTableFilterV2$ | async">
+            <imperia-icon-button
+              *impMenuV2Item="
+                '';
+                name: 'openFilters';
+                collapseOrder: 0;
+                neverCollapse: true
+              "
+              type="button"
+              icon="filter"
+              [active]="filtersAreVisible$ | async"
+              (onClick)="toggleFilters.next()"
+            ></imperia-icon-button>
+          </ng-container>
+          <!-- <imperia-icon-button
+          *impMenuV2Item="''; name: 'toggleRowspan'"
+          type="button"
+          icon="plus"
+          [active]="rowspanEnabled$ | async"
+          (onClick)="toggleRowspan.next()"
+        ></imperia-icon-button> -->
+        </imp-menu-v2-item-group>
+      </imp-menu-v2>
+    </div>
+    <ng-container
+      *ngIf="{
+        editMode: editMode$ | async,
+        hasFilters: hasImperiaTableFilterV2$ | async,
+        hasRowSelection: hasRowSelection$ | async,
+        isRowSelectedFn: (isRowSelectedFn$ | async)!,
+        hasCellSelection: hasCellSelection$ | async,
+        isCellSelectedFn: (isCellSelectedFn$ | async)!,
+        imperiaTableV2CellSelectionComponent:
+          imperiaTableV2CellSelectionComponent | async,
+        lastCellClicked: lastCellClicked$ | async,
+        hasSelection: hasSelection$ | async,
+        hasRowContextMenuCustomButtons: hasRowContextMenuCustomButton$ | async,
+        hasHead: hasSomeHeader$ | async,
+        hasRowDetail: hasRowDetail$ | async,
+        rowDetail: imperiaTableV2RowDetail | async,
+        frozenLeftCellsTemplate: frozenLeftCellsTemplate$ | async,
+        unfrozenCellsTemplate: unfrozenCellsTemplate$ | async,
+        frozenRightCellsTemplate: frozenRightCellsTemplate$ | async,
+        withRowspan: rowspanEnabled$ | async,
+        hasReorder: hasReorder$ | async,
+      } as tableVM"
+    >
+      <!-- BEFORE HEADERS NG CONTENT -->
+      <div class="before-headers">
+        <ng-content select="[before-headers]"></ng-content>
+      </div>
+      <ng-container
+        *ngIf="{
+          orderedColumns: orderedColumns$ | async,
+          paginatedColumns: paginatedColumns$ | async,
+          rowSelection: rowSelection$ | async,
+          cellSelection: cellSelection$ | async,
+          focusedColumnField: focusedColumnField$ | async,
+          focusedRowDataKeyValue: focusedRowDataKeyValue$ | async,
+        } as scrollVM"
+      >
+        @let viewport = viewport$ | async;
+        <div
+          #filtersTableContainer
+          class="filters-table-container"
+          imp-resize-events
+          (onWidthChange)="_filtersTableContainerWidthChange.next($event)"
+          (onHeightChange)="_filtersTableContainerHeightChange.next($event)"
+          (onSizeChange)="_filtersTableContainerSizeChange.next($event)"
+        >
+          <ng-container #lastCellClickedContextMenuVcr></ng-container>
+          <ng-container #cellOverlayVcr></ng-container>
+          <ng-content select="imperia-table-filter-v2"></ng-content>
+          <table
+            #table
+            class="imperia-table"
+            [ngClass]="{
+              'filters-opened': filtersAreVisible$ | async,
+              'without-headers': !tableVM.hasHead,
+            }"
+            cdkVirtualScrollingElement
+            (scroll)="onScroll.next(table)"
+            cdkMonitorSubtreeFocus
+            (cdkFocusChange)="onFocusChange.next($event)"
+            tabindex="0"
+            imp-resize-events
+            (onWidthChange)="_tableWidthChange.next($event)"
+            (onHeightChange)="
+              _tableHeightChange.next($event); viewport?.checkViewportSize()
+            "
+            (onSizeChange)="_tableSizeChange.next($event)"
+          >
+            <!-- HEAD -->
+            <thead
+              *ngIf="tableVM.hasHead"
+              [ngClass]="{
+                horizontalScrollDisabled: horizontalScrollDisabled,
+              }"
+              imp-resize-events
+              (onHeightChange)="_headHeightChange.next($event)"
+            >
+              <ng-container
+                *ngIf="scrollVM.orderedColumns && scrollVM.paginatedColumns"
+              >
+                <!-- COLUMNS GROUPS -->
+                <tr
+                  *ngFor="
+                    let colGroupRowIndex of scrollVM.orderedColumns
+                      .columnsGroupsRowsCount
+                  "
+                  [@horizontalElementEnterLeave]
+                  class="imperia-table-columns-groups-row"
+                >
+                  <th
+                    *ngIf="tableVM.hasCellSelection"
+                    class="imperia-table-columns-group frozen-left row-selector-placeholder"
+                  ></th>
+                  <!-- FROZEN LEFT COLUMNS GROUPS -->
+                  <ng-container
+                    *ngFor="
+                      let colGroup of scrollVM.orderedColumns
+                        .frozenLeftColumnsGroupsMatrix[colGroupRowIndex]
+                        .columnsGroups;
+                      let colGroupIndex = index;
+                      let last = last;
+                      trackBy: colGroupTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenLeftColumnsGroupTemplate;
+                        context: {
+                          $implicit: {
+                            colGroup,
+                            colGroupIndex,
+                            isLastFrozenLeft: last,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns
+                                .frozenLeftColumnsGroupsMatrix[colGroupRowIndex]
+                                .positions[colGroupIndex],
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <!-- UNFROZEN COLUMNS GROUPS -->
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns
+                          .leftColumnsGroupsPlaceholdersWidths[
+                          colGroupRowIndex
+                        ],
+                    }"
+                  ></th>
+                  <ng-container
+                    *ngFor="
+                      let colGroup of scrollVM.paginatedColumns
+                        .columnsGroupsMatrix[colGroupRowIndex];
+                      let colGroupIndex = index;
+                      let last = last;
+                      trackBy: colGroupTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        unfrozenColumnsGroupTemplate;
+                        context: {
+                          $implicit: {
+                            colGroup,
+                            colGroupIndex,
+                            isLastUnfrozen: last,
+                            frozenLeftColumnsWidth:
+                              scrollVM.paginatedColumns.frozenLeftColumnsWidth,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns
+                          .rightColumnsGroupsPlaceholdersWidths[
+                          colGroupRowIndex
+                        ],
+                    }"
+                  ></th>
+                  <!-- FILL COLUMN -->
+                  <div class="imperia-table-columns-group to-fill"></div>
+                  <!-- FROZEN RIGHT COLUMNS GROUPS -->
+                  <ng-container
+                    *ngFor="
+                      let colGroup of scrollVM.orderedColumns
+                        .frozenRightColumnsGroupsMatrix[colGroupRowIndex]
+                        .columnsGroups;
+                      let colGroupIndex = index;
+                      let first = first;
+                      trackBy: colGroupTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenRightColumnsGroupTemplate;
+                        context: {
+                          $implicit: {
+                            colGroup,
+                            colGroupIndex,
+                            isFirstFrozenRight: first,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns
+                                .frozenRightColumnsGroupsMatrix[
+                                colGroupRowIndex
+                              ].positions[colGroupIndex],
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                </tr>
+                <!-- HEADERS -->
+                <tr
+                  *ngIf="scrollVM.orderedColumns.hasColumns"
+                  class="imperia-table-header-row"
+                  [ngClass]="{
+                    horizontalScrollDisabled: horizontalScrollDisabled,
+                  }"
+                >
+                  <th
+                    *ngIf="tableVM.hasCellSelection"
+                    class="imperia-table-header-cell frozen-left row-selector-placeholder"
+                  ></th>
+                  <!-- FROZEN LEFT COLUMNS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenLeftColumns
+                        .columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenLeftHeaderCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            isFocused:
+                              !!scrollVM.focusedColumnField &&
+                              col.field.includes(scrollVM.focusedColumnField),
+                            isLastFrozenLeft: last,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns.frozenLeftColumns
+                                .positions[colIndex],
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <!-- UNFROZEN COLUMNS -->
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.leftColumnsPlaceholderWidth,
+                    }"
+                  ></th>
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.paginatedColumns.columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        unfrozenHeaderCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            isFocused:
+                              !!scrollVM.focusedColumnField &&
+                              col.field.includes(scrollVM.focusedColumnField),
+                            isLastUnfrozen: last,
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.rightColumnsPlaceholderWidth,
+                    }"
+                  ></th>
+                  <!-- FILL COLUMN -->
+                  <div class="imperia-table-header-cell to-fill"></div>
+                  <!-- FROZEN RIGHT COLUMNS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenRightColumns
+                        .columns;
+                      let colIndex = index;
+                      let first = first;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenRightHeaderCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            isFocused:
+                              !!scrollVM.focusedColumnField &&
+                              col.field.includes(scrollVM.focusedColumnField),
+                            isFirstFrozenRight: first,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns.frozenRightColumns
+                                .positions[colIndex],
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                </tr>
+                <!-- COLUMNS SELECTORS -->
+                <tr
+                  *ngIf="
+                    scrollVM.orderedColumns.hasColumns &&
+                    tableVM.imperiaTableV2CellSelectionComponent as imperiaTableV2CellSelectionComponent
+                  "
+                  class="imperia-table-header-row columns-selectors"
+                  [ngClass]="{
+                    horizontalScrollDisabled: horizontalScrollDisabled,
+                  }"
+                >
+                  <th
+                    class="imperia-table-header-cell frozen-left row-selector-placeholder"
+                  ></th>
+                  <!-- FROZEN LEFT COLUMNS SELECTORS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenLeftColumns
+                        .columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <th
+                      class="imperia-table-header-cell frozen-left col-selector"
+                      [class]="col.field | fieldToImperiaTableColumnClass"
+                      [ngClass]="{
+                        'last-clicked':
+                          tableVM.lastCellClicked &&
+                          tableVM.lastCellClicked.col.field === col.field,
+                        'last-frozen-left': last,
+                        'auto-width': (col.width$ | async) == 'auto',
+                      }"
+                      [ngStyle]="{
+                        left: scrollVM.paginatedColumns.frozenColumnsOverflow
+                          ? 'unset'
+                          : (scrollVM.orderedColumns.frozenLeftColumns
+                              .positions[colIndex] | async),
+                        width: col.width$ | async,
+                        minWidth: col.minWidth,
+                        maxWidth: col.maxWidth,
+                      }"
+                      (click)="
+                        imperiaTableV2CellSelectionComponent.colSelectorClick.next(
+                          { event: $event, col }
+                        )
+                      "
+                    ></th>
+                  </ng-container>
+                  <!-- UNFROZEN COLUMNS SELECTORS -->
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.leftColumnsPlaceholderWidth,
+                    }"
+                  ></th>
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.paginatedColumns.columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <th
+                      class="imperia-table-header-cell col-selector"
+                      [class]="col.field | fieldToImperiaTableColumnClass"
+                      [ngClass]="{
+                        'last-clicked':
+                          tableVM.lastCellClicked &&
+                          tableVM.lastCellClicked.col.field === col.field,
+                        'last-unfrozen': last,
+                        'last-in-group': col.isLastInGroup && !last,
+                        'auto-width': (col.width$ | async) == 'auto',
+                      }"
+                      [ngStyle]="{
+                        width: col.width$ | async,
+                        minWidth: col.minWidth,
+                        maxWidth: col.maxWidth,
+                      }"
+                      (click)="
+                        imperiaTableV2CellSelectionComponent.colSelectorClick.next(
+                          { event: $event, col }
+                        )
+                      "
+                    ></th>
+                  </ng-container>
+                  <th
+                    class="imperia-table-header-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.rightColumnsPlaceholderWidth,
+                    }"
+                  ></th>
+                  <!-- FILL COLUMN -->
+                  <div class="imperia-table-header-cell to-fill"></div>
+                  <!-- FROZEN RIGHT COLUMNS SELECTORS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenRightColumns
+                        .columns;
+                      let colIndex = index;
+                      let first = first;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <th
+                      class="imperia-table-header-cell frozen-right col-selector"
+                      [class]="col.field | fieldToImperiaTableColumnClass"
+                      [ngClass]="{
+                        'last-clicked':
+                          tableVM.lastCellClicked &&
+                          tableVM.lastCellClicked.col.field === col.field,
+                        'first-frozen-right': first,
+                        'auto-width': (col.width$ | async) == 'auto',
+                      }"
+                      [ngStyle]="{
+                        right: scrollVM.paginatedColumns.frozenColumnsOverflow
+                          ? 'unset'
+                          : (scrollVM.orderedColumns.frozenRightColumns
+                              .positions[colIndex] | async),
+                        width: col.width$ | async,
+                        minWidth: col.minWidth,
+                        maxWidth: col.maxWidth,
+                      }"
+                      (click)="
+                        imperiaTableV2CellSelectionComponent.colSelectorClick.next(
+                          { event: $event, col }
+                        )
+                      "
+                    ></th>
+                  </ng-container>
+                </tr>
+              </ng-container>
+            </thead>
+            <!-- TOP LOADING ROW -->
+            <tr
+              class="loading-row at-top"
+              [style.top.px]="headHeightChange$ | async"
+            >
+              <th
+                class="loading-cell"
+                *ngIf="vm.loading.state && vm.loading.at === 'top'"
+                [@horizontalElementEnterLeave]
+              >
+                <span *ngIf="vm.loading.from === 'startWith'">
+                  {{
+                    "IMPERIA_TABLE.loading_messages.initialLoading"
+                      | impTranslate
+                  }}
+                </span>
+                <span *ngIf="vm.loading.from === 'searchChanges'">
+                  {{
+                    "IMPERIA_TABLE.loading_messages.searching" | impTranslate
+                  }}
+                </span>
+                <span *ngIf="vm.loading.from === 'filtersChanges'">
+                  {{
+                    "IMPERIA_TABLE.loading_messages.applyingFilters"
+                      | impTranslate
+                  }}
+                </span>
+                <span *ngIf="vm.loading.from === 'columnSortChanges'">
+                  {{ "IMPERIA_TABLE.loading_messages.ordering" | impTranslate }}
+                </span>
+                <span *ngIf="!vm.loading.from || vm.loading.from === 'outside'">
+                  {{
+                    vm.loading.msg ??
+                      ("IMPERIA_TABLE.loading_messages.initialLoading"
+                        | impTranslate)
+                  }}
+                </span>
+                <span *ngIf="vm.loading.from === 'deleteChanges'">
+                  {{
+                    "IMPERIA_TABLE.loading_messages.deletingRows" | impTranslate
+                  }}
+                </span>
+                <div class="loading-cell-effect-container">
+                  <div class="loading-cell-effect"></div>
+                </div>
+              </th>
+            </tr>
+            <!-- ROWS -->
+            @let noDataTemplate = $noDataTemplate();
+            <ng-container *ngIf="(rows$ | async) ?? [] as rows">
+              <div
+                *ngIf="!rows.length && !vm.loading.state && showNoDataMessage"
+                class="no-rows-container"
+              >
+                @if (noDataTemplate) {
+                  <ng-container
+                    [ngTemplateOutlet]="noDataTemplate"
+                  ></ng-container>
+                } @else {
+                  <h3>
+                    {{ "IMPERIA_TABLE.messages.noData" | impTranslate }}
+                  </h3>
+                }
+              </div>
+              <tbody
+                #body
+                cdkDropList
+                [cdkDropListData]="rows"
+                (cdkDropListDropped)="onRowReorder.next($event)"
+                [ngClass]="{
+                  'no-rows': !rows.length && !vm.loading.state,
+                }"
+                imp-resize-events
+                (onSizeChange)="viewport.checkViewportSize()"
+              >
+                <cdk-virtual-scroll-viewport
+                  #viewport
+                  imperiaTableV2VirtualScrollStrategy
+                  [headerHeight]="headHeightChange$ | async"
+                  [rows]="rows"
+                  [footerHeight]="footHeightChange$ | async"
+                  [ngClass]="{
+                    horizontalScrollDisabled: horizontalScrollDisabled,
+                  }"
+                >
+                  <ng-container
+                    *ngIf="
+                      scrollVM.orderedColumns &&
+                      scrollVM.paginatedColumns &&
+                      scrollVM.rowSelection
+                    "
+                  >
+                    <ng-container
+                      *cdkVirtualFor="
+                        let row of rows$;
+                        let rowIndex = index;
+                        trackBy: rowTrackByFn;
+                        templateCacheSize: 0
+                      "
+                    >
+                      <tr
+                        cdkDrag
+                        [cdkDragData]="row"
+                        [cdkDragDisabled]="!tableVM.hasReorder"
+                        cdkDragLockAxis="y"
+                        class="imperia-table-body-row"
+                        [attr.data-data-key-value]="row.dataKeyValue"
+                        [ngClass]="{
+                          selected:
+                            tableVM.hasRowSelection &&
+                            tableVM.isRowSelectedFn(row, scrollVM.rowSelection),
+                          focused:
+                            scrollVM.focusedRowDataKeyValue ===
+                            row.dataKeyValue,
+                        }"
+                      >
+                        <td
+                          *ngIf="
+                            tableVM.imperiaTableV2CellSelectionComponent as imperiaTableV2CellSelectionComponent
+                          "
+                          class="imperia-table-body-cell frozen-left row-selector"
+                          [ngClass]="{
+                            'last-clicked':
+                              tableVM.lastCellClicked &&
+                              tableVM.lastCellClicked.row.dataKeyValue ===
+                                row.dataKeyValue,
+                          }"
+                          (click)="
+                            imperiaTableV2CellSelectionComponent.rowSelectorClick.next(
+                              { event: $event, row }
+                            )
+                          "
+                        ></td>
+                        <!-- FROZEN LEFT COLUMNS -->
+                        <ng-container
+                          *ngFor="
+                            let col of scrollVM.orderedColumns.frozenLeftColumns
+                              .columns;
+                            let colIndex = index;
+                            let last = last;
+                            trackBy: colTrackByFn
+                          "
+                        >
+                          <ng-container
+                            *ngTemplateOutlet="
+                              !tableVM.withRowspan
+                                ? frozenLeftBodyCellTemplate
+                                : row.cells[col.field].rowspan
+                                  ? frozenLeftBodyCellTemplate
+                                  : frozenLeftBodyCellRowspanPlaceholderTemplate;
+                              context: {
+                                $implicit: {
+                                  col,
+                                  colIndex,
+                                  row,
+                                  rowIndex,
+                                  cell: row.cells[col.field],
+                                  editMode: tableVM.editMode,
+                                  selected:
+                                    tableVM.hasCellSelection &&
+                                    tableVM.isCellSelectedFn(
+                                      row,
+                                      col,
+                                      scrollVM.cellSelection
+                                    ),
+                                  isLastClicked:
+                                    tableVM.lastCellClicked &&
+                                    tableVM.lastCellClicked.row.dataKeyValue ===
+                                      row.dataKeyValue &&
+                                    tableVM.lastCellClicked.col.field ===
+                                      col.field,
+                                  isLastFrozenLeft: last,
+                                  frozenColumnsOverflow:
+                                    scrollVM.paginatedColumns
+                                      .frozenColumnsOverflow,
+                                  position$:
+                                    scrollVM.orderedColumns.frozenLeftColumns
+                                      .positions[colIndex],
+                                },
+                              }
+                            "
+                          ></ng-container>
+                        </ng-container>
+                        <!-- UNFROZEN COLUMNS -->
+                        <!-- UNFROZEN EXTERNAL TEMPLATE -->
+                        <ng-container
+                          *ngIf="
+                            tableVM.unfrozenCellsTemplate &&
+                              tableVM.unfrozenCellsTemplate.useWhen(row);
+                            else unfrozenCells
+                          "
+                        >
+                          <td
+                            class="imperia-table-body-cell last-unfrozen"
+                            [style.width.px]="
+                              scrollVM.paginatedColumns.unfrozenColumnsWidth
+                            "
+                          >
+                            <ng-container
+                              *ngTemplateOutlet="
+                                tableVM.unfrozenCellsTemplate.template;
+                                context: {
+                                  $implicit: {
+                                    row,
+                                    rowIndex,
+                                    columns: scrollVM.paginatedColumns.columns,
+                                  },
+                                }
+                              "
+                            ></ng-container>
+                          </td>
+                        </ng-container>
+                        <!-- UNFROZEN CELLS TEMPLATE -->
+                        <ng-template #unfrozenCells>
+                          <td
+                            class="imperia-table-body-cell spacer"
+                            [ngStyle]="{
+                              width:
+                                scrollVM.paginatedColumns
+                                  .leftColumnsPlaceholderWidth,
+                            }"
+                          ></td>
+                          <ng-container
+                            *ngFor="
+                              let col of scrollVM.paginatedColumns.columns;
+                              let colIndex = index;
+                              let last = last;
+                              trackBy: colTrackByFn
+                            "
+                          >
+                            <ng-container
+                              *ngTemplateOutlet="
+                                unfrozenBodyCellTemplate;
+                                context: {
+                                  $implicit: {
+                                    col,
+                                    colIndex,
+                                    row,
+                                    rowIndex,
+                                    cell: row.cells[col.field],
+                                    editMode: tableVM.editMode,
+                                    selected:
+                                      tableVM.hasCellSelection &&
+                                      tableVM.isCellSelectedFn(
+                                        row,
+                                        col,
+                                        scrollVM.cellSelection
+                                      ),
+                                    isLastClicked:
+                                      tableVM.lastCellClicked &&
+                                      tableVM.lastCellClicked.row
+                                        .dataKeyValue === row.dataKeyValue &&
+                                      tableVM.lastCellClicked.col.field ===
+                                        col.field,
+                                    isLastUnfrozen: last,
+                                  },
+                                }
+                              "
+                            ></ng-container>
+                          </ng-container>
+                          <td
+                            class="imperia-table-body-cell spacer"
+                            [ngStyle]="{
+                              width:
+                                scrollVM.paginatedColumns
+                                  .rightColumnsPlaceholderWidth,
+                            }"
+                          ></td>
+                        </ng-template>
+                        <!-- FILL COLUMN -->
+                        <td class="imperia-table-body-cell to-fill"></td>
+                        <!-- FROZEN RIGHT COLUMNS -->
+                        <ng-container
+                          *ngFor="
+                            let col of scrollVM.orderedColumns
+                              .frozenRightColumns.columns;
+                            let colIndex = index;
+                            let first = first;
+                            trackBy: colTrackByFn
+                          "
+                        >
+                          <ng-container
+                            *ngTemplateOutlet="
+                              !tableVM.withRowspan
+                                ? frozenRightBodyCellTemplate
+                                : row.cells[col.field].rowspan
+                                  ? frozenRightBodyCellTemplate
+                                  : frozenRightBodyCellRowspanPlaceholderTemplate;
+                              context: {
+                                $implicit: {
+                                  col,
+                                  colIndex,
+                                  row,
+                                  rowIndex,
+                                  cell: row.cells[col.field],
+                                  editMode: tableVM.editMode,
+                                  selected:
+                                    tableVM.hasCellSelection &&
+                                    tableVM.isCellSelectedFn(
+                                      row,
+                                      col,
+                                      scrollVM.cellSelection
+                                    ),
+                                  isLastClicked:
+                                    tableVM.lastCellClicked &&
+                                    tableVM.lastCellClicked.row.dataKeyValue ===
+                                      row.dataKeyValue &&
+                                    tableVM.lastCellClicked.col.field ===
+                                      col.field,
+                                  isFirstFrozenRight: first,
+                                  frozenColumnsOverflow:
+                                    scrollVM.paginatedColumns
+                                      .frozenColumnsOverflow,
+                                  position$:
+                                    scrollVM.orderedColumns.frozenRightColumns
+                                      .positions[colIndex],
+                                },
+                              }
+                            "
+                          ></ng-container>
+                        </ng-container>
+                      </tr>
+                      <!-- ROW DETAIL -->
+                      <tr
+                        class="imperia-table-body-row-detail"
+                        *ngIf="
+                          tableVM.rowDetail &&
+                          tableVM.rowDetail.enabled(row) &&
+                          tableVM.rowDetail.isDetailed(row)
+                        "
+                      >
+                        <td class="imperia-table-body-cell-detail">
+                          <ng-container
+                            *ngTemplateOutlet="
+                              tableVM.rowDetail.template;
+                              context: { $implicit: { row } }
+                            "
+                          ></ng-container>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </cdk-virtual-scroll-viewport>
+              </tbody>
+            </ng-container>
+            <!-- BOTTOM LOADING ROW -->
+            <tr
+              class="loading-row at-bottom"
+              [style.bottom.px]="footHeightChange$ | async"
+            >
+              <td
+                class="loading-cell"
+                *ngIf="vm.loading.state && vm.loading.at === 'bottom'"
+                [@horizontalElementEnterLeave]
+              >
+                <span *ngIf="vm.loading.from === 'pageChanges'">
+                  {{
+                    "IMPERIA_TABLE.loading_messages.loadingMoreRows"
+                      | impTranslate
+                  }}
+                </span>
+                <span *ngIf="!vm.loading.from || vm.loading.from === 'outside'">
+                  {{
+                    vm.loading.msg ??
+                      ("IMPERIA_TABLE.loading_messages.initialLoading"
+                        | impTranslate)
+                  }}
+                </span>
+                <div class="loading-cell-effect-container">
+                  <div class="loading-cell-effect"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- FOOT -->
+            <tfoot
+              #foot
+              imp-resize-events
+              (onHeightChange)="_footHeightChange.next($event)"
+            >
+              <ng-container
+                *ngIf="
+                  scrollVM.orderedColumns &&
+                  scrollVM.paginatedColumns &&
+                  scrollVM.rowSelection
+                "
+              >
+                <tr
+                  *ngFor="
+                    let row of footerRows$ | async;
+                    let rowIndex = index;
+                    trackBy: rowTrackByFn
+                  "
+                  class="imperia-table-footer-row"
+                  [attr.data-data-key-value]="row.dataKeyValue"
+                  [ngClass]="{
+                    selected:
+                      tableVM.hasRowSelection &&
+                      tableVM.isRowSelectedFn(row, scrollVM.rowSelection),
+                  }"
+                >
+                  <td
+                    *ngIf="
+                      tableVM.imperiaTableV2CellSelectionComponent as imperiaTableV2CellSelectionComponent
+                    "
+                    class="imperia-table-footer-cell frozen-left row-selector"
+                    [ngClass]="{
+                      'last-clicked':
+                        tableVM.lastCellClicked &&
+                        tableVM.lastCellClicked.row.dataKeyValue ===
+                          row.dataKeyValue,
+                    }"
+                    (click)="
+                      imperiaTableV2CellSelectionComponent.rowSelectorClick.next(
+                        {
+                          event: $event,
+                          row,
+                        }
+                      )
+                    "
+                  ></td>
+                  <!-- FROZEN LEFT COLUMNS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenLeftColumns
+                        .columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenLeftBodyCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            row,
+                            rowIndex,
+                            cell: row.cells[col.field],
+                            editMode: tableVM.editMode,
+                            selected:
+                              tableVM.hasCellSelection &&
+                              tableVM.isCellSelectedFn(
+                                row,
+                                col,
+                                scrollVM.cellSelection
+                              ),
+                            isLastClicked:
+                              tableVM.lastCellClicked &&
+                              tableVM.lastCellClicked.row.dataKeyValue ===
+                                row.dataKeyValue &&
+                              tableVM.lastCellClicked.col.field === col.field,
+                            isLastFrozenLeft: last,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns.frozenLeftColumns
+                                .positions[colIndex],
+                            atFooter: true,
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <!-- UNFROZEN COLUMNS -->
+                  <td
+                    class="imperia-table-footer-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.leftColumnsPlaceholderWidth,
+                    }"
+                  ></td>
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.paginatedColumns.columns;
+                      let colIndex = index;
+                      let last = last;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        unfrozenBodyCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            row,
+                            rowIndex,
+                            cell: row.cells[col.field],
+                            editMode: tableVM.editMode,
+                            selected:
+                              tableVM.hasCellSelection &&
+                              tableVM.isCellSelectedFn(
+                                row,
+                                col,
+                                scrollVM.cellSelection
+                              ),
+                            isLastClicked:
+                              tableVM.lastCellClicked &&
+                              tableVM.lastCellClicked.row.dataKeyValue ===
+                                row.dataKeyValue &&
+                              tableVM.lastCellClicked.col.field === col.field,
+                            atFooter: true,
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                  <td
+                    class="imperia-table-footer-cell spacer"
+                    [ngStyle]="{
+                      width:
+                        scrollVM.paginatedColumns.rightColumnsPlaceholderWidth,
+                    }"
+                  ></td>
+                  <!-- FILL COLUMN -->
+                  <td class="imperia-table-footer-cell to-fill"></td>
+                  <!-- FROZEN RIGHT COLUMNS -->
+                  <ng-container
+                    *ngFor="
+                      let col of scrollVM.orderedColumns.frozenRightColumns
+                        .columns;
+                      let colIndex = index;
+                      let first = first;
+                      trackBy: colTrackByFn
+                    "
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        frozenRightBodyCellTemplate;
+                        context: {
+                          $implicit: {
+                            col,
+                            colIndex,
+                            row,
+                            rowIndex,
+                            cell: row.cells[col.field],
+                            editMode: tableVM.editMode,
+                            selected:
+                              tableVM.hasCellSelection &&
+                              tableVM.isCellSelectedFn(
+                                row,
+                                col,
+                                scrollVM.cellSelection
+                              ),
+                            isLastClicked:
+                              tableVM.lastCellClicked &&
+                              tableVM.lastCellClicked.row.dataKeyValue ===
+                                row.dataKeyValue &&
+                              tableVM.lastCellClicked.col.field === col.field,
+                            isFirstFrozenRight: first,
+                            frozenColumnsOverflow:
+                              scrollVM.paginatedColumns.frozenColumnsOverflow,
+                            position$:
+                              scrollVM.orderedColumns.frozenRightColumns
+                                .positions[colIndex],
+                            atFooter: true,
+                          },
+                        }
+                      "
+                    ></ng-container>
+                  </ng-container>
+                </tr>
+              </ng-container>
+            </tfoot>
+          </table>
+          <imperia-table-v2-cell-overlay-pinned-list></imperia-table-v2-cell-overlay-pinned-list>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- FROZEN LEFT COLUMNS GROUP -->
+    <ng-template
+      #frozenLeftColumnsGroupTemplate
+      imperiaTableColumnsGroupTemplate
+      let-ctx
+    >
+      <th
+        tooltip-on-hover
+        class="imperia-table-columns-group frozen-left"
+        [class]="ctx.colGroup.key + ' ' + ctx.colGroup.headerCellClass"
+        [ngClass]="{
+          'last-frozen-left': ctx.isLastFrozenLeft,
+        }"
+        [style]="ctx.colGroup.headerCellStyle"
+        [ngStyle]="{
+          left: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.colGroup.width$ | async,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.colGroup.template ?? columnsGroupContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- UNFROZEN COLUMNS GROUP -->
+    <ng-template
+      #unfrozenColumnsGroupTemplate
+      imperiaTableColumnsGroupTemplate
+      let-ctx
+    >
+      <th
+        tooltip-on-hover
+        class="imperia-table-columns-group"
+        [class]="ctx.colGroup.key + ' ' + ctx.colGroup.headerCellClass"
+        [ngClass]="{
+          'last-unfrozen': ctx.isLastUnfrozen,
+        }"
+        [style]="ctx.colGroup.headerCellStyle"
+        [ngStyle]="{
+          left: ctx.frozenColumnsOverflow
+            ? 'unset'
+            : ctx.frozenLeftColumnsWidth + 'px',
+          width: ctx.colGroup.width$ | async,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.colGroup.template ?? columnsGroupContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- FROZEN RIGHT COLUMNS GROUP -->
+    <ng-template
+      #frozenRightColumnsGroupTemplate
+      imperiaTableColumnsGroupTemplate
+      let-ctx
+    >
+      <th
+        tooltip-on-hover
+        class="imperia-table-columns-group frozen-right"
+        [class]="ctx.colGroup.key + ' ' + ctx.colGroup.headerCellClass"
+        [ngClass]="{
+          'first-frozen-right': ctx.isFirstFrozenRight,
+        }"
+        [style]="ctx.colGroup.headerCellStyle"
+        [ngStyle]="{
+          right: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.colGroup.width$ | async,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.colGroup.template ?? columnsGroupContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- GROUP CONTENT TEMPLATE -->
+    <ng-template
+      #columnsGroupContentTemplate
+      imperiaTableColumnsGroupTemplate
+      let-ctx
+    >
+      <div
+        [style]="ctx.colGroup.headerTextStyle"
+        class="no-group-custom-cell-template"
+      >
+        <span>
+          {{ ctx.colGroup.header }}
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- HEADER CELL CONTEXT MENU TEMPLATE -->
+    <ng-template
+      #headerCellOverlayPanelTemplate
+      imperiaTableHeaderCellContextMenuTemplate
+      let-ctx
+    >
+      <div
+        class="imp-table-cell-tooltip-container"
+        [style.top.px]="ctx.top"
+        [style.left.px]="ctx.left"
+        [@contextMenuEnterLeave]
+      >
+        @let headerCellCtxMenuVM =
+          {
+            sort: {
+              direction: ctx.col.sort$ | async,
+              isSorted: ctx.col.isSorted$ | async,
+            },
+            filter: {
+              isFiltered: ctx.col.isFiltered$ | async,
+            },
+          };
+        @let filterComponent = imperiaTableFilterV2Component | async;
+        <div
+          class="imp-table-cell-tooltip"
+          [class.empty]="!sortAllowed && !filterComponent"
+          [@fadeInOut]
+        >
+          @if (headerCellCtxMenuVM) {
+            <ng-container *ngIf="sortAllowed">
+              <!-- SORT ASC -->
+              <div class="mx-1">
+                <imperia-icon-button
+                  type="button"
+                  icon="arrow-up"
+                  [text]="
+                    'IMPERIA_TABLE.headers.context_menu.sort_asc' | impTranslate
+                  "
+                  [textPosition]="'left'"
+                  [containerSize]="29"
+                  [active]="headerCellCtxMenuVM.sort.direction == 'ASC'"
+                  [disabled]="
+                    !ctx.col.sortable ||
+                    headerCellCtxMenuVM.sort.direction == 'ASC'
+                  "
+                  (onClick)="
+                    onSortASC.next({
+                      col: ctx.col,
+                      close: ctx.close,
+                    })
+                  "
+                ></imperia-icon-button>
+                <!-- SORT DESC -->
+                <imperia-icon-button
+                  type="button"
+                  icon="arrow-down"
+                  [textPosition]="'left'"
+                  [containerSize]="29"
+                  [text]="
+                    'IMPERIA_TABLE.headers.context_menu.sort_desc'
+                      | impTranslate
+                  "
+                  [active]="headerCellCtxMenuVM.sort.direction == 'DESC'"
+                  [disabled]="
+                    !ctx.col.sortable ||
+                    headerCellCtxMenuVM.sort.direction == 'DESC'
+                  "
+                  (onClick)="
+                    onSortDESC.next({
+                      col: ctx.col,
+                      close: ctx.close,
+                    })
+                  "
+                ></imperia-icon-button>
+                <!-- CLEAR SORT -->
+                <imperia-icon-button
+                  type="button"
+                  primeNGIconClass="pi-sort-alt-slash"
+                  [textPosition]="'left'"
+                  [containerSize]="29"
+                  [text]="
+                    'IMPERIA_TABLE.headers.context_menu.clear_sort'
+                      | impTranslate
+                  "
+                  [disabled]="
+                    !ctx.col.sortable || !headerCellCtxMenuVM.sort.isSorted
+                  "
+                  (onClick)="
+                    onSortClear.next({ col: ctx.col, close: ctx.close })
+                  "
+                ></imperia-icon-button>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="filterComponent">
+              <div *ngIf="sortAllowed" class="separator horizontal my-1"></div>
+              <div class="mx-1">
+                <imperia-icon-button
+                  *ngIf="!headerCellCtxMenuVM.filter.isFiltered"
+                  type="button"
+                  [containerSize]="29"
+                  icon="filter"
+                  [textPosition]="'left'"
+                  [text]="
+                    'IMPERIA_TABLE.headers.context_menu.filter' | impTranslate
+                  "
+                  [disabled]="!ctx.col.allowFilter"
+                  (onClick)="filterComponent.addFilter.next(ctx.col.filterName)"
+                ></imperia-icon-button>
+                <imperia-icon-button
+                  *ngIf="headerCellCtxMenuVM.filter.isFiltered"
+                  type="button"
+                  icon="filter"
+                  [containerSize]="29"
+                  [textPosition]="'left'"
+                  [text]="
+                    'IMPERIA_TABLE.headers.context_menu.clear_filter'
+                      | impTranslate
+                  "
+                  [disabled]="!ctx.col.allowFilter"
+                  (onClick)="
+                    filterComponent.removeFilter.next(ctx.col.filterName);
+                    ctx.col.updateFilterValue(null)
+                  "
+                ></imperia-icon-button>
+              </div>
+            </ng-container>
+          }
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- HEADER CELL ICONS TEMPLATE -->
+    <ng-template #headerCellIconsTemplate imperiaTableHeaderCellIcons let-ctx>
+      <div
+        class="icons"
+        *ngIf="{
+          sort: ctx.col.sort$ | async,
+          isFiltered: ctx.col.isFiltered$ | async,
+        } as icons"
+      >
+        <imperia-icon-button
+          *ngIf="icons.isFiltered"
+          icon="filter"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="icons.sort == 'ASC'"
+          icon="arrow-up"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="icons.sort == 'DESC'"
+          icon="arrow-down"
+        ></imperia-icon-button>
+      </div>
+    </ng-template>
+
+    <!-- FROZEN LEFT HEADER CELL TEMPLATE -->
+    <ng-template #frozenLeftHeaderCellTemplate imperiaTableHeaderCell let-ctx>
+      <th
+        tooltip-on-hover
+        [resizableV2]="ctx.col.resizable"
+        [resizableColumn]="ctx.col"
+        [headerCellContextMenu]="headerCellOverlayPanelTemplate"
+        [headerCellContextMenuCol]="ctx.col"
+        class="imperia-table-header-cell frozen-left"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.col.headerCellClass
+        "
+        [ngClass]="{
+          'last-frozen-left': ctx.isLastFrozenLeft,
+          focused: ctx.isFocused,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+        }"
+        [style]="ctx.col.headerCellStyle"
+        [ngStyle]="{
+          left: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.col.headerCellTemplate ?? headerCellContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+        <ng-template
+          *ngTemplateOutlet="
+            headerCellIconsTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- UNFROZEN HEADER CELL TEMPLATE -->
+    <ng-template #unfrozenHeaderCellTemplate imperiaTableHeaderCell let-ctx>
+      <th
+        tooltip-on-hover
+        [resizableV2]="ctx.col.resizable"
+        [resizableColumn]="ctx.col"
+        [headerCellContextMenu]="headerCellOverlayPanelTemplate"
+        [headerCellContextMenuCol]="ctx.col"
+        class="imperia-table-header-cell"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.col.headerCellClass
+        "
+        [ngClass]="{
+          'last-unfrozen': ctx.isLastUnfrozen,
+          'last-in-group': ctx.col.isLastInGroup && !ctx.isLastUnfrozen,
+          focused: ctx.isFocused,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+        }"
+        [style]="ctx.col.headerCellStyle"
+        [ngStyle]="{
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.col.headerCellTemplate ?? headerCellContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+        <ng-template
+          *ngTemplateOutlet="
+            headerCellIconsTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- FROZEN RIGHT HEADER CELL TEMPLATE -->
+    <ng-template #frozenRightHeaderCellTemplate imperiaTableHeaderCell let-ctx>
+      <th
+        tooltip-on-hover
+        [resizableV2]="ctx.col.resizable"
+        [resizableColumn]="ctx.col"
+        [headerCellContextMenu]="headerCellOverlayPanelTemplate"
+        [headerCellContextMenuCol]="ctx.col"
+        class="imperia-table-header-cell frozen-right"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.col.headerCellClass
+        "
+        [ngClass]="{
+          'first-frozen-right': ctx.isFirstFrozenRight,
+          focused: ctx.isFocused,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+        }"
+        [style]="ctx.col.headerCellStyle"
+        [ngStyle]="{
+          right: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.col.headerCellTemplate ?? headerCellContentTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+        <ng-template
+          *ngTemplateOutlet="
+            headerCellIconsTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </th>
+    </ng-template>
+
+    <!-- HEADER CELL CONTENT TEMPLATE -->
+    <ng-template #headerCellContentTemplate imperiaTableHeaderCell let-ctx>
+      <div
+        class="no-header-custom-cell-template"
+        [class]="ctx.col.dataInfo.type"
+      >
+        <span [style]="ctx.col.headerTextStyle">
+          {{ ctx.col.header }}
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- BODY/FOOTER CELL CONTEXT MENU TEMPLATE -->
+    <ng-template
+      #bodyCellOverlayPanelTemplate
+      imperiaTableBodyCellContextMenuTemplate
+      let-ctx
+    >
+      <div
+        class="imp-table-cell-tooltip-container"
+        [style.top.px]="ctx.top"
+        [style.left.px]="ctx.left"
+        [@contextMenuEnterLeave]
+      >
+        <div class="imp-table-cell-tooltip" [@fadeInOut]>
+          <ng-container
+            *ngIf="{
+              imperiaTableV2RowSelection:
+                imperiaTableV2RowSelectionComponent | async,
+              imperiaTableV2CellSelection:
+                imperiaTableV2CellSelectionComponent | async,
+              imperiaTableFilterV2: imperiaTableFilterV2Component | async,
+              hasRowDetail: hasRowDetail$ | async,
+              rowDetail: imperiaTableV2RowDetail | async,
+            } as bodyCellContextMenuVM"
+          >
+            <ng-container
+              *ngIf="
+                bodyCellContextMenuVM.imperiaTableV2RowSelection ??
+                bodyCellContextMenuVM.imperiaTableV2CellSelection as imperiaTableV2Selection
+              "
+            >
+              <ng-container
+                *ngTemplateOutlet="
+                  imperiaTableV2Selection.copyTemplate;
+                  context: { $implicit: ctx }
+                "
+              ></ng-container>
+            </ng-container>
+            <!-- FILTER BY VALUE -->
+            <ng-container
+              *ngIf="
+                bodyCellContextMenuVM.imperiaTableFilterV2 &&
+                ctx.col.allowFilter
+              "
+            >
+              <div
+                *ngIf="
+                  bodyCellContextMenuVM.imperiaTableV2RowSelection ||
+                  bodyCellContextMenuVM.imperiaTableV2CellSelection
+                "
+                class="separator horizontal my-1"
+              ></div>
+              <imperia-icon-button
+                *ngIf="ctx.col.allowFilter"
+                type="button"
+                icon="filter"
+                [containerSize]="29"
+                [text]="
+                  'IMPERIA_TABLE.headers.context_menu.filter_by_value'
+                    | impTranslate
+                "
+                (onClick)="
+                  filterByValue(
+                    bodyCellContextMenuVM.imperiaTableFilterV2,
+                    ctx.col,
+                    ctx.row,
+                    ctx.close
+                  )
+                "
+              ></imperia-icon-button>
+            </ng-container>
+            <!-- DETAIL -->
+            <ng-container
+              *ngIf="
+                bodyCellContextMenuVM.rowDetail &&
+                bodyCellContextMenuVM.rowDetail.enabled(ctx.row)
+              "
+            >
+              <div
+                *ngIf="
+                  (bodyCellContextMenuVM.imperiaTableFilterV2 &&
+                    ctx.col.allowFilter) ||
+                  bodyCellContextMenuVM.imperiaTableV2RowSelection ||
+                  bodyCellContextMenuVM.imperiaTableV2CellSelection
+                "
+                class="separator horizontal my-1"
+              ></div>
+              <imperia-icon-button
+                *ngIf="!bodyCellContextMenuVM.rowDetail.isDetailed(ctx.row)"
+                type="button"
+                icon="chevron-down"
+                [containerSize]="29"
+                [text]="
+                  'IMPERIA_TABLE.rows.context_menu.show_detail' | impTranslate
+                "
+                (onClick)="bodyCellContextMenuVM.rowDetail.show(ctx.row)"
+              ></imperia-icon-button>
+              <imperia-icon-button
+                *ngIf="bodyCellContextMenuVM.rowDetail.isDetailed(ctx.row)"
+                type="button"
+                icon="chevron-up"
+                [containerSize]="29"
+                [text]="
+                  'IMPERIA_TABLE.rows.context_menu.hide_detail' | impTranslate
+                "
+                (onClick)="bodyCellContextMenuVM.rowDetail.hide(ctx.row)"
+              ></imperia-icon-button>
+            </ng-container>
+            <!-- CUSTOM BUTTONS -->
+            <ng-container
+              *ngIf="
+                rowContextMenuButtonTemplatesChanges$
+                  | async as rowContextMenuButtonTemplates
+              "
+            >
+              <div
+                *ngIf="
+                  rowContextMenuButtonTemplates.length > 0 &&
+                  bodyCellContextMenuVM.rowDetail &&
+                  bodyCellContextMenuVM.rowDetail.enabled(ctx.row) &&
+                  ((bodyCellContextMenuVM.imperiaTableFilterV2 &&
+                    ctx.col.allowFilter) ||
+                    bodyCellContextMenuVM.imperiaTableV2RowSelection ||
+                    bodyCellContextMenuVM.imperiaTableV2CellSelection)
+                "
+                class="separator horizontal my-1"
+              ></div>
+              <ng-container
+                *ngFor="let contextMenuButton of rowContextMenuButtonTemplates"
+              >
+                <ng-container
+                  *ngTemplateOutlet="
+                    contextMenuButton.template;
+                    context: {
+                      $implicit: ctx,
+                      menu: $any(bodyCellContextMenuVM),
+                    }
+                  "
+                ></ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- FROZEN LEFT BODY/FOOTER CELL TEMPLATE -->
+    <ng-template #frozenLeftBodyCellTemplate imperiaTableBodyCell let-ctx>
+      <td
+        *ngIf="ctx.cell.state$ | async as cellState"
+        #cellElement
+        [attr.data-field]="ctx.col.field"
+        tooltip-on-hover
+        [bodyCellContextMenu]="bodyCellOverlayPanelTemplate"
+        [bodyCellContextMenuCol]="ctx.col"
+        [bodyCellContextMenuRow]="ctx.row"
+        (click)="clickCell($event, cellElement, ctx, ctx.editMode, ctx.cell)"
+        (contextmenu)="
+          contextMenuCell($event, cellElement, !!ctx.atFooter, ctx)
+        "
+        class="frozen-left rowspan"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.cell.class
+        "
+        [ngClass]="{
+          'imperia-table-body-cell': !ctx.atFooter,
+          'imperia-table-footer-cell': !!ctx.atFooter,
+          'last-frozen-left': ctx.isLastFrozenLeft,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+          selected: ctx.selected,
+          isLastClicked: ctx.isLastClicked,
+          loading: cellState.loading,
+          ok: cellState.ok === true,
+          error: cellState.ok === false,
+        }"
+        [style]="ctx.cell.style"
+        [ngStyle]="{
+          left: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-container *ngIf="ctx.cell.rowspan; else cellTemplate">
+          <div class="rowspan-container" [style.height.px]="ctx.cell.rowspan">
+            <ng-container *ngTemplateOutlet="cellTemplate"></ng-container>
+          </div>
+        </ng-container>
+        <ng-template #cellTemplate>
+          <ng-container
+            *ngTemplateOutlet="
+              ctx.cell.dataInfo.editing || (ctx.editMode && cellState.loading)
+                ? bodyCellEditTemplate
+                : (ctx.col.bodyCellTemplate ?? bodyCellContentTemplate);
+              context: { $implicit: ctx }
+            "
+          ></ng-container>
+        </ng-template>
+      </td>
+    </ng-template>
+
+    <!-- FROZEN LEFT BODY/FOOTER CELL ROWSPAN PLACEHOLDER -->
+    <ng-template
+      #frozenLeftBodyCellRowspanPlaceholderTemplate
+      imperiaTableBodyCell
+      let-ctx
+    >
+      <td
+        class="frozen-left rowspan-placeholder"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.cell.class
+        "
+        [ngClass]="{
+          'imperia-table-body-cell': !ctx.atFooter,
+          'imperia-table-footer-cell': !!ctx.atFooter,
+          'last-frozen-left': ctx.isLastFrozenLeft,
+          'last-rowspan-placeholder': ctx.row.isLastRowInRowspan,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+        }"
+        [style]="ctx.cell.style"
+        [ngStyle]="{
+          left: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      ></td>
+    </ng-template>
+
+    <!-- UNFROZEN BODY/FOOTER CELL TEMPLATE -->
+    <ng-template #unfrozenBodyCellTemplate imperiaTableBodyCell let-ctx>
+      <td
+        *ngIf="ctx.cell.state$ | async as cellState"
+        #cellElement
+        [attr.data-field]="ctx.col.field"
+        tooltip-on-hover
+        [bodyCellContextMenu]="bodyCellOverlayPanelTemplate"
+        [bodyCellContextMenuCol]="ctx.col"
+        [bodyCellContextMenuRow]="ctx.row"
+        (click)="clickCell($event, cellElement, ctx, ctx.editMode, ctx.cell)"
+        (contextmenu)="
+          contextMenuCell($event, cellElement, !!ctx.atFooter, ctx)
+        "
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.cell.class
+        "
+        [ngClass]="{
+          'last-unfrozen': ctx.isLastUnfrozen,
+          'last-in-group': ctx.col.isLastInGroup && !ctx.isLastUnfrozen,
+          'imperia-table-body-cell': !ctx.atFooter,
+          'imperia-table-footer-cell': !!ctx.atFooter,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+          selected: ctx.selected,
+          isLastClicked: ctx.isLastClicked,
+          loading: cellState.loading,
+          ok: cellState.ok === true,
+          error: cellState.ok === false,
+        }"
+        [style]="ctx.cell.style"
+        [ngStyle]="{
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-template
+          *ngTemplateOutlet="
+            ctx.cell.dataInfo.editing || (ctx.editMode && cellState.loading)
+              ? bodyCellEditTemplate
+              : (ctx.col.bodyCellTemplate ?? bodyCellContentTemplate);
+            context: { $implicit: ctx }
+          "
+        ></ng-template>
+      </td>
+    </ng-template>
+
+    <!-- FROZEN RIGHT BODY/FOOTER CELL TEMPLATE -->
+    <ng-template #frozenRightBodyCellTemplate imperiaTableBodyCell let-ctx>
+      <td
+        *ngIf="ctx.cell.state$ | async as cellState"
+        #cellElement
+        [attr.data-field]="ctx.col.field"
+        tooltip-on-hover
+        [bodyCellContextMenu]="bodyCellOverlayPanelTemplate"
+        [bodyCellContextMenuCol]="ctx.col"
+        [bodyCellContextMenuRow]="ctx.row"
+        (click)="clickCell($event, cellElement, ctx, ctx.editMode, ctx.cell)"
+        (contextmenu)="
+          contextMenuCell($event, cellElement, !!ctx.atFooter, ctx)
+        "
+        class="frozen-right rowspan"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.cell.class
+        "
+        [ngClass]="{
+          'imperia-table-body-cell': !ctx.atFooter,
+          'imperia-table-footer-cell': !!ctx.atFooter,
+          'first-frozen-right': ctx.isFirstFrozenRight,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+          selected: ctx.selected,
+          isLastClicked: ctx.isLastClicked,
+          loading: cellState.loading,
+          ok: cellState.ok === true,
+          error: cellState.ok === false,
+        }"
+        [style]="ctx.cell.style"
+        [ngStyle]="{
+          right: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      >
+        <ng-container *ngIf="ctx.cell.rowspan; else cellTemplate">
+          <div class="rowspan-container" [style.height.px]="ctx.cell.rowspan">
+            <ng-container *ngTemplateOutlet="cellTemplate"></ng-container>
+          </div>
+        </ng-container>
+        <ng-template #cellTemplate>
+          <ng-container
+            *ngTemplateOutlet="
+              ctx.cell.dataInfo.editing || (ctx.editMode && cellState.loading)
+                ? bodyCellEditTemplate
+                : (ctx.col.bodyCellTemplate ?? bodyCellContentTemplate);
+              context: { $implicit: ctx }
+            "
+          ></ng-container>
+        </ng-template>
+      </td>
+    </ng-template>
+
+    <!-- FROZEN RIGHT BODY/FOOTER CELL ROWSPAN PLACEHOLDER -->
+    <ng-template
+      #frozenRightBodyCellRowspanPlaceholderTemplate
+      imperiaTableBodyCell
+      let-ctx
+    >
+      <td
+        class="frozen-right rowspan-placeholder"
+        [class]="
+          (ctx.col.field | fieldToImperiaTableColumnClass) +
+          ' ' +
+          ctx.cell.class
+        "
+        [ngClass]="{
+          'imperia-table-body-cell': !ctx.atFooter,
+          'imperia-table-footer-cell': !!ctx.atFooter,
+          'first-frozen-right': ctx.isFirstFrozenRight,
+          'last-rowspan-placeholder': ctx.row.isLastRowInRowspan,
+          'auto-width': (ctx.col.width$ | async) == 'auto',
+        }"
+        [style]="ctx.cell.style"
+        [ngStyle]="{
+          right: ctx.frozenColumnsOverflow ? 'unset' : (ctx.position$ | async),
+          width: ctx.col.width$ | async,
+          minWidth: ctx.col.minWidth,
+          maxWidth: ctx.col.maxWidth,
+        }"
+      ></td>
+    </ng-template>
+
+    <!-- BODY/FOOTER CELL CONTENT TEMPLATE -->
+    <ng-template #bodyCellContentTemplate imperiaTableBodyCell let-ctx>
+      <div class="no-body-custom-cell-template" [class]="ctx.col.dataInfo.type">
+        <span>
+          <ng-container
+            *ngTemplateOutlet="
+              ctx.cell.dataInfo.type == 'number'
+                ? numberBodyCellContent
+                : ctx.cell.dataInfo.type == 'boolean'
+                  ? booleanBodyCellContent
+                  : ctx.cell.dataInfo.type == 'date'
+                    ? dateBodyCellContent
+                    : ctx.cell.dataInfo.type == 'select'
+                      ? selectBodyCellContent
+                      : fallbackBodyCellContent;
+              context: { $implicit: ctx }
+            "
+          ></ng-container>
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- NUMBER BODY/FOOTER CELL TEMPLATE -->
+    <ng-template
+      #numberBodyCellContent
+      imperiaTableBodyCell
+      colDataInfoType="number"
+      cellDataInfoType="number"
+      let-ctx
+    >
+      {{
+        ctx.row.data[ctx.col.field]
+          | formatNumberTo
+            : {
+                integer: 1,
+                minDecimals: ctx.cell.dataInfo.minFractionDigits,
+                maxDecimals: ctx.cell.dataInfo.maxFractionDigits,
+              }
+      }}
+      {{ ctx.cell.dataInfo.suffix }}
+    </ng-template>
+
+    <!-- BOOLEAN BODY/FOOTER CELL TEMPLATE -->
+    <ng-template
+      #booleanBodyCellContent
+      imperiaTableBodyCell
+      colDataInfoType="boolean"
+      cellDataInfoType="boolean"
+      let-ctx
+    >
+      <span
+        *ngIf="
+          editAllowed && !ctx.cell.dataInfo.readonly;
+          else readonlyTemplate
+        "
+      >
+        {{
+          ctx.row.data[ctx.col.field]
+            ? ("IMPERIA_TABLE.cells.types.boolean.options.Yes" | impTranslate)
+            : ("IMPERIA_TABLE.cells.types.boolean.options.No" | impTranslate)
+        }}
+      </span>
+      <ng-template #readonlyTemplate>
+        <input
+          type="checkbox"
+          [disabled]="true"
+          [checked]="ctx.row.data[ctx.col.field]"
+        />
+      </ng-template>
+    </ng-template>
+
+    <!-- DATE BODY/FOOTER CELL TEMPLATE -->
+    <ng-template
+      #dateBodyCellContent
+      imperiaTableBodyCell
+      colDataInfoType="date"
+      cellDataInfoType="date"
+      let-ctx
+    >
+      {{ ctx.row.data[ctx.col.field] | date: ctx.cell.dataInfo.format }}
+    </ng-template>
+
+    <!-- SELECT BODY/FOOTER CELL TEMPLATE -->
+    <ng-template
+      #selectBodyCellContent
+      imperiaTableBodyCell
+      colDataInfoType="select"
+      cellDataInfoType="select"
+      let-ctx
+    >
+      {{
+        ctx.cell.dataInfo.options
+          | findOption
+            : ctx.row.data[ctx.col.field]
+            : ctx.cell.dataInfo.keyProperty
+            : ctx.cell.dataInfo.labelProperty
+      }}
+    </ng-template>
+
+    <!-- STRING | STRING-WITH-HELP | TEXTAREA | TABLE BODY/FOOTER CELL TEMPLATE -->
+    <ng-template
+      #fallbackBodyCellContent
+      imperiaTableBodyCell
+      [colDataInfoType]="['string', 'string-with-help', 'textarea', 'table']"
+      [cellDataInfoType]="['string', 'string-with-help', 'textarea', 'table']"
+      let-ctx
+    >
+      {{ ctx.row.data[ctx.col.field] }}
+    </ng-template>
+
+    <!-- TABLE BODY/FOOTER CELL EDIT TEMPLATE -->
+    <ng-template #bodyCellEditTemplate imperiaTableBodyCell let-ctx>
+      <imperia-table-v2-cell-edition
+        [ctx]="ctx"
+        (hasBeenClickInside)="onClickInsideEditCellElement.next($event)"
+        (onSave)="
+          onCellSave.next({
+            event: $event,
+            fromFooter: !!ctx.atFooter,
+          })
+        "
+      ></imperia-table-v2-cell-edition>
+    </ng-template>
+  </div>
+</ng-container>

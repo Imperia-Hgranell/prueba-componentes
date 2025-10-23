@@ -1,0 +1,110 @@
+.imp-tooltip-default {
+  background: rgb(255, 255, 255);
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  max-width: 350px;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.imp-tooltip {
+  position: absolute;
+  z-index: 9999999;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.caret {
+  position: absolute;
+  z-index: 2;
+  height: 8px;
+  width: 8px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 60%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  &.bottom-left {
+    top: -4px;
+    left: calc(50% - 5px);
+    transform: rotate(45deg);
+    &.isContentOverflowing {
+      left: calc(100% - 20px);
+    }
+  }
+  &.bottom-right {
+    top: -4px;
+    right: calc(50% - 5px);
+    transform: rotate(45deg);
+    &.isContentOverflowing {
+      right: calc(100% - 20px);
+    }
+  }
+  &.top-left {
+    bottom: -4px;
+    left: calc(50% - 5px);
+    transform: rotate(-135deg);
+    &.isContentOverflowing {
+      left: calc(100% - 20px);
+    }
+  }
+  &.top-right {
+    bottom: -4px;
+    right: calc(50% - 5px);
+    transform: rotate(-135deg);
+    &.isContentOverflowing {
+      right: calc(100% - 20px);
+    }
+  }
+  &.bottom-center {
+    top: -4px;
+    left: calc(50% - 5px);
+    transform: rotate(45deg);
+    &.isContentOverflowing {
+      left: calc(100% - 20px);
+    }
+  }
+  &.top-center {
+    bottom: -4px;
+    right: calc(50% - 5px);
+    transform: rotate(-135deg);
+    &.isContentOverflowing {
+      right: calc(100% - 20px);
+    }
+  }
+  &.right-center {
+    top: calc(50% - 5px);
+    left: -4px;
+    transform: rotate(-135deg);
+    background: linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 1) 60%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    &.isContentOverflowing {
+      left: calc(100% - 20px);
+    }
+  }
+  &.left-center {
+    top: calc(50% - 5px);
+    right: -4px;
+    transform: rotate(-135deg);
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 1) 60%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    &.isContentOverflowing {
+      right: calc(100% - 20px);
+    }
+  }
+}

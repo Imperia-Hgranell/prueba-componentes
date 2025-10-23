@@ -1,0 +1,97 @@
+@let textTemplate = $textTemplate();
+<a
+  *ngIf="type === 'button'; else imgTemplate"
+  role="button"
+  class="button-container"
+  [class.left]="textPosition === 'left'"
+  [class.center]="textPosition === 'center'"
+  [class.right]="textPosition === 'right'"
+  [title]="$showDefaultTooltip() ? title || text : ''"
+  [style.height.px]="containerSize"
+  [class]="containerClass"
+  [ngClass]="{
+    disabled: disabled || loading,
+    'no-text': !text,
+    active: active,
+    shadow: shadow,
+  }"
+  [ngStyle]="active ? activeButtonStyle : buttonStyle"
+  [routerLink]="disabled || loading ? null : linkTo"
+  (click)="onClick($event)"
+>
+  @if (iconPosition == "right") {
+    @if (!!text) {
+      <span class="p-2" *ngIf="!!text">
+        {{ text }}
+      </span>
+    }
+    @if (!text && textTemplate) {
+      <ng-container *ngTemplateOutlet="textTemplate"></ng-container>
+    }
+  }
+
+  <ng-container *ngTemplateOutlet="imgTemplate"></ng-container>
+  @if (iconPosition == "left") {
+    @if (!!text) {
+      <span class="p-2" *ngIf="!!text">
+        {{ text }}
+      </span>
+    }
+    @if (!text && textTemplate) {
+      <ng-container *ngTemplateOutlet="textTemplate"></ng-container>
+    }
+  }
+</a>
+<ng-template #imgTemplate>
+  <div class="flex gap-2">
+    <!-- Si tiene alguna clase de algun icono de primeNG se muestra el icono -->
+    <i
+      [style.display]="loading ? 'none' : null"
+      *ngFor="let klass of primeNGIconClass"
+      class="pi"
+      [class]="klass"
+      [title]="title || text"
+      [ngStyle]="{
+        fontSize: imgSize + 'px',
+      }"
+      [ngClass]="{
+        'pl-2': (!!text || textTemplate) && hasIcon && iconPosition == 'left',
+        'pr-2': (!!text || textTemplate) && hasIcon && iconPosition == 'right',
+      }"
+    ></i>
+    <!-- Si no, se muestra el icono personalizado -->
+    <img
+      [style.display]="loading ? 'none' : null"
+      *ngIf="!primeNGIconClass.length && !!icon"
+      [class]="imgClass"
+      [title]="title || text || containerTitle"
+      [ngStyle]="{
+        height: imgSize + 'px',
+        fontSize: imgSize + 'px',
+      }"
+      [ngClass]="{
+        'pl-2': (!!text || textTemplate) && hasIcon && iconPosition == 'left',
+        'pr-2': (!!text || textTemplate) && hasIcon && iconPosition == 'right',
+      }"
+      [src]="'assets/icons/' + icon + '.svg'"
+    />
+  </div>
+  <ng-container *ngIf="!loading; else loadingTemplate"></ng-container>
+</ng-template>
+<ng-template #loadingTemplate>
+  <div
+    class="loading-indicator-container"
+    [ngClass]="{
+      'pl-2': (!!text || textTemplate) && iconPosition == 'left',
+      'pr-2': (!!text || textTemplate) && iconPosition == 'right',
+    }"
+  >
+    <div
+      [ngStyle]="{
+        height: imgSize + 'px',
+        fontSize: imgSize + 'px',
+      }"
+      class="loading-indicator"
+    ></div>
+  </div>
+</ng-template>

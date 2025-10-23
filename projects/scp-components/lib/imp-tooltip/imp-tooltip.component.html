@@ -1,0 +1,36 @@
+@let withCaret = $withCaret();
+<div
+  #content
+  class="imp-tooltip"
+  [style.top.px]="(bounds$ | async)?.top"
+  [style.left.px]="(bounds$ | async)?.left"
+  [style.bottom.px]="(bounds$ | async)?.bottom"
+  [style.right.px]="(bounds$ | async)?.right"
+  [class.invisible]="!(showTooltip$ | async)"
+>
+  <div
+    @fadeInFadeOut
+    imp-resize-events
+    (onSizeChange)="onSizeChange.next($event)"
+  >
+    <ng-template
+      *ngTemplateOutlet="
+        (tooltipTemplate | async) ?? defaultTemplate;
+        context: { $implicit: tooltipTemplateContext | async }
+      "
+    ></ng-template>
+
+    <ng-template #defaultTemplate>
+      <div *ngIf="text | async as text" class="imp-tooltip-default">
+        <p class="m-0 p-0">{{ text }}</p>
+      </div>
+    </ng-template>
+    @if (withCaret) {
+      <div
+        class="caret"
+        [class]="cellPointerAt | async"
+        [class.isContentOverflowing]="(bounds$ | async)?.isContentOverflowing"
+      ></div>
+    }
+  </div>
+</div>

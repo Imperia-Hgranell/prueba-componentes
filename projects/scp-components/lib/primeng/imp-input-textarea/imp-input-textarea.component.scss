@@ -1,0 +1,36 @@
+textarea {
+  width: 100%;
+  min-height: 29px;
+  transition: height 0.2s ease-out;
+  padding: 0.25rem 0.5rem;
+  font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma, Helvetica,
+    Arial, sans-serif;
+  border: 1px solid rgb(141, 149, 160) !important;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 10.5pt;
+  color: #212121;
+
+  &[disabled] {
+    cursor: auto;
+    border-color: transparent !important;
+    background-color: #ebedef;
+  }
+
+  &:hover:not([disabled]) {
+    border-color: rgb(0, 183, 195) !important;
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+imperia-icon-button {
+  margin-top: 1px;
+  margin-left: -30px;
+  &.disabled {
+    background-color: #ebedef;
+  }
+}

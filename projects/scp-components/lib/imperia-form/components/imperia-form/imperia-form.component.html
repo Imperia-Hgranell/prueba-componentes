@@ -1,0 +1,95 @@
+<ng-container
+  *ngTemplateOutlet="onlyShowTemplate ? onlyTemplate : complete"
+></ng-container>
+<ng-template #complete>
+  <ng-container
+    *ngIf="{
+      fields: (fields$ | async) ?? [],
+      item: item$ | async,
+      formValueChanges: formValueChanges$ | async,
+    } as vm"
+  >
+    <div class="flex align-items-center justify-content-between">
+      <div class="title-content-container">
+        <ng-content select="[itemTitle]"></ng-content>
+      </div>
+    </div>
+    <div class="menu">
+      <div class="flex flex-1">
+        <ng-container
+          *ngTemplateOutlet="
+            menuTemplate | async;
+            context: {
+              $implicit: form,
+              fields: vm.fields,
+              setDataSyncFn: setDataSyncState,
+              item: vm.item!,
+              editable: editable,
+            }
+          "
+        ></ng-container>
+      </div>
+      <div class="form-buttons-container">
+        <imperia-icon-button
+          *ngIf="editable && showSaveButton"
+          type="button"
+          icon="save"
+          (onClick)="save(vm.fields, form, vm.item)"
+          [disabled]="!editable || !form.dirty"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="showEditButton"
+          type="button"
+          icon="pencil"
+          (onClick)="editableChangeFn(!editable)"
+          [active]="editable"
+        ></imperia-icon-button>
+        <ng-container *ngIf="dataStatusTemplate">
+          <ng-container *ngTemplateOutlet="dataStatusTemplate"></ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div
+      class="form-container"
+      [style.height]="height"
+      [style.max-height]="height"
+      cdkScrollable
+    >
+      <ng-container
+        *ngTemplateOutlet="
+          formTemplate | async;
+          context: {
+            $implicit: form,
+            fields: vm.fields,
+            setDataSyncFn: setDataSyncState,
+            item: vm.item!,
+            editable: editable,
+          }
+        "
+      >
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+<ng-template #onlyTemplate>
+  <ng-container
+    *ngIf="{
+      fields: fields$ | async,
+      item: item$ | async,
+      formValueChanges: formValueChanges$ | async,
+    } as vm"
+  >
+    <ng-container
+      *ngTemplateOutlet="
+        formTemplate | async;
+        context: {
+          $implicit: form,
+          fields: vm.fields!,
+          setDataSyncFn: setDataSyncState,
+          item: vm.item!,
+          editable: editable,
+        }
+      "
+    ></ng-container>
+  </ng-container>
+</ng-template>

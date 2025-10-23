@@ -1,0 +1,26 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <p-calendar
+    [useUtc]="useUtc"
+    [appendTo]="appendTo"
+    [dateFormat]="dateFormat"
+    [showTime]="showTime"
+    [showSeconds]="showSeconds"
+    [inline]="inline"
+    [view]="view"
+    [readonlyInput]="readonlyInput"
+    [disabledDays]="disabledDays"
+    [timeOnly]="timeOnly"
+    [firstDayOfWeek]="firstDayOfWeek"
+    [ngModel]="vm.value"
+    [disabled]="vm.disabled"
+    [defaultDate]="defaultDate!"
+    [minDate]="_minDate!"
+    [maxDate]="_maxDate!"
+    [disabledDays]="$disabledDays()"
+    [ngClass]="{
+      'invalid-date': isInvalid,
+    }"
+    (onSelect)="selectChange($event)"
+    (ngModelChange)="onInput($event)"
+  ></p-calendar>
+</ng-container>

@@ -1,0 +1,9 @@
+table.to-copy-rows {
+  display: block;
+  position: absolute;
+  height: 0;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}

@@ -1,0 +1,159 @@
+.container {
+  width: 20rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family:
+    Segoe UI Semibold,
+    Segoe WP,
+    Segoe,
+    device-segoe,
+    Tahoma,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 10.5pt;
+  color: #505c6d;
+  padding: 0.25rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.configurations {
+  flex: 0 0 auto;
+  padding-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.filters-applicator {
+  padding-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.unselected-filters-panel-buttons {
+  padding-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.unselected-filters-panel {
+  flex: 0 0 10rem;
+  padding-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.unselected-filters-searcher {
+  display: flex;
+  flex: 0 0 auto;
+
+  input {
+    flex: 1 1 auto;
+    border: none;
+    border-bottom: 1px solid rgb(167, 173, 182);
+    height: 30px;
+    outline: none;
+    border-radius: 0;
+    font-family:
+      Segoe UI Semibold,
+      Segoe WP,
+      Segoe,
+      device-segoe,
+      Tahoma,
+      Helvetica,
+      Arial,
+      sans-serif;
+    font-size: 10.5pt;
+  }
+}
+
+.unselected-filters {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 100%;
+}
+
+.selected-filters {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.25rem;
+  overflow: auto;
+
+  .selected-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    &:hover {
+      ::ng-deep *:not(.p-disabled, [disabled], .disabled) {
+        border-color: #3e7bbf !important;
+      }
+    }
+
+    input,
+    p-calendar ::ng-deep span input,
+    p-dropdown ::ng-deep .p-dropdown {
+      width: 100%;
+      height: 29px;
+      padding: 0.25rem 0.5rem;
+      font-family:
+        "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma,
+        Helvetica, Arial, sans-serif;
+      border: 1px solid rgb(141, 149, 160);
+      border-radius: 0;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 10.5pt !important;
+      color: #212121;
+
+      &:focus,
+      &.p-focus {
+        outline: none;
+        box-shadow: none;
+      }
+      &.operator {
+        border-left: none;
+      }
+      &.operator-left {
+        border-right: none;
+      }
+    }
+    p-calendar ::ng-deep span input {
+      border-left: none;
+    }
+    imp-input-number ::ng-deep p-inputnumber ::ng-deep span input {
+      border-left: none;
+    }
+
+    p-dropdown ::ng-deep .p-dropdown {
+      padding: 0;
+      border-radius: 0;
+      span {
+        padding: 0.25rem 0.5rem;
+      }
+    }
+  }
+}
+
+.filter-configurator {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgb(141, 149, 160);
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+}

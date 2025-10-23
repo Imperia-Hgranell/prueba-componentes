@@ -1,0 +1,57 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="div-to-hidden" [hidden]="vm.disabled">
+    <p-inputNumber
+      #inputNumber
+      [ngModel]="vm.value"
+      [inputStyle]="inputStyle | async"
+      (ngModelChange)="onNgModelChange($event)"
+      [mode]="mode"
+      [placeholder]="placeholder"
+      [min]="vm.min!"
+      [max]="vm.max!"
+      [prefix]="prefix"
+      [suffix]="suffix"
+      [useGrouping]="useGrouping"
+      [maxFractionDigits]="vm.maxFractionDigits!"
+      [minFractionDigits]="vm.minFractionDigits!"
+      [disabled]="vm.disabled"
+      [currency]="CURRENCY"
+      [locale]="LOCALE"
+      [step]="step"
+      (onInput)="onInputChange.emit($event)"
+      (onFocus)="focus()"
+      (onBlur)="onBlurFn()"
+      (onKeyDown)="onKeyDonwFn($event)"
+    ></p-inputNumber>
+  </div>
+  <div class="div-to-hidden" [hidden]="!vm.disabled">
+    <div id="disabled-div" [ngClass]="{ 'disabled': vm.disabled  }">
+      <ng-container
+        *ngIf="vm.value || vm.value === 0; else placeholderTemplate"
+      >
+        <span class="prefix">{{ inputNumber.prefixChar }}</span>
+        <span
+          class="number"
+          [ngClass]="{ link: isLink }"
+          (click)="onClickLink.emit()"
+        >
+          {{
+            vm.value
+              | number
+                : "1." +
+                    (vm.minFractionDigits ?? 0) +
+                    "-" +
+                    (vm.maxFractionDigits ?? 0)
+                : LOCALE
+          }}
+        </span>
+        <span class="suffix">{{ inputNumber.suffixChar }}</span>
+      </ng-container>
+      <ng-template #placeholderTemplate>
+        <span tooltip-on-hover class="number placeholder">
+          {{ placeholder }}
+        </span>
+      </ng-template>
+    </div>
+  </div>
+</ng-container>

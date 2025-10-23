@@ -1,0 +1,23 @@
+@let value = value$ | async;
+<div
+  class="imp-select-button"
+  [ngClass]="orientation == 'vertical' ? 'vertical' : ''"
+>
+  <imperia-icon-button
+    type="button"
+    *ngFor="let option of options"
+    [icon]="option.icon ?? defaultIcon.icon"
+    [iconPosition]="option.iconPosition ?? defaultIcon.iconPosition"
+    [containerSize]="option.containerSize ?? defaultIcon.containerSize"
+    [containerClass]="option.containerClass ?? defaultIcon.containerClass"
+    [imgSize]="option.imgSize ?? defaultIcon.imgSize"
+    [imgClass]="option.imgClass ?? defaultIcon.imgClass"
+    [title]="option.title ?? defaultIcon.title"
+    [text]="option.text ?? defaultIcon.text"
+    [disabled]="(disabled | async) ?? true"
+    [active]="isSelected(option, value)"
+    [activeButtonStyle]="activeButtonStyle"
+    [primeNGIconClass]="option.primeNGIconClass ?? defaultIcon.primeNGIconClass"
+    (onClick)="select(option)"
+  ></imperia-icon-button>
+</div>

@@ -1,0 +1,202 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family:
+    Segoe UI Semibold,
+    Segoe WP,
+    Segoe,
+    device-segoe,
+    Tahoma,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 10.5pt;
+  color: #505c6d;
+  overflow: auto;
+}
+.imperia-table-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem;
+  .header-title {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* CONFIGURATION */
+.configuration-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+}
+.toggle-configuration-panel-button {
+  padding: 0.25rem 0.25rem 0 0.25rem;
+}
+.configuration-panel-container {
+  overflow: hidden;
+  .configuration-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    width: 100%;
+    background-color: white;
+    max-height: 210px;
+    overflow: auto;
+  }
+}
+.filter-configuration-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+}
+
+.filter-configuration-panel-container {
+  width: 100%;
+  overflow: hidden;
+  .filter-configuration-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0 0 0.35rem 0;
+    width: 100%;
+    background-color: white;
+    max-height: 210px;
+    overflow: auto;
+  }
+}
+/* FILTERS TO ADD */
+.filters-to-add-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+}
+.toggle-filters-to-add-panel-button {
+  padding: 0.25rem 0.25rem 0 0.25rem;
+}
+.filters-to-add-panel-container {
+  overflow: hidden;
+  .filters-to-add-searcher {
+    display: flex;
+    width: 100%;
+    padding: 0 0.25rem;
+    input {
+      flex: 1 1 auto;
+      border: none;
+      border-bottom: 1px solid rgb(167, 173, 182);
+      height: 30px;
+      outline: none;
+      border-radius: 0;
+    }
+    imperia-icon-button {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  .filters-to-add-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    width: 100%;
+    background-color: white;
+    max-height: 210px;
+    overflow: auto;
+  }
+  .no-filter-to-add-found {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem;
+  }
+}
+/* APPLY FILTERS */
+.apply-filters-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.25rem;
+  gap: 0.25rem;
+}
+
+/* FILTERS SELECTED */
+.filters-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  width: 100%;
+  overflow: auto;
+  min-height: fit-content;
+  .filter {
+    display: flex;
+    flex-direction: column;
+    &:hover {
+      ::ng-deep * {
+        border-color: #3e7bbf !important;
+      }
+    }
+
+    input,
+    p-calendar ::ng-deep span input,
+    p-dropdown ::ng-deep .p-dropdown {
+      width: 100%;
+      height: 29px;
+      padding: 0.25rem 0.5rem;
+      font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+        Tahoma, Helvetica, Arial, sans-serif;
+      border: 1px solid rgb(141, 149, 160);
+      border-radius: 0;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 10.5pt !important;
+      color: #212121;
+
+      &:focus,
+      &.p-focus {
+        outline: none;
+        box-shadow: none;
+      }
+      &.operator {
+        border-left: none;
+      }
+      &.operator-left {
+        border-right: none;
+      }
+    }
+    p-calendar ::ng-deep span input {
+      border-left: none;
+    }
+    imp-input-number ::ng-deep p-inputnumber ::ng-deep span input {
+      border-left: none;
+    }
+
+    p-dropdown ::ng-deep .p-dropdown {
+      padding: 0;
+      border-radius: 0;
+      span {
+        padding: 0.25rem 0.5rem;
+      }
+    }
+  }
+}
+
+.icons {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  height: calc(100% - 12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+}

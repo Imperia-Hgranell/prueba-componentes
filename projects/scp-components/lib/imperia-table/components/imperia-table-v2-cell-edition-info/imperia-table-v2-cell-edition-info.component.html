@@ -1,0 +1,44 @@
+<ng-container *ngIf="{ info: info$ | async, loading: loading$ | async } as vm">
+  <div class="title">
+    {{ TRANSLATION.title }}
+  </div>
+  <div class="edition-info-scroller" [style.height.px]="height$ | async">
+    <table class="edition-info-table">
+      <thead style="position: sticky; top: 0">
+        <tr class="edition-info-header-row">
+          <th class="edition-info-header-cell">
+            {{ TRANSLATION.table.columns.UpdateUser.header }}
+          </th>
+          <th class="edition-info-header-cell">
+            {{ TRANSLATION.table.columns.UpdatedDate.header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="vm.info && !vm.loading; else loading">
+          <tr class="editon-info-body-row" *ngFor="let infoRow of vm.info">
+            <td [title]="infoRow.UpdateUser" class="editon-info-body-cell">
+              {{ infoRow.UpdateUser }}
+            </td>
+            <td [title]="infoRow.UpdatedDate" class="editon-info-body-cell">
+              {{ infoRow.UpdatedDate | date: "dd/MM/yyyy HH:mm:ss" }}
+            </td>
+          </tr>
+          <tr class="editon-info-body-row" *ngIf="vm.info.length === 0">
+            <td class="editon-info-body-cell" colspan="2">
+              {{ TRANSLATION.table.noInformation }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <tr class="editon-info-body-row">
+    <td class="editon-info-body-cell" colspan="2">
+      {{ TRANSLATION.table.loading }}
+    </td>
+  </tr>
+</ng-template>

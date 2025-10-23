@@ -1,0 +1,48 @@
+<ng-container
+  *ngIf="{
+    cellOverlayComponent: cellOverlayComponent$ | async,
+    cellOverlaysPinned: cellOverlaysPinned$ | async,
+    cellOverlayPinnedContainerWidth: cellOverlayPinnedContainerWidth$ | async,
+  } as vm"
+>
+  <ng-container *ngIf="vm.cellOverlayComponent">
+    <div
+      class="flex flex-column"
+      [style.width.px]="vm.cellOverlayPinnedContainerWidth"
+      [@componentOpenClose]="
+        !!vm.cellOverlaysPinned?.length ? 'open' : 'closed'
+      "
+      [@horizontalListElementEnterLeave]="vm.cellOverlaysPinned?.length"
+    >
+      <div
+        #cellOverlayPinnedContainer
+        *ngFor="let cellOverlay of vm.cellOverlaysPinned"
+        class="cell-overlay-pinned-container"
+      >
+        <div class="title">
+          <ng-container
+            *ngTemplateOutlet="
+              (vm.cellOverlayComponent.titleTemplate$ | async) ??
+                vm.cellOverlayComponent.defaultTitleTemplate;
+              context: { $implicit: cellOverlay }
+            "
+          ></ng-container>
+        </div>
+        <imperia-icon-button
+          class="unpin"
+          type="button"
+          icon="unfix"
+          [containerSize]="32"
+          (onClick)="unpin.next(cellOverlay)"
+        ></imperia-icon-button>
+        <ng-container
+          *ngTemplateOutlet="
+            (vm.cellOverlayComponent.contentTemplate$ | async) ??
+              vm.cellOverlayComponent.defaultContentTemplate;
+            context: { $implicit: cellOverlay }
+          "
+        ></ng-container>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

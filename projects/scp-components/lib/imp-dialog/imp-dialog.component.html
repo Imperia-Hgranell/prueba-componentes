@@ -1,0 +1,94 @@
+<ng-template #template>
+  <ng-container *ngIf="closeDialog$ | async"></ng-container>
+  <div
+    id="imp-dialog-wrapper"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="autoFocus"
+    cdkDrag
+    cdkDragRootElement=".cdk-overlay-pane"
+    cdkDragBoundary=".cdk-overlay-container"
+    [cdkDragDisabled]="maximized"
+    (cdkDragStarted)="onDragStarted()"
+    (cdkDragEnded)="onDragEnded()"
+    class="imp-dialog-wrapper shadow-3"
+    [ngClass]="{ dragging: dragging, resizing: resizing }"
+  >
+    <div cdkDragHandle class="imp-dialog-header" *ngIf="showHeader">
+      <ng-content select="[header]"></ng-content>
+      <div class="header-buttons-wrapper">
+        <imperia-icon-button
+          *ngIf="maximizable"
+          type="button"
+          [primeNGIconClass]="
+            'pi-window-' + (maximized ? 'minimize' : 'maximize')
+          "
+          (onClick)="maximize()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="closable"
+          icon="x"
+          type="button"
+          [disabled]="acceptLoading"
+          (onClick)="onClickClose('cancel')"
+        ></imperia-icon-button>
+      </div>
+    </div>
+    <div
+      class="imp-dialog-content"
+      #contentContainer
+      [ngStyle]="{
+        overflow: scrollableContent ? 'auto' : 'hidden',
+        height:
+          'calc(100% - ' +
+          (showFooter ? 53 : 10) +
+          'px - ' +
+          (showHeader ? 53 : 10) +
+          'px)',
+      }"
+    >
+      <ng-container *ngIf="contentTemplate">
+        <ng-container
+          *ngTemplateOutlet="
+            contentTemplate;
+            context: { $implicit: contentContainer.clientHeight }
+          "
+        ></ng-container>
+      </ng-container>
+      <ng-container *ngIf="!contentTemplate">
+        <ng-content></ng-content>
+      </ng-container>
+    </div>
+    <div class="imp-dialog-footer" *ngIf="showFooter">
+      <ng-content select="[footer]"></ng-content>
+      <div class="footer-buttons-wrapper" *ngIf="showFooterButtons">
+        <imperia-icon-button
+          *ngIf="showAcceptButton"
+          icon="save"
+          type="button"
+          [loading]="acceptLoading"
+          [disabled]="acceptButtonDisabled || acceptLoading"
+          [text]="translate.translation.IMPERIA_TABLE_INPUT.footer.accept"
+          (onClick)="onClickClose('accept')"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="showCancelButton"
+          icon="x"
+          type="button"
+          [disabled]="cancelButtonDisabled || acceptLoading"
+          [text]="translate.translation.IMPERIA_TABLE_INPUT.footer.cancel"
+          (onClick)="onClickClose('cancel')"
+        ></imperia-icon-button>
+      </div>
+    </div>
+    <div
+      *ngIf="maximizable"
+      class="resize-handler right"
+      (mousedown)="onMouseDown($event, 'right')"
+    ></div>
+    <div
+      *ngIf="maximizable"
+      class="resize-handler bottom"
+      (mousedown)="onMouseDown($event, 'bottom')"
+    ></div>
+  </div>
+</ng-template>

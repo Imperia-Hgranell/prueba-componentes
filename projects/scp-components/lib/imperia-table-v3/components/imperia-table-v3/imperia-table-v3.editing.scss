@@ -1,0 +1,100 @@
+.imperia-table-body-cell,
+.imperia-table-footer-cell {
+  input[type="checkbox"] {
+    height: 14px;
+    width: 14px;
+  }
+
+  ::ng-deep input {
+    height: 100%;
+    width: 100%;
+    border: none !important;
+    outline: none !important;
+    padding: 6px 12px !important;
+  }
+
+  &.loading {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 6px;
+      width: 6px;
+      top: 3px;
+      right: 3px;
+      border: 2px solid #a6e0a6;
+      border-bottom-color: transparent;
+      border-radius: 100%;
+      animation: rotation 1s linear infinite;
+    }
+  }
+  &.ok {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 11px;
+      width: 2px;
+      background-color: #a6e0a6;
+      top: 2px;
+      right: 5px;
+      transform: rotate(45deg);
+      animation: fadeout 2s linear infinite;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      height: 5px;
+      width: 2px;
+      background-color: #a6e0a6;
+      top: 7px;
+      right: 10px;
+      transform: rotate(-45deg);
+      animation: fadeout 2s linear infinite;
+    }
+  }
+  &.error {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      height: 12px;
+      width: 2px;
+      background-color: red;
+      top: 2px;
+      right: 6px;
+      transform: rotate(45deg);
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      height: 12px;
+      width: 2px;
+      background-color: red;
+      top: 2px;
+      right: 6px;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

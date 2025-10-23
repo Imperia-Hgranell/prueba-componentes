@@ -1,0 +1,155 @@
+@let disabled = $disabled();
+<ng-container
+  *ngIf="{
+    displayMode: numberDisplay$ | async,
+    column: col | async,
+    filterOperator: filterOperator | async,
+    operator: operator$ | async,
+    value: value$ | async,
+    col: col | async,
+  } as vm"
+>
+  @if (vm.col) {
+    <div class="filters-container" [ngClass]="{ disabled: disabled }">
+      <div
+        class="filter"
+        [ngClass]="{
+          disabled: disabled,
+          'custom-cursor-not-allowed': disabled,
+        }"
+      >
+        <div
+          *ngIf="vm.col?.dataInfo?.allowFilterByRange ?? false"
+          class="mb-2 pr-2"
+        >
+          <form>
+            <imp-label
+              [label]="TRANSLATIONS.filterByRange"
+              [labelStyle]="{ width: '90%' }"
+              [contentStyle]="{ width: 'auto' }"
+            >
+              <p-inputSwitch
+                [ngModel]="vm.displayMode"
+                [trueValue]="2"
+                [falseValue]="1"
+                [impDisabled]="disabled"
+                (ngModelChange)="numberDisplay.next($event)"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="numberDisplay.next($event)"
+              ></p-inputSwitch>
+            </imp-label>
+          </form>
+        </div>
+
+        <div class="flex">
+          <ng-container *ngIf="vm.displayMode === 1">
+            <div class="flex w-full">
+              <p-dropdown
+                appendTo="body"
+                styleClass="w-full operator-left"
+                [options]="[
+                  { label: '=', value: '=' },
+                  { label: '<', value: '<' },
+                  { label: '>', value: '>' },
+                ]"
+                optionLabel="label"
+                optionValue="value"
+                [disabled]="disabled"
+                [ngModel]="vm.operator"
+                (ngModelChange)="onOperatorChange.next($event)"
+              ></p-dropdown>
+
+              <div class="w-full no-border-filter">
+                <imp-input-number
+                  class="w-full"
+                  [mode]="vm.col.dataInfo.mode"
+                  [prefix]="vm.col.dataInfo.prefix"
+                  [suffix]="vm.col.dataInfo.suffix"
+                  [min]="vm.col.dataInfo.min"
+                  [max]="vm.col.dataInfo.max"
+                  [minFractionDigits]="vm.col.dataInfo.minFractionDigits ?? 0"
+                  [maxFractionDigits]="vm.col.dataInfo.maxFractionDigits ?? 3"
+                  [step]="vm.col.dataInfo.step"
+                  [isLink]="vm.col.dataInfo.isLink"
+                  [disabled]="disabled"
+                  [ngModel]="vm.value"
+                  (ngModelChange)="onValueChange.next($event)"
+                ></imp-input-number>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="vm.displayMode === 2">
+            @if (
+              {
+                value: value$ | async,
+                rangeStart: rangeStart$ | async,
+                rangeEnd: rangeEnd$ | async,
+                onValueBetweenChanges: onValueBetweenChanges$ | async,
+              };
+              as betweenModeVM
+            ) {
+              <div class="input-number-filter-form">
+                <div class="input-label">{{ TRANSLATIONS.from }}</div>
+                <div class="input-number">
+                  <imp-input-number
+                    class="w-full"
+                    [mode]="vm.col.dataInfo.mode"
+                    [prefix]="vm.col.dataInfo.prefix"
+                    [suffix]="vm.col.dataInfo.suffix"
+                    [min]="vm.col.dataInfo.min"
+                    [max]="vm.col.dataInfo.max"
+                    [minFractionDigits]="vm.col.dataInfo.minFractionDigits ?? 0"
+                    [maxFractionDigits]="vm.col.dataInfo.maxFractionDigits ?? 3"
+                    [step]="vm.col.dataInfo.step"
+                    [isLink]="vm.col.dataInfo.isLink"
+                    [disabled]="disabled"
+                    [ngModel]="betweenModeVM.rangeStart"
+                    (ngModelChange)="rangeStartChanges.next($event)"
+                  ></imp-input-number>
+                </div>
+              </div>
+              <div class="input-number-filter-form">
+                <div class="input-label">{{ TRANSLATIONS.to }}</div>
+                <div class="input-number no-border-filter">
+                  <imp-input-number
+                    class="w-full"
+                    [mode]="vm.col.dataInfo.mode"
+                    [prefix]="vm.col.dataInfo.prefix"
+                    [suffix]="vm.col.dataInfo.suffix"
+                    [min]="vm.col.dataInfo.min"
+                    [max]="vm.col.dataInfo.max"
+                    [minFractionDigits]="vm.col.dataInfo.minFractionDigits ?? 0"
+                    [maxFractionDigits]="vm.col.dataInfo.maxFractionDigits ?? 3"
+                    [step]="vm.col.dataInfo.step"
+                    [isLink]="vm.col.dataInfo.isLink"
+                    [disabled]="disabled"
+                    [ngModel]="betweenModeVM.rangeEnd"
+                    (ngModelChange)="rangeEndChanges.next($event)"
+                  ></imp-input-number>
+                </div>
+              </div>
+            }
+          </ng-container>
+        </div>
+      </div>
+      @if (!!vm.col.dataInfo.specialCaseConfig) {
+        <div class="flex justify-content-end w-100">
+          <div class="flex align-items-center gap-2">
+            <span class="special-case-label">{{
+              vm.col.dataInfo.specialCaseConfig.label
+            }}</span>
+            <imp-toggle
+              [ngModel]="vm.value === vm.col.dataInfo.specialCaseConfig.value"
+              (ngModelChange)="
+                onValueChange.next(
+                  $event ? vm.col.dataInfo.specialCaseConfig.value : ''
+                )
+              "
+            ></imp-toggle>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</ng-container>

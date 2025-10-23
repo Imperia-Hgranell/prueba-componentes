@@ -1,0 +1,74 @@
+:host {
+  background-color: white;
+}
+.filter-drawer {
+  display: flex;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 0;
+  transition: width 0.5s ease-in-out;
+  &.opened {
+    width: 300px;
+  }
+}
+
+.filter-container {
+  font-family: Segoe UI Semibold, Segoe WP, Segoe, device-segoe, Tahoma,
+    Helvetica, Arial, sans-serif;
+  font-size: 10.5pt;
+  color: #505c6d;
+  width: 300px;
+}
+
+.input-container {
+  background-color: white;
+  width: 100%;
+  &.boolean {
+    width: fit-content;
+  }
+  p-calendar ::ng-deep .p-calendar {
+    display: block;
+  }
+  input,
+  textarea,
+  p-dropdown ::ng-deep .p-dropdown,
+  p-calendar ::ng-deep span input {
+    width: 100%;
+    height: 29px;
+    padding: 0.25rem 0.5rem;
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma, Helvetica,
+      Arial, sans-serif !important;
+
+    border: 1px solid rgb(141, 149, 160) !important;
+    border-radius: 0;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 10.5pt !important;
+    color: #212121;
+
+    &.disabled,
+    &[disabled] {
+      cursor: auto;
+      border-color: transparent !important;
+      background-color: #ebedef;
+    }
+
+    &:hover:not([disabled]) {
+      border-color: #3e7bbf !important;
+    }
+
+    &:focus,
+    &.p-focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+  p-dropdown ::ng-deep .p-dropdown {
+    padding: 0;
+    border-radius: 0;
+    span {
+      padding: 0.25rem 0.5rem;
+    }
+  }
+}

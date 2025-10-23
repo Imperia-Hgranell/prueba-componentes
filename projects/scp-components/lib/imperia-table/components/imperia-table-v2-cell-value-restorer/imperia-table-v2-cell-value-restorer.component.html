@@ -1,0 +1,157 @@
+<ng-container
+  *ngIf="{
+    values: values$ | async,
+    clickEvent: clickEvent$ | async,
+    loading: loading$ | async,
+  } as vm"
+>
+  <div class="title">
+    {{ title }}
+  </div>
+  <table class="edition-info-table">
+    <thead *ngIf="withHeader">
+      <tr class="edition-info-header-row">
+        <th [width]="143" class="edition-info-header-cell number">
+          <ng-container *ngIf="vm.values">
+            <ng-container
+              *ngTemplateOutlet="
+                (toRestoreHeaderTemplate$ | async) ??
+                  defaultToRestoreHeaderTemplate;
+                context: {
+                  $implicit: {
+                    current: vm.values.current,
+                    toRestore: vm.values.toRestore,
+                    areEqual: vm.values.areEqual,
+                    canRestore: vm.values.canRestore,
+                    event: vm.clickEvent,
+                  },
+                }
+              "
+            ></ng-container>
+          </ng-container>
+        </th>
+        <th [width]="143" class="edition-info-header-cell number">
+          <ng-container *ngIf="vm.values">
+            <ng-container
+              *ngTemplateOutlet="
+                (currentValueHeaderTemplate$ | async) ??
+                  defaultCurrentValueHeaderTemplate;
+                context: {
+                  $implicit: {
+                    current: vm.values.current,
+                    toRestore: vm.values.toRestore,
+                    areEqual: vm.values.areEqual,
+                    canRestore: vm.values.canRestore,
+                    event: vm.clickEvent,
+                  },
+                }
+              "
+            ></ng-container>
+          </ng-container>
+        </th>
+        <th [width]="34" class="edition-info-header-cell"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="vm.values && !vm.loading; else loading">
+        <tr class="editon-info-body-row">
+          <td
+            tooltip-on-hover
+            [width]="143"
+            class="editon-info-body-cell number toRestore"
+          >
+            <ng-container
+              *ngTemplateOutlet="
+                (toRestoreTemplate$ | async) ?? defaultToRestoreTemplate;
+                context: {
+                  $implicit: {
+                    current: vm.values.current,
+                    toRestore: vm.values.toRestore,
+                    areEqual: vm.values.areEqual,
+                    canRestore: vm.values.canRestore,
+                    event: vm.clickEvent,
+                  },
+                }
+              "
+            ></ng-container>
+          </td>
+          <td
+            tooltip-on-hover
+            [width]="143"
+            class="editon-info-body-cell number"
+          >
+            <ng-container
+              *ngTemplateOutlet="
+                (currentValueTemplate$ | async) ?? defaultCurrentValueTemplate;
+                context: {
+                  $implicit: {
+                    current: vm.values.current,
+                    toRestore: vm.values.toRestore,
+                    areEqual: vm.values.areEqual,
+                    canRestore: vm.values.canRestore,
+                    event: vm.clickEvent,
+                  },
+                }
+              "
+            ></ng-container>
+          </td>
+          <td [width]="34" class="editon-info-body-cell p-0">
+            <imperia-icon-button
+              type="button"
+              [icon]="restoreIcon"
+              [loading]="restoring$ | async"
+              [disabled]="!vm.values.canRestore || (disabled | async)"
+              [containerSize]="33"
+              (onClick)="
+                restore.next({
+                  values: vm.values,
+                  clickEvent: vm.clickEvent!,
+                })
+              "
+            ></imperia-icon-button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</ng-container>
+
+<ng-template
+  #defaultToRestoreHeaderTemplate
+  imperia-table-v2-cell-value-restorer-template
+  let-value
+>
+  {{ TRANSLATION.table.columns.toRestore.header }}
+</ng-template>
+
+<ng-template
+  #defaultToRestoreTemplate
+  imperia-table-v2-cell-value-restorer-template
+  let-value
+>
+  {{ value ?? "-" }}
+</ng-template>
+
+<ng-template
+  #defaultCurrentValueHeaderTemplate
+  imperia-table-v2-cell-value-restorer-template
+  let-value
+>
+  {{ TRANSLATION.table.columns.currentValue.header }}
+</ng-template>
+
+<ng-template
+  #defaultCurrentValueTemplate
+  imperia-table-v2-cell-value-restorer-template
+  let-value
+>
+  {{ value ?? "-" }}
+</ng-template>
+
+<ng-template #loading>
+  <tr class="editon-info-body-row">
+    <td colspan="3" class="editon-info-body-cell">
+      {{ TRANSLATION.table.loading }}
+    </td>
+  </tr>
+</ng-template>

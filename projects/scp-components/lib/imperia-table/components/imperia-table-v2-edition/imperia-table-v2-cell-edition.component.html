@@ -1,0 +1,99 @@
+<ng-container *ngIf="ctx$ | async as ctx">
+  <!-- NUMBER -->
+  <imp-input-number
+    *ngIf="ctx.cell.dataInfo.type == 'number'"
+    #numberEditor
+    [mode]="ctx.cell.dataInfo.mode"
+    [prefix]="ctx.cell.dataInfo.prefix"
+    [suffix]="ctx.cell.dataInfo.suffix"
+    [min]="ctx.cell.dataInfo.min"
+    [max]="ctx.cell.dataInfo.max"
+    [minFractionDigits]="ctx.cell.dataInfo.minFractionDigits"
+    [maxFractionDigits]="ctx.cell.dataInfo.maxFractionDigits"
+    [step]="ctx.cell.dataInfo.step"
+    [isLink]="ctx.cell.dataInfo.isLink"
+    [formControl]="ctx.cell.control"
+  ></imp-input-number>
+
+  <!-- BOOLEAN -->
+  <p-dropdown
+    *ngIf="ctx.cell.dataInfo.type == 'boolean'"
+    #booleanEditor
+    appendTo="body"
+    styleClass="w-full"
+    [showClear]="false"
+    [placeholder]="' '"
+    [options]="[
+      {
+        label: 'IMPERIA_TABLE_FILTERS.types.boolean.options.1' | impTranslate,
+        value: 1,
+      },
+      {
+        label: 'IMPERIA_TABLE_FILTERS.types.boolean.options.0' | impTranslate,
+        value: 0,
+      },
+    ]"
+    optionLabel="label"
+    optionValue="value"
+    [formControl]="ctx.cell.control"
+  ></p-dropdown>
+
+  <!-- STRING -->
+  <input
+    *ngIf="ctx.cell.dataInfo.type == 'string'"
+    #stringEditor
+    pInputText
+    type="text"
+    [formControl]="ctx.cell.control"
+  />
+
+  <!-- DATE -->
+  <imp-input-calendar
+    *ngIf="ctx.cell.dataInfo.type == 'date'"
+    #dateEditor
+    appendTo="body"
+    dateFormat="dd/mm/yy"
+    [timeOnly]="ctx.cell.dataInfo.timeOnly"
+    [showTime]="ctx.cell.dataInfo.showTime"
+    [minDate]="ctx.cell.dataInfo.minDate"
+    styleClass="imperia-table-body-cell-calendar"
+    (onShow)="ctx.cell.dataInfo.overlayOpen.next(true)"
+    (onClose)="ctx.cell.dataInfo.overlayOpen.next(false)"
+    (onSelect)="onDateInputChange($event, ctx.cell.control)"
+    [formControl]="ctx.cell.control"
+  ></imp-input-calendar>
+
+  <!-- SELECT -->
+  <p-dropdown
+    *ngIf="ctx.cell.dataInfo.type == 'select'"
+    #selectEditor
+    [style]="{ 'min-width': 'calc(' + getWidth(ctx.col) + ' - 1px)' }"
+    appendTo="body"
+    panelStyleClass="imperia-table-body-cell-dropdown-panel"
+    [panelStyle]="{
+      'min-width': 'calc(' + getWidth(ctx.col) + ' - 1px)',
+    }"
+    [options]="ctx.cell.dataInfo.options"
+    [optionLabel]="ctx.cell.dataInfo.labelProperty"
+    [optionValue]="ctx.cell.dataInfo.keyProperty"
+    [formControl]="ctx.cell.control"
+  ></p-dropdown>
+
+  <!-- STRING WITH HELP -->
+  <imp-input-help
+    #stringWithHelpEditor
+    *ngIf="ctx.cell.dataInfo.type == 'string-with-help'"
+    [async]="ctx.cell.dataInfo.async"
+    [optionLabel]="ctx.cell.dataInfo.optionLabel"
+    [optionValue]="ctx.cell.dataInfo.optionValue"
+    [allowMultipleValues]="ctx.cell.dataInfo.allowMultipleValues"
+    [allowCustomValue]="ctx.cell.dataInfo.allowCustomValue"
+    [allowSearch]="false"
+    [endpoint]="ctx.cell.dataInfo.endpoint"
+    [body]="ctx.cell.dataInfo.body"
+    [hasFilters]="ctx.cell.dataInfo.hasFilters"
+    [options]="ctx.cell.dataInfo.options"
+    [valueMapper]="ctx.cell.dataInfo.valueMapper"
+    [formControl]="ctx.cell.control"
+  ></imp-input-help>
+</ng-container>

@@ -1,0 +1,137 @@
+<imperia-icon-button
+  type="button"
+  icon="list-edit"
+  [text]="'IMPERIA_TABLE.caption.modify_columns' | impTranslate"
+  (onClick)="toggleModalVisibility.next()"
+></imperia-icon-button>
+
+<imp-dialog
+  [visible]="(modalVisible$ | async) ?? false"
+  [maximizable]="false"
+  [showCancelButton]="false"
+  height="80%"
+  width="50%"
+  maxWidth="800px"
+  (onClose)="toggleModalVisibility.next()"
+>
+  <ng-template
+    #content
+    *ngIf="{
+      columnsToConfigure: columnsToConfigure$ | async,
+      isSomeColumnSelected: isSomeColumnSelected$ | async,
+    } as vm"
+  >
+    <imperia-table-v2
+      [columns]="COLUMNS"
+      [value]="vm.columnsToConfigure"
+      [title]="'IMPERIA_TABLE.columns_configurator.title' | impTranslate"
+      dataKey="field"
+      [loading]="loading$ | async"
+    >
+      <imperia-table-v2-row-selection
+        (selectionChange)="selection.next($event)"
+      ></imperia-table-v2-row-selection>
+
+      <imp-menu-v2-item-group position="right">
+        <imperia-icon-button
+          *impMenuV2Item
+          type="button"
+          [text]="
+            'IMPERIA_TABLE.columns_configurator.buttons.reset' | impTranslate
+          "
+          (onClick)="reset.next()"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *impMenuV2Item
+          [disabled]="!vm.isSomeColumnSelected"
+          type="button"
+          icon="chevron-down"
+          (onClick)="
+            move.next({
+              direction: 'down',
+              columns: vm.columnsToConfigure ?? [],
+            })
+          "
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *impMenuV2Item
+          [disabled]="!vm.isSomeColumnSelected"
+          type="button"
+          icon="chevron-up"
+          (onClick)="
+            move.next({ direction: 'up', columns: vm.columnsToConfigure ?? [] })
+          "
+        ></imperia-icon-button>
+      </imp-menu-v2-item-group>
+
+      <ng-template imperiaTableBodyCell="visible" let-data>
+        <div
+          class="h-full flex justify-content-center align-items-center cell-template-padding"
+        >
+          <imperia-icon-button
+            type="button"
+            [containerSize]="34"
+            [disabled]="!data.row.data.configurable"
+            [primeNGIconClass]="
+              data.row.data.configuration.visible ? 'pi-eye' : 'pi-eye-slash'
+            "
+            (onClick)="
+              toggleVisibility.next({
+                columns: vm.columnsToConfigure ?? [],
+                columnSelected: data.row.data,
+              })
+            "
+          ></imperia-icon-button>
+        </div>
+      </ng-template>
+
+      <ng-template imperiaTableBodyCell="frozen" let-data>
+        <div
+          class="h-full flex justify-content-center align-items-center cell-template-padding"
+        >
+          <imperia-icon-button
+            *ngIf="data.row.data.configuration.frozen"
+            type="button"
+            [containerSize]="34"
+            [disabled]="!data.row.data.configurable"
+            primeNGIconClass="pi-lock-open"
+            (onClick)="
+              toggleFrozen.next({
+                columnsToConfigure: vm.columnsToConfigure ?? [],
+                columnSelected: data.row.data,
+              })
+            "
+          ></imperia-icon-button>
+          <ng-container *ngIf="!data.row.data.configuration.frozen">
+            <imperia-icon-button
+              type="button"
+              [containerSize]="34"
+              [disabled]="!data.row.data.configurable"
+              primeNGIconClass="pi-arrow-circle-left"
+              (onClick)="
+                toggleFrozen.next({
+                  columnsToConfigure: vm.columnsToConfigure ?? [],
+                  columnSelected: data.row.data,
+                  frozenPosition: 'left',
+                })
+              "
+            ></imperia-icon-button>
+            <imperia-icon-button
+              type="button"
+              [containerSize]="34"
+              [disabled]="!data.row.data.configurable"
+              primeNGIconClass="pi-arrow-circle-right"
+              (onClick)="
+                toggleFrozen.next({
+                  columnsToConfigure: vm.columnsToConfigure ?? [],
+                  columnSelected: data.row.data,
+                  frozenPosition: 'right',
+                })
+              "
+            ></imperia-icon-button>
+          </ng-container>
+        </div>
+      </ng-template>
+    </imperia-table-v2>
+  </ng-template>
+</imp-dialog>

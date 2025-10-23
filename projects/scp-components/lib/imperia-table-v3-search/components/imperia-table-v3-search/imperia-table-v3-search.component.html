@@ -1,0 +1,18 @@
+<imperia-icon-button
+  type="button"
+  icon="search"
+  [active]="expanded.value$ | async"
+></imperia-icon-button>
+<div class="input-container" [class.expanded]="expanded.value$ | async">
+  <input
+    #input
+    type="text"
+    [ngModel]="value$ | async"
+    (ngModelChange)="set($event)"
+  />
+  <imperia-icon-button
+    type="button"
+    icon="x"
+    (click)="set('')"
+  ></imperia-icon-button>
+</div>

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/scp-components",
+  "lib": {
+    "entryFile": "./public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "primeflex",
+    "primeicons",
+    "primeng",
+    "moment",
+    "rxjs",
+    "moment",
+    "@imperiascm/translate",
+    "@imperiascm/rxjs-utils",
+    "@imperiascm/scp-utils",
+    "@imperiascm/dom-utils",
+    "file-saver"
+  ]
+}

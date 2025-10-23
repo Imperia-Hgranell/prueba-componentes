@@ -1,0 +1,25 @@
+<div class="flex imp-card arrow__container">
+  <i
+    class="imp-icon size-medium imp-minus minus text-black"
+    [ngClass]="{
+      'text-light-grey disabled': $value() === $minValue(),
+    }"
+    (click)="updateValue(-1)"
+  ></i>
+  @if ($allowVisibilityToggle()) {
+    <i
+      class="imp-icon size-medium imp-eye-off minus text-black"
+      [ngClass]="{
+        'imp-eye': $visible(),
+      }"
+      (click)="$visible.set(!$visible())"
+    ></i>
+  }
+  <i
+    class="imp-icon size-medium imp-plus plus text-black"
+    [ngClass]="{
+      'text-light-grey disabled': $value() === $maxValue(),
+    }"
+    (click)="updateValue(+1)"
+  ></i>
+</div>

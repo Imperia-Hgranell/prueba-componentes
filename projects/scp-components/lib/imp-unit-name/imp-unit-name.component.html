@@ -1,0 +1,51 @@
+@let unit = $unit();
+@let context = $context();
+<ng-template #unitNameTemplate let-data>
+  <ng-template
+    [ngTemplateOutlet]="content"
+    [ngTemplateOutletContext]="{ $implicit: data }"
+  ></ng-template>
+</ng-template>
+@if (!$asCellTemplate()) {
+  <ng-template
+    [ngTemplateOutlet]="content"
+    [ngTemplateOutletContext]="{ $implicit: context }"
+  ></ng-template>
+}
+
+<ng-template #content let-data>
+  <div
+    *ngIf="
+      $unitNameErrorShowError()[$typeAmount()](unit) ||
+        $unitNameErrorShowError()[$typeAmount()](data);
+      else unitTemplate
+    "
+    [ngClass]="
+      $asCellTemplate()
+        ? 'h-full flex justify-content-center align-items-center cell-template-padding'
+        : ''
+    "
+  >
+    <imp-icon
+      [icon]="'imp-info'"
+      [tooltip]="$unitNameErrorMessages()[$typeAmount()]"
+    ></imp-icon>
+  </div>
+  <ng-template #unitTemplate>
+    <div
+      [ngClass]="
+        $asCellTemplate()
+          ? 'h-full flex justify-content-center align-items-center cell-template-padding'
+          : ''
+      "
+    >
+      {{
+        !!$unit()
+          ? $unit()
+          : $asCellTemplate()
+            ? data.row.data[data.col.field]
+            : $defaultUnit()[$typeAmount()]
+      }}
+    </div>
+  </ng-template>
+</ng-template>

@@ -14,9 +14,36 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
+    "paths": {
+      "@imperiascm/scp-components": ["./projects/scp-components/lib"],
+      "@imperiascm/scp-components/pipes": ["./projects/scp-components/pipes"],
+      "@imperiascm/scp-components/directives": [
+        "./projects/scp-components/directives"
+      ],
+      "@imperiascm/scp-components/imp-overlay": [
+        "./projects/scp-components/imp-overlay"
+      ],
+      "@imperiascm/scp-components/imp-arrow-controls": [
+        "./projects/scp-components/imp-arrow-controls"
+      ],
+      "@imperiascm/scp-components/imp-input-calendar": [
+        "./projects/scp-components/imp-input-calendar"
+      ],
+      "@imperiascm/scp-components/imp-toggle": [
+        "./projects/scp-components/imp-toggle"
+      ],
+      "@imperiascm/scp-components/imp-progress-bar": [
+        "./projects/scp-components/imp-progress-bar"
+      ],
+      "@imperiascm/scp-components/imp-date-range-filter-selector": [
+        "./projects/scp-components/imp-date-range-filter-selector"
+      ]
+    },
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "allowJs": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

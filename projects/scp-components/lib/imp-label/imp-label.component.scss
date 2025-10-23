@@ -1,0 +1,196 @@
+:host ::ng-deep {
+  .form-control-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 29px;
+    // TODO: ARREGLAR ESTO
+    // background-image: url(./puntos.svg);
+    background-repeat: repeat-x;
+    background-position: center;
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+      Tahoma, Helvetica, Arial, sans-serif;
+    &.top {
+      align-items: flex-start;
+      background-position: top;
+    }
+    &.bottom {
+      align-items: flex-end;
+      background-position: bottom;
+    }
+    .form-control-label,
+    .form-control-input {
+      background-color: transparent;
+    }
+    .form-control-label {
+      display: flex;
+      align-items: center;
+      width: 40%;
+      overflow: hidden;
+      .label-container {
+        background-color: white;
+        display: flex;
+        max-width: 100%;
+        padding: 0 0.5rem;
+        span {
+          font-weight: 400;
+          font-size: 14px;
+          color: #505c6d;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        .info-button {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+    .form-control-input {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+      width: 60%;
+      .input-container {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+
+        &.boolean {
+          display: flex;
+          align-items: center;
+        }
+
+        p-calendar ::ng-deep .p-calendar {
+          display: block;
+        }
+        input[type="text"],
+        input[type="password"],
+        textarea {
+          cursor: auto !important;
+        }
+        imp-input-help ::ng-deep .input-container input {
+          min-height: 0 !important;
+          border-width: 0 !important;
+        }
+        input[type="text"],
+        input[type="password"],
+        textarea,
+        p-dropdown ::ng-deep .p-dropdown-label,
+        p-multiselect ::ng-deep .p-multiselect-label,
+        p-calendar ::ng-deep span input {
+          width: 100%;
+          min-height: 29px;
+          padding: 0.25rem 0.5rem;
+          font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe,
+            "Segoe UI TT", Tahoma, Helvetica, Arial, sans-serif;
+          border: 1px solid rgb(141, 149, 160) !important;
+          border-radius: 0;
+          cursor: pointer;
+          font-weight: 400;
+          font-size: 10.5pt;
+          color: #212121;
+
+          &.p-placeholder {
+            color: #a5a5a5 !important;
+          }
+
+          &.disabled,
+          &.p-disabled,
+          &[disabled] {
+            cursor: auto;
+            border-color: transparent !important;
+            background-color: #ebedef;
+          }
+
+          &:hover:not([disabled]) {
+            border-color: #3e7bbf !important;
+          }
+
+          &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #3e7bbf !important;
+          }
+        }
+        p-dropdown ::ng-deep .p-dropdown-trigger,
+        p-multiselect ::ng-deep .p-multiselect-trigger {
+          border: 1px solid rgb(141, 149, 160) !important;
+          border-left: none;
+          font-weight: 400;
+          font-size: 10.5pt;
+          color: #212121;
+          border-radius: 0;
+        }
+        imp-input-help-v2 ::ng-deep .input-container .input {
+          border: none !important;
+          min-height: 0 !important;
+        }
+        p-dropdown ::ng-deep,
+        p-multiselect ::ng-deep {
+          .p-dropdown,
+          .p-multiselect {
+            border: none;
+            border-radius: 0;
+            &:hover:not([disabled]) {
+              .p-dropdown-label,
+              .p-dropdown-trigger,
+              .p-multiselect-label,
+              .p-multiselect-trigger {
+                border-color: #3e7bbf !important;
+              }
+            }
+            .p-dropdown-label,
+            .p-multiselect-label {
+              border-right-width: 0px !important;
+            }
+            .p-dropdown-label-empty,
+            .p-multiselect-label-empty {
+              visibility: visible !important;
+            }
+            .p-dropdown-trigger,
+            .p-multiselect-trigger {
+              border-left-width: 0px !important;
+            }
+            &.p-disabled {
+              .p-dropdown-label,
+              .p-dropdown-trigger,
+              .p-multiselect-label,
+              .p-multiselect-trigger {
+                cursor: auto;
+                border-color: transparent !important;
+                background-color: #ebedef;
+              }
+            }
+            &.p-focus {
+              outline: none;
+              box-shadow: none;
+              border-color: #3e7bbf !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: 280px;
+  background-color: rgba(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.info-message {
+  padding: 0.5rem;
+  font-size: 14px;
+  color: #505c6d;
+}
+
+.info-title {
+  padding: 0.5rem;
+  font-size: 14px;
+  font-weight: bold;
+}

@@ -1,0 +1,26 @@
+:host {
+  display: inline-flex;
+}
+
+.input-container {
+  min-width: 0;
+  overflow: hidden;
+  width: 0;
+  transition: width 250ms ease-in-out;
+  display: inline-flex;
+
+  &.expanded {
+    width: 10rem;
+  }
+
+  input {
+    outline: none;
+    height: 38px;
+    border: none;
+    width: calc(100% - 38px);
+    padding: 6px 12px;
+    font-size: 10.5pt;
+    font-family: "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT",
+      Tahoma, Helvetica, Arial, sans-serif;
+  }
+}

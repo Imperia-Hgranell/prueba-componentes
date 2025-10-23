@@ -1,0 +1,55 @@
+<ng-template
+  #defaultTitleTemplate
+  imperia-table-v2-cell-overlay-template
+  let-ctx
+>
+  {{ ctx.event.col.header }}
+</ng-template>
+
+<ng-template #overlay imperia-table-v2-cell-overlay-template let-ctx>
+  <div
+    @fadeInFadeOut
+    class="overlay-container"
+    [style.top.px]="ctx.top"
+    [style.left.px]="ctx.left"
+    [style.bottom.px]="ctx.bottom"
+    [style.right.px]="ctx.right"
+  >
+    <div class="overlay">
+      <div class="title" #title>
+        <ng-container
+          *ngTemplateOutlet="
+            (titleTemplate$ | async) ?? defaultTitleTemplate;
+            context: { $implicit: ctx }
+          "
+        ></ng-container>
+      </div>
+      <imperia-icon-button
+        *ngIf="pinnable$ | async"
+        class="pin"
+        type="button"
+        icon="fix"
+        [containerSize]="32"
+        (onClick)="pin.next(ctx)"
+      ></imperia-icon-button>
+
+      <div class="caret" [class]="ctx.cellPointerAt"></div>
+      <div
+        class="content-scroller"
+        [style.max-height.px]="ctx.maxHeight - title.clientHeight - 40"
+        [style.max-width.px]="ctx.maxWidth - 32"
+      >
+        <div class="content">
+          <ng-container
+            *ngTemplateOutlet="
+              (contentTemplate$ | async) ?? noContentTemplate;
+              context: { $implicit: ctx }
+            "
+          ></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noContentTemplate></ng-template>

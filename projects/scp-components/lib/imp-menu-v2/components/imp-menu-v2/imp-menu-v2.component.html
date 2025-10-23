@@ -1,0 +1,171 @@
+<div
+  #menu
+  class="imp-menu-v2"
+  [ngClass]="{
+    'items-width-checked': itemsWidthChecked$ | async,
+  }"
+>
+  <ng-container
+    *ngIf="{
+      left: leftGroups$ | async,
+      center: centerGroups$ | async,
+      right: rightGroups$ | async,
+    } as groups"
+  >
+    <div class="imp-menu-v2-groups">
+      <div class="imp-menu-v2-grups-left">
+        <ng-container *ngFor="let group of groups.left">
+          <ng-container
+            *ngTemplateOutlet="
+              groupItemsTemplate;
+              context: { $implicit: group }
+            "
+          ></ng-container>
+        </ng-container>
+      </div>
+      <div class="imp-menu-v2-grups-center">
+        <ng-container *ngFor="let group of groups.center">
+          <ng-container
+            *ngTemplateOutlet="
+              groupItemsTemplate;
+              context: { $implicit: group }
+            "
+          ></ng-container>
+        </ng-container>
+      </div>
+      <div class="imp-menu-v2-grups-right">
+        <ng-container *ngFor="let group of groups.right">
+          <ng-container
+            *ngTemplateOutlet="
+              groupItemsTemplate;
+              context: { $implicit: group }
+            "
+          ></ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #groupItemsTemplate imp-menu-v2-group-template let-group>
+  <div class="imp-menu-v2-group" #menuGroup>
+    <!-- GROUP VISIBLE ITEMS -->
+    <ng-container
+      *ngTemplateOutlet="
+        visibleItemsLoopTemplate;
+        context: {
+          $implicit: group.visibleItems$ | async,
+        }
+      "
+    ></ng-container>
+    <!-- GROUP COLLAPSED ITEMS BUTTON -->
+    <ng-container *ngIf="group.someItemCollapsed$ | async">
+      <ng-container
+        *ngIf="{
+          position: (group.collapsedItemsDropdownPosition$ | async) ?? '',
+          visibility:
+            (group.collapsedItemsDropdownVisibility$ | async) ?? false,
+        } as dropdown"
+      >
+        <div #dropdownButton class="collapsed-items-dropdown-button-container">
+          <div
+            *ngIf="['before', 'both'].includes(group.collapsedBtnSeparators)"
+            class="separator mx-2"
+          ></div>
+          <imperia-icon-button
+            type="button"
+            [text]="
+              (group.someItemVisible$ | async) ? '' : group.collapsedBtnText
+            "
+            [iconPosition]="group.collapsedBtnIconPosition"
+            [icon]="group.collapsedBtnIcon"
+            [active]="
+              (group.collapsedItemsDropdownVisibility$ | async) ?? false
+            "
+            (onClick)="
+              group.toggleCollapsedItemsDropdown.next({
+                groupContainer: menuGroup,
+                dropdown: collapsedItemsDropdown,
+              })
+            "
+          >
+          </imperia-icon-button>
+          <div
+            *ngIf="['after', 'both'].includes(group.collapsedBtnSeparators)"
+            class="separator mx-2"
+          ></div>
+        </div>
+        <!-- GROUP COLLAPSED ITEMS DROPDOWN -->
+
+        <div
+          #collapsedItemsDropdown
+          class="collapsed-items-dropdown"
+          cdkMonitorSubtreeFocus
+          (cdkFocusChange)="
+            group.collapsedItemsDropdownFocusChange.next($event)
+          "
+          tabindex="0"
+          [class]="dropdown.position"
+          [ngClass]="{
+            visible: dropdown.visibility,
+          }"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              collapsedItemsLoopTemplate;
+              context: { $implicit: group.collapsedItems$ | async }
+            "
+          ></ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #visibleItemsLoopTemplate let-items>
+  <ng-container
+    *ngFor="
+      let item of items;
+      let first = first;
+      let last = last;
+      trackBy: itemTrackByFn
+    "
+  >
+    <div #itemContainer class="item-container">
+      <div
+        *ngIf="['before', 'both'].includes(item.separators)"
+        class="separator mx-2"
+      ></div>
+      <ng-container
+        *ngTemplateOutlet="item.template; context: { $implicit: false }"
+      ></ng-container>
+      <div
+        *ngIf="['after', 'both'].includes(item.separators)"
+        class="separator mx-2"
+      ></div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #collapsedItemsLoopTemplate let-items>
+  <ng-container
+    *ngFor="
+      let item of items;
+      let first = first;
+      let last = last;
+      trackBy: itemTrackByFn
+    "
+  >
+    <div
+      *ngIf="first ? false : ['before', 'both'].includes(item.separators)"
+      class="separator horizontal my-2"
+    ></div>
+    <ng-container
+      *ngTemplateOutlet="item.template; context: { $implicit: true }"
+    ></ng-container>
+    <div
+      *ngIf="last ? false : ['after', 'both'].includes(item.separators)"
+      class="separator horizontal my-2"
+    ></div>
+  </ng-container>
+</ng-template>

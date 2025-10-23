@@ -1,0 +1,26 @@
+@let trueValue = $trueValue();
+@let value = toggled | async;
+@let isToggled = value === trueValue;
+@let isDisabled = $disabled();
+
+<div
+  (click)="toggle(value, isDisabled)"
+  class="toggle-container cursor-pointer"
+>
+  <div
+    [ngClass]="
+      isDisabled && isToggled
+        ? 'toggle-bg toggle-disabled toggle-on'
+        : isDisabled && !isToggled
+          ? 'toggle-bg toggle-disabled'
+          : isToggled
+            ? 'toggle-bg toggle-on'
+            : 'toggle-bg'
+    "
+    [ngStyle]="
+      isToggled && $toggleColor() ? { 'background-color': $toggleColor() } : {}
+    "
+  >
+    <div [@toggleTrigger]="isToggled ? 'on' : 'off'" class="toggle"></div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div
+  @fadeInFadeOut
+  class="overlay-container shadow-3"
+  [style.top.px]="position.top"
+  [style.left.px]="position.left"
+  [style.bottom.px]="position.bottom"
+  [style.right.px]="position.right"
+  [style.max-width.px]="position.maxWidth"
+  [style.max-height.px]="position.maxHeight"
+  [style.width]="templateCtx['width']"
+>
+  <div class="overlay">
+    <ng-container
+      class="p-1"
+      *ngTemplateOutlet="template; context: templateCtx"
+    ></ng-container>
+  </div>
+</div>

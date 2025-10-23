@@ -1,0 +1,1018 @@
+<!-- OVERLAY PANEL FOR HEADERS -->
+<p-overlayPanel #op>
+  <ng-template pTemplate>
+    <ng-container
+      *ngIf="{
+        sortDirection: colHeaderSelected.sortDirection$ | async,
+      } as colHeaderSelected$"
+    >
+      <!-- ORDERING -->
+      <ng-container *ngIf="!disableSorting">
+        <!-- ASCENDING ORDER -->
+        <div
+          class="context-menu-item"
+          [ngClass]="{ disabled: !colHeaderSelected.sortable }"
+          (click)="onSort(colHeaderSelected, sortTypes.ASC, op)"
+        >
+          <div class="context-menu-icon">
+            <i class="pi pi-sort-alpha-down"></i>
+          </div>
+          <div class="context-menu-label">
+            {{ HEADER_TRANSLATIONS.context_menu.sort_asc }}
+          </div>
+        </div>
+        <!-- DESCENDING ORDER -->
+        <div
+          class="context-menu-item"
+          [ngClass]="{ disabled: !colHeaderSelected.sortable }"
+          (click)="onSort(colHeaderSelected, sortTypes.DESC, op)"
+        >
+          <div class="context-menu-icon">
+            <i class="pi pi-sort-alpha-down-alt"></i>
+          </div>
+          <div class="context-menu-label">
+            {{ HEADER_TRANSLATIONS.context_menu.sort_desc }}
+          </div>
+        </div>
+        <!-- CLEAR ORDER -->
+        <div
+          class="context-menu-item"
+          [ngClass]="{
+            disabled:
+              !colHeaderSelected.sortable ||
+              colHeaderSelected$.sortDirection == sortTypes.NONE,
+          }"
+          (click)="onSort(colHeaderSelected, sortTypes.NONE, op)"
+        >
+          <div class="context-menu-icon">
+            <i class="pi pi-sort-alt-slash"></i>
+          </div>
+          <div class="context-menu-label">
+            {{ HEADER_TRANSLATIONS.context_menu.clear_sort }}
+          </div>
+        </div>
+      </ng-container>
+      <!-- FILTERING -->
+      <ng-container *ngIf="!disableFilters && !hideFilterIcon">
+        <!-- FILTER -->
+        <div
+          class="context-menu-item"
+          [ngClass]="{ disabled: !colHeaderSelected.allowFilter }"
+          (click)="startFiltering(colHeaderSelected, false, op)"
+        >
+          <div class="context-menu-icon">
+            <i class="pi pi-filter"></i>
+          </div>
+          <div class="context-menu-label">
+            {{ HEADER_TRANSLATIONS.context_menu.filter }}
+          </div>
+        </div>
+        <!-- FILTER BY VALUE -->
+        <div
+          class="context-menu-item"
+          [ngClass]="{
+            disabled: !colHeaderSelected.allowFilter || !canFilterByValue,
+          }"
+          (click)="startFiltering(colHeaderSelected, true, op)"
+        >
+          <div class="context-menu-icon">
+            <i class="pi pi-filter"></i>
+          </div>
+          <div class="context-menu-label">
+            {{ HEADER_TRANSLATIONS.context_menu.filter_by_value }}
+          </div>
+        </div>
+        <!-- CLEAR FILTERS -->
+        <!-- <div class="context-menu-item">
+        <div class="context-menu-icon">
+          <i class="pi pi-filter-slash"></i>
+        </div>
+        <div class="context-menu-label">
+          {{
+            HEADER_TRANSLATIONS.context_menu
+              .clear_filter
+          }}
+        </div>
+      </div> -->
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</p-overlayPanel>
+
+<!-- OVERLAY PANEL FOR ROWS -->
+<p-overlayPanel #opRow>
+  <ng-template pTemplate>
+    <!-- COPY -->
+    <div class="context-menu-item" (click)="onCopy()">
+      <div class="context-menu-icon">
+        <i class="pi pi-copy"></i>
+      </div>
+      <div class="context-menu-label">Copiar fila</div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<!-- COMPONENT CONTAINER -->
+<div
+  cdkMonitorSubtreeFocus
+  (cdkFocusChange)="onFocusChange($event)"
+  tabindex="0"
+  [style.width]="width"
+  class="h-full flex flex-column outline-none"
+>
+  <!-- TABLE CAPTION -->
+  <div class="imperia-table-caption" *ngIf="captionVisibility">
+    <div class="flex caption-start min-w-0">
+      <!-- TITLE AND SEARCHBAR -->
+      <div class="flex align-items-center">
+        <ng-container *ngIf="(!!title || !!registerName.singular) && showTitle">
+          <div class="title-registerName" tooltip-on-hover>
+            {{ title || registerName.plural | capitalize }}
+          </div>
+          <div class="separator mx-2"></div>
+        </ng-container>
+
+        <ng-container *ngIf="(!disableFilters || allowSearch) && !hideSearch">
+          <imperia-icon-button
+            type="button"
+            [active]="searchBarOpened"
+            icon="search"
+            (onClick)="toggleSearchBar(searchBar)"
+          ></imperia-icon-button>
+
+          <div class="search-bar-container" [class.show]="searchBarOpened">
+            <input
+              #searchBar
+              class="search-bar"
+              type="text"
+              pInputText
+              [placeholder]="CAPTION_TRANSLATIONS.search_bar_placeholder"
+              [ngModel]="searchBarValue$ | async"
+              (ngModelChange)="searchBarValue.next($event)"
+            />
+          </div>
+          <div class="separator mx-2"></div>
+        </ng-container>
+      </div>
+      <!-- TITLE AND SEARCHBAR -->
+      <!-- DEFAULT BUTTONS -->
+      <div class="flex flex-initial min-w-0">
+        <imp-menu
+          *ngIf="
+            enableAddRow ||
+            enableCellEditing ||
+            enableDelete ||
+            cellEditingState.value
+          "
+          [text]="CAPTION_TRANSLATIONS.menu"
+        >
+          <ng-container *ngIf="enableAddRow">
+            <imperia-icon-button
+              *impMenuItem
+              id="addRow"
+              type="button"
+              [text]="
+                CAPTION_TRANSLATIONS[
+                  registerName.gender == 'f' ? 'add_row_f' : 'add_row_m'
+                ]
+              "
+              [disabled]="
+                ((cellEditingState | async) ?? true) || addingRowActive
+              "
+              [active]="addingRowActive"
+              icon="plus"
+              (onClick)="startAddingRow()"
+            ></imperia-icon-button>
+          </ng-container>
+          <ng-container *ngIf="enableCellEditing">
+            <imperia-icon-button
+              *impMenuItem
+              id="edit"
+              type="button"
+              [text]="CAPTION_TRANSLATIONS.enter_edit_mode"
+              [disabled]="addingRowActive"
+              [active]="(cellEditingState | async) ?? true"
+              icon="list-edit"
+              (onClick)="toggleCellEditingState(cellEditingState.value)"
+            ></imperia-icon-button>
+          </ng-container>
+          <ng-container *ngIf="enableDelete">
+            <imperia-icon-button
+              *impMenuItem
+              id="delete"
+              type="button"
+              [text]="CAPTION_TRANSLATIONS.delete"
+              [disabled]="cellEditingState.value || addingRowActive"
+              icon="trash"
+              (onClick)="onDeleteSelectedItems()"
+            ></imperia-icon-button>
+          </ng-container>
+          <ng-container *ngIf="cellEditingState.value">
+            <imperia-icon-button
+              *impMenuItem
+              id="save"
+              type="button"
+              [text]="CAPTION_TRANSLATIONS.save"
+              icon="save"
+            ></imperia-icon-button>
+          </ng-container>
+        </imp-menu>
+      </div>
+      <!-- DEFAULT BUTTONS -->
+      <ng-content select="[caption-start]"></ng-content>
+    </div>
+    <div class="flex flex-initial caption-end min-w-0">
+      <ng-content select="[caption-end]"></ng-content>
+      <div class="flex flex-initial min-w-0">
+        <imperia-icon-button
+          type="button"
+          [text]="CAPTION_TRANSLATIONS.multiple_selection"
+          icon="multi-select-check"
+          *ngIf="enableSelection && enableToggleSelectionMode"
+          (onClick)="toggleSelectionMode()"
+          [active]="selectionMode == 'multiple'"
+        ></imperia-icon-button>
+        <div *ngIf="hasExportExcel" class="flex align-items-center">
+          <div class="separator mx-2"></div>
+          <imperia-icon-button
+            type="button"
+            icon="export-excel"
+            [loading]="excelButtonLoading"
+            [text]="EXCEL_LIKE_TABLE_TRANSLATIONS.menu.export.excel.label"
+            (onClick)="exportExcel()"
+          ></imperia-icon-button>
+        </div>
+
+        <div *ngIf="dataStatusTemplate" class="flex align-items-center mx-2">
+          <ng-container *ngTemplateOutlet="dataStatusTemplate"></ng-container>
+        </div>
+
+        <imperia-icon-button
+          *ngIf="!disableFilters && !hideFilterIcon"
+          type="button"
+          icon="filter"
+          (onClick)="tableFilterOpened = !tableFilterOpened"
+          [active]="tableFilterOpened"
+        ></imperia-icon-button>
+
+        <imperia-icon-button
+          *ngIf="!disableBookmark"
+          type="button"
+          icon="bookmark"
+        ></imperia-icon-button>
+      </div>
+    </div>
+  </div>
+  <ng-content select="[before-headers]"></ng-content>
+  <!-- FILTER AND TABLE CONTAINER -->
+  <div class="flex w-full flex-grow-1">
+    <!-- FILTER -->
+    <imperia-table-filter
+      [hidden]="disableFilters || hideFilterIcon"
+      [(opened)]="tableFilterOpened"
+      [closedByUser]="tableFiltersClosedByUser"
+      [columns]="columnsAndAdditionalFilters"
+      [selectedFilters]="filters"
+      [storageKey]="storageKey"
+      [scrollHeight]="scrollHeight"
+      (onFilter)="onFilter($event)"
+    ></imperia-table-filter>
+    <!-- TABLE CONTAINER -->
+    <div class="imperia-table-container" [style.height]="scrollHeight">
+      <!-- TABLE -->
+      <cdk-virtual-scroll-viewport
+        [ngClass]="{
+          verticalScrollDisabled: disableVerticalScroll,
+          horizontalScrollDisabled: disableHorizontalScroll,
+        }"
+        [itemSize]="VIRTUAL_SCROLL_ITEM_SIZE"
+        appendOnly
+      >
+        <ng-container *ngIf="footerVM$ | async as footerVM">
+          <cdk-table
+            recycleRows
+            *ngIf="tableVM$ | async as tableVM"
+            [trackBy]="rowTrackByFn"
+            class="imperia-table"
+            [ngClass]="{
+              'with-footer': footerVM.visible,
+            }"
+            [dataSource]="
+              showLoading && tableVM.value.length < pageSize
+                ? loadingRows
+                : tableVM.value
+            "
+            cdkDropList
+            [cdkDropListData]="tableVM.value"
+            (cdkDropListDropped)="onRowReorder($event)"
+          >
+            <!-- HEADER ROW -->
+            <ng-container *ngIf="!disableHeaders">
+              <ng-container *ngIf="((columnsGroups | async) ?? []).length > 0">
+                <cdk-header-row
+                  *cdkHeaderRowDef="columnsGroupsKeys | async; sticky: true"
+                  class="imperia-table-header-row group"
+                ></cdk-header-row>
+              </ng-container>
+              <cdk-header-row
+                *cdkHeaderRowDef="tableVM.fields; sticky: true"
+                class="imperia-table-header-row"
+              ></cdk-header-row>
+            </ng-container>
+            <!-- BODY ROW -->
+            <ng-container
+              *ngIf="{
+                onRowClick: onRowClick$ | async,
+                onArrowUp: onArrowUp$ | async,
+                onArrowDown: onArrowDown$ | async,
+              }"
+            >
+              <cdk-row
+                #cdkRow
+                *cdkRowDef="
+                  let row;
+                  columns: tableVM.fields;
+                  let rowIndex = index
+                "
+                cdkDrag
+                [cdkDragData]="row"
+                [cdkDragDisabled]="!enableRowReorder"
+                cdkDragBoundary=".imperia-table"
+                cdkDragLockAxis="y"
+                class="imperia-table-body-row"
+                (click)="onRowClickNext(row, rowIndex, $event)"
+                [ngClass]="{
+                  selected: isSelected(row),
+                }"
+              >
+                <tr *cdkDragPlaceholder class="imperia-table-body-row"></tr>
+              </cdk-row>
+              <!-- FOOTER ROW -->
+              <ng-container *ngIf="footerVM.visible">
+                <cdk-footer-row
+                  *cdkFooterRowDef="tableVM.fields; sticky: true"
+                  class="imperia-table-footer-row"
+                  (click)="
+                    onRowClickNext(footerVM.row, footerVM.row.index, $event)
+                  "
+                  [ngClass]="{
+                    selected: isSelected(footerVM.row),
+                  }"
+                ></cdk-footer-row>
+              </ng-container>
+            </ng-container>
+            <!-- ROW REORDER COLUMN -->
+            <ng-container cdkColumnDef="rowReorder">
+              <!-- ROW REORDER COLUMN HEADER CELL -->
+              <cdk-header-cell
+                *cdkHeaderCellDef
+                class="imperia-table-header-cell"
+                [ngStyle]="{
+                  width: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  minWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  maxWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                }"
+              ></cdk-header-cell>
+              <!-- ROW REORDER COLUMN BODY CELL -->
+              <cdk-cell
+                *cdkCellDef
+                class="imperia-table-body-cell"
+                [ngStyle]="{
+                  width: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  minWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  maxWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                }"
+              >
+                <div
+                  class="h-full flex justify-content-center align-items-center"
+                >
+                  <imperia-icon-button icon="hamburguer"></imperia-icon-button>
+                </div>
+              </cdk-cell>
+              <!-- ROW REORDER COLUMN FOOTER CELL -->
+              <cdk-footer-cell
+                *cdkFooterCellDef
+                class="imperia-table-header-cell"
+                [ngStyle]="{
+                  width: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  minWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                  maxWidth: VIRTUAL_SCROLL_ITEM_SIZE + 'px',
+                }"
+              ></cdk-footer-cell>
+            </ng-container>
+
+            <ng-container
+              *ngIf="{
+                focusedColumnField: focusedColumnField$ | async,
+              } as colVM"
+            >
+              <!-- COLUMNS GROUPS -->
+              <ng-container
+                *ngFor="let group of columnsGroups$ | async; let index = index"
+              >
+                <ng-container
+                  [cdkColumnDef]="group.key"
+                  [sticky]="group.frozen && group.frozenPosition == 'left'"
+                  [stickyEnd]="group.frozen && group.frozenPosition == 'right'"
+                >
+                  <cdk-header-cell
+                    *cdkHeaderCellDef
+                    [class]="group.headerCellClass"
+                    [style]="group.headerCellStyle"
+                    [ngClass]="{
+                      focused: colVM.focusedColumnField == group.key,
+                    }"
+                    [ngStyle]="{
+                      width: (group.width$ | async) ?? '0px',
+                      flex: '0 0 auto',
+                    }"
+                    class="imperia-table-header-cell group"
+                  >
+                    <ng-container
+                      *ngTemplateOutlet="
+                        group.template ?? noGroupTemplate;
+                        context: { $implicit: group, index }
+                      "
+                    ></ng-container>
+                  </cdk-header-cell>
+                </ng-container>
+                <ng-template #noGroupTemplate>
+                  <div class="no-group-template-container">
+                    <span class="flex-grow-1" [style]="group.headerTextStyle">
+                      {{ group.header }}
+                    </span>
+                  </div>
+                </ng-template>
+              </ng-container>
+              <!-- COLUMNS -->
+              <ng-container
+                *ngFor="
+                  let col of tableVM.columns | filter: 'visible' : true;
+                  let colIndex = index;
+                  trackBy: colTrackByFn
+                "
+                [cdkColumnDef]="col.field"
+                [sticky]="col.frozen && col.frozenPosition == 'left'"
+                [stickyEnd]="col.frozen && col.frozenPosition == 'right'"
+              >
+                <ng-container
+                  *ngIf="{
+                    width: col.width$ | async,
+                    sortIcon: col.sortIcon$ | async,
+                    filtered: col.filtered$ | async,
+                  } as col$"
+                >
+                  <!-- COLUMN HEADER CELL -->
+                  <ng-container *ngIf="!disableHeaders">
+                    <cdk-header-cell
+                      *cdkHeaderCellDef
+                      [resizable]="col.resizable ? enableColumnResize : false"
+                      [resizableColumn]="col"
+                      [resizableColumnIndex]="colIndex"
+                      (onResizeEnd)="onColResize($event)"
+                      class="imperia-table-header-cell"
+                      [class]="col.headerCellClass"
+                      [style]="col.headerCellStyle"
+                      (click)="toggleHeaderOverlayPanel(col, $event)"
+                      (contextmenu)="toggleHeaderOverlayPanel(col, $event)"
+                      [ngClass]="{
+                        focused: colVM.focusedColumnField == col.field,
+                      }"
+                      [ngStyle]="{
+                        width: col$.width,
+                        minWidth: col.minWidth,
+                        maxWidth: col.maxWidth,
+                        flex: col$.width == 'auto' ? '100 1 0px' : '0 0 auto',
+                      }"
+                    >
+                      <span
+                        class="flex-grow-1"
+                        [class]="col.dataInfo.type"
+                        [style]="col.headerTextStyle"
+                      >
+                        {{ col.header }}
+                      </span>
+                      <div class="column-header-icons-container">
+                        <imperia-icon-button
+                          [imgSize]="12"
+                          [primeNGIconClass]="col$.sortIcon ?? ''"
+                        ></imperia-icon-button>
+                        <imperia-icon-button
+                          [imgSize]="12"
+                          [primeNGIconClass]="
+                            col$.filtered ? 'pi-filter-fill' : ''
+                          "
+                        ></imperia-icon-button>
+                      </div>
+                    </cdk-header-cell>
+                  </ng-container>
+                  <!-- COLUMN BODY CELL -->
+                  <ng-template cdkCellDef let-row let-rowIndex="index">
+                    <ng-container *ngIf="row.cells[col.field] as cell">
+                      <cdk-cell
+                        #cdkCell
+                        tooltip-on-hover
+                        [editable]="
+                          tableVM.cellEditingState &&
+                          ((row.editable$ | async) ?? false)
+                        "
+                        [editableRow]="row"
+                        [editableRowIndex]="rowIndex"
+                        [editableCol]="col"
+                        [editableColIndex]="colIndex"
+                        (onEditInit)="onEditEvents($event, 'init', footerVM)"
+                        (onEditComplete)="
+                          onEditEvents($event, 'complete', footerVM)
+                        "
+                        (onEditCancel)="
+                          onEditEvents($event, 'cancel', footerVM)
+                        "
+                        (contextmenu)="
+                          toggleRowOverlayPanel(cdkCell, row, $event)
+                        "
+                        class="imperia-table-body-cell"
+                        [class]="cell.class"
+                        [style]="cell.style"
+                        [ngStyle]="{
+                          width: col$.width,
+                          minWidth: col.minWidth,
+                          maxWidth: col.maxWidth,
+                          flex: col$.width == 'auto' ? '100 1 0px' : '0 0 auto',
+                        }"
+                      >
+                        <ng-container
+                          *ngTemplateOutlet="
+                            CELL_EDIT_TEMPLATES_MAP
+                              | cellTemplate
+                                : cell
+                                : cell.dataInfo.editing
+                                : showLoading ||
+                                    ((cell.loading$ | async) ?? false)
+                                : loadingTemplate
+                                : fallbackTemplate
+                                : noEditTemplate;
+                            context: cell | cellTemplateContext: col : row
+                          "
+                        ></ng-container>
+
+                        <ng-template #fallbackTemplate>
+                          No se ha definido un template para el tipo
+                          {{ cell.dataInfo.type }}
+                        </ng-template>
+
+                        <ng-template #noEditTemplate>
+                          <div
+                            #cellContentContainer
+                            class="cell-content-container"
+                            (click)="
+                              onCellClick(
+                                $event,
+                                col,
+                                colIndex,
+                                row,
+                                rowIndex,
+                                cellContentContainer,
+                                footerVM
+                              )
+                            "
+                          >
+                            <ng-container
+                              *ngTemplateOutlet="
+                                col.cellTemplate ?? noCellTemplate;
+                                context: cell.templateContext
+                              "
+                            ></ng-container>
+                            <ng-template #noCellTemplate>
+                              <div
+                                class="no-template-container"
+                                [class]="cell.dataInfo.type"
+                              >
+                                <input
+                                  *ngIf="cell.dataInfo.type == 'boolean'"
+                                  type="checkbox"
+                                  [disabled]="true"
+                                  [checked]="cell.value ?? row.data[col.field]"
+                                />
+                                <span *ngIf="cell.dataInfo.type == 'date'">
+                                  {{
+                                    (tableVM.cellEditingState
+                                      ? cell.value
+                                      : row.data[col.field]
+                                    ) | date: cell.dataInfo.format
+                                  }}
+                                </span>
+                                <span *ngIf="cell.dataInfo.type == 'number'">
+                                  {{
+                                    (tableVM.cellEditingState
+                                      ? cell.value
+                                      : (row.data[col.field] ?? 0)
+                                    )
+                                      | number
+                                        : "1." +
+                                            (cell.dataInfo.minFractionDigits ??
+                                              0) +
+                                            "-" +
+                                            (cell.dataInfo.maxFractionDigits ??
+                                              0)
+                                        : LOCALE
+                                  }}
+                                </span>
+                                <span
+                                  *ngIf="
+                                    cell.dataInfo.type != 'boolean' &&
+                                    cell.dataInfo.type != 'date' &&
+                                    cell.dataInfo.type != 'number'
+                                  "
+                                >
+                                  {{
+                                    tableVM.cellEditingState
+                                      ? cell.value
+                                      : row.data[col.field]
+                                  }}
+                                </span>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </ng-template>
+                      </cdk-cell>
+                    </ng-container>
+                  </ng-template>
+                  <!-- COLUMN FOOTER CELL -->
+                  <ng-container *ngIf="footerVM.visible">
+                    <ng-container *ngIf="footerVM.row.cells[col.field] as cell">
+                      <cdk-footer-cell
+                        #cdkFooterCell
+                        *cdkFooterCellDef
+                        tooltip-on-hover
+                        [editable]="
+                          tableVM.cellEditingState &&
+                          ((footerVM.row.editable$ | async) ?? false)
+                        "
+                        [editableRow]="footerVM.row"
+                        [editableRowIndex]="footerVM.row.index"
+                        [editableCol]="col"
+                        [editableColIndex]="colIndex"
+                        (onEditInit)="onEditEvents($event, 'init', footerVM)"
+                        (onEditComplete)="
+                          onEditEvents($event, 'complete', footerVM)
+                        "
+                        (onEditCancel)="
+                          onEditEvents($event, 'cancel', footerVM)
+                        "
+                        (contextmenu)="
+                          toggleRowOverlayPanel(
+                            cdkFooterCell,
+                            footerVM.row,
+                            $event
+                          )
+                        "
+                        class="imperia-table-footer-cell"
+                        [class]="cell.class"
+                        [style]="cell.style"
+                        [ngStyle]="{
+                          width: col$.width,
+                          minWidth: col.minWidth,
+                          maxWidth: col.maxWidth,
+                          flex: col$.width == 'auto' ? '100 1 0px' : '0 0 auto',
+                        }"
+                      >
+                        <ng-container
+                          *ngTemplateOutlet="
+                            CELL_EDIT_TEMPLATES_MAP
+                              | cellTemplate
+                                : cell
+                                : cell.dataInfo.editing
+                                : showLoading ||
+                                    ((cell.loading$ | async) ?? false)
+                                : loadingTemplate
+                                : fallbackTemplate
+                                : noEditTemplate;
+                            context: cell
+                              | cellTemplateContext: col : footerVM.row
+                          "
+                        ></ng-container>
+
+                        <ng-template #fallbackTemplate>
+                          No se ha definido un template para el tipo
+                          {{ cell.dataInfo.type }}
+                        </ng-template>
+
+                        <ng-template #noEditTemplate>
+                          <div
+                            #cellContentContainer
+                            class="cell-content-container"
+                            (click)="
+                              onCellClick(
+                                $event,
+                                col,
+                                colIndex,
+                                footerVM.row,
+                                footerVM.row.index,
+                                cellContentContainer,
+                                footerVM
+                              )
+                            "
+                          >
+                            <ng-container
+                              *ngTemplateOutlet="
+                                col.cellTemplate ?? noCellTemplate;
+                                context: cell.templateContext
+                              "
+                            ></ng-container>
+                            <ng-template #noCellTemplate>
+                              <div
+                                class="no-template-container"
+                                [class]="cell.dataInfo.type"
+                              >
+                                <input
+                                  *ngIf="cell.dataInfo.type == 'boolean'"
+                                  type="checkbox"
+                                  [disabled]="true"
+                                  [checked]="
+                                    cell.value ?? footerVM.row.data[col.field]
+                                  "
+                                />
+                                <span *ngIf="cell.dataInfo.type == 'date'">
+                                  {{
+                                    (tableVM.cellEditingState
+                                      ? cell.value
+                                      : footerVM.row.data[col.field]) + ""
+                                      | date: cell.dataInfo.format
+                                  }}
+                                </span>
+                                <span *ngIf="cell.dataInfo.type == 'number'">
+                                  {{
+                                    (tableVM.cellEditingState
+                                      ? cell.value
+                                      : (footerVM.row.data[col.field] ?? 0)) +
+                                      ""
+                                      | number
+                                        : "1." +
+                                            (cell.dataInfo.minFractionDigits ??
+                                              0) +
+                                            "-" +
+                                            (cell.dataInfo.maxFractionDigits ??
+                                              0)
+                                        : LOCALE
+                                  }}
+                                </span>
+                                <span
+                                  *ngIf="
+                                    cell.dataInfo.type != 'boolean' &&
+                                    cell.dataInfo.type != 'date' &&
+                                    cell.dataInfo.type != 'number'
+                                  "
+                                >
+                                  {{
+                                    tableVM.cellEditingState
+                                      ? cell.value
+                                      : footerVM.row.data[col.field]
+                                  }}
+                                </span>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </ng-template>
+                      </cdk-footer-cell>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <!-- FILL COLUMN -->
+            <ng-container cdkColumnDef="**">
+              <!-- FILL COLUMN HEADER CELL -->
+              <ng-container *ngIf="!disableHeaders">
+                <cdk-header-cell
+                  *cdkHeaderCellDef
+                  class="imperia-table-header-cell fill-column"
+                ></cdk-header-cell>
+              </ng-container>
+              <!-- FILL COLUMN BODY CELL -->
+              <cdk-cell *cdkCellDef class="imperia-table-body-cell fill-column">
+                <ng-container *ngIf="showLoading">
+                  <ng-container *ngTemplateOutlet="loadingTemplate">
+                  </ng-container>
+                </ng-container>
+              </cdk-cell>
+              <!-- FILL COLUMN FOOTER CELL -->
+              <ng-container *ngIf="footerVM.visible">
+                <cdk-footer-cell
+                  *cdkFooterCellDef
+                  class="imperia-table-footer-cell fill-column"
+                >
+                  <ng-container *ngIf="showLoading">
+                    <ng-container *ngTemplateOutlet="loadingTemplate">
+                    </ng-container>
+                  </ng-container>
+                </cdk-footer-cell>
+              </ng-container>
+            </ng-container>
+          </cdk-table>
+        </ng-container>
+      </cdk-virtual-scroll-viewport>
+
+      <ng-template #loadingTemplate>
+        <div class="loading-cell-effect-container">
+          <div class="loading-cell-effect"></div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<!-- #region CELL EDIT TEMPLATES -->
+<!-- string -->
+<ng-template cell-edit-template="string" let-cell>
+  <input pInputText type="text" [formControl]="cell.control" />
+</ng-template>
+<!-- string with help -->
+<ng-template cell-edit-template="string-with-help" let-cell>
+  <imp-input-help
+    [async]="cell.dataInfo.async"
+    [optionLabel]="cell.dataInfo.optionLabel"
+    [optionValue]="cell.dataInfo.optionValue"
+    [endpoint]="cell.dataInfo.endpoint"
+    [body]="cell.dataInfo.body"
+    [hasFilters]="cell.dataInfo.hasFilters"
+    [options]="cell.dataInfo.options"
+    [valueMapper]="cell.dataInfo.valueMapper"
+    [formControl]="cell.control"
+  ></imp-input-help>
+</ng-template>
+<!-- number -->
+<ng-template cell-edit-template="number" let-cell>
+  <imp-input-number
+    [mode]="cell.dataInfo.mode"
+    [prefix]="cell.dataInfo.prefix"
+    [suffix]="cell.dataInfo.suffix"
+    [min]="cell.dataInfo.min"
+    [max]="cell.dataInfo.max"
+    [minFractionDigits]="cell.dataInfo.minFractionDigits"
+    [maxFractionDigits]="cell.dataInfo.maxFractionDigits"
+    [step]="cell.dataInfo.step"
+    [isLink]="cell.dataInfo.isLink"
+    [formControl]="cell.control"
+  ></imp-input-number>
+</ng-template>
+<!-- date -->
+<ng-template cell-edit-template="date" let-cell>
+  <p-calendar
+    appendTo="body"
+    dateFormat="dd/mm/yy"
+    [timeOnly]="cell.dataInfo.timeOnly"
+    [showTime]="cell.dataInfo.timeOnly"
+    styleClass="imperia-table-body-cell-calendar"
+    (onShow)="cell.dataInfo.overlayOpen.next(true)"
+    (onClose)="cell.dataInfo.overlayOpen.next(false)"
+    (onSelect)="onDateInputChange($event, cell.control)"
+    [formControl]="cell.control"
+  ></p-calendar>
+</ng-template>
+<!-- select -->
+<ng-template cell-edit-template="select" let-cell let-col="col">
+  <p-dropdown
+    #dropdown
+    appendTo="body"
+    panelStyleClass="imperia-table-body-cell-dropdown-panel"
+    [panelStyle]="{
+      'min-width': 'calc(' + getWidth(col) + ' - 1px)',
+    }"
+    [options]="cell.dataInfo.options"
+    [optionLabel]="cell.dataInfo.labelProperty"
+    [optionValue]="cell.dataInfo.keyProperty"
+    [formControl]="cell.control"
+    (onFocus)="dropdown.show()"
+    (onShow)="cell.dataInfo.overlayOpen.next(true)"
+    (onHide)="cell.dataInfo.overlayOpen.next(false)"
+  ></p-dropdown>
+</ng-template>
+<!-- table -->
+<ng-template cell-edit-template="table" let-cell let-col="col">
+  <imperia-input-table
+    container="overlay"
+    [(loaded)]="col.dataInfo.endpoint.loaded"
+    [(columns)]="col.dataInfo.columns"
+    [(value)]="col.dataInfo.value"
+    [(dataInfo)]="cell.dataInfo"
+    [formControl]="cell.control"
+  ></imperia-input-table>
+</ng-template>
+<!-- boolean -->
+<ng-template cell-edit-template="boolean" let-cell>
+  <div class="w-full flex align-items-center justify-content-center">
+    <input
+      type="checkbox"
+      (change)="onCheckBoxInputChange($event, cell.control, cell.dataInfo)"
+      [formControl]="cell.control"
+    />
+  </div>
+</ng-template>
+<!-- textarea -->
+<ng-template cell-edit-template="textarea" let-cell>
+  <imp-input-textarea
+    [autoResize]="cell.dataInfo.autoResize"
+    [resize]="cell.dataInfo.resize"
+    [height]="cell.dataInfo.height"
+    [expandedHeight]="cell.dataInfo.expandedHeight"
+    [showExpandButton]="cell.dataInfo.showExpandButton"
+    [formControl]="cell.control"
+  ></imp-input-textarea>
+</ng-template>
+<!-- #endregion CELL EDIT TEMPLATES -->
+
+<imp-dialog
+  [visible]="modalToAddRowVisible"
+  [relativeToContainer]="true"
+  minWidth="600px"
+  [closeOnAccept]="false"
+  (onAccept)="saveRowAdding()"
+  (onCancel)="stopAddingRow()"
+>
+  <div class="p-2 m-0" header>
+    <span class="font-bold">
+      {{
+        CAPTION_TRANSLATIONS[
+          registerName.gender == "m" ? "add_row_m" : "add_row_f"
+        ]
+      }}
+      {{ registerName.singular }}
+    </span>
+  </div>
+  <form
+    *ngIf="!updatingValueByScrolling && !updatingColumnsByScrolling"
+    [formGroup]="form"
+  >
+    <ng-container *ngIf="addRowDialogVM$ | async as addRowDialogVM">
+      <ng-container
+        *ngFor="
+          let col of addRowDialogVM.columns | filter: 'showAtForm' : true;
+          let colIndex = index
+        "
+      >
+        <div class="py-1">
+          <imp-label [label]="col.label" [type]="col.dataInfo.type">
+            <!-- STRING -->
+
+            <input
+              *ngIf="col.dataInfo.type == 'string'"
+              type="text"
+              [formControlName]="col.field"
+            />
+
+            <!-- NUMBER -->
+            <imp-input-number
+              *ngIf="col.dataInfo.type == 'number'"
+              [mode]="col.dataInfo.mode"
+              [prefix]="col.dataInfo.prefix"
+              [suffix]="col.dataInfo.suffix"
+              [min]="col.dataInfo.min"
+              [max]="col.dataInfo.max"
+              [minFractionDigits]="col.dataInfo.minFractionDigits"
+              [maxFractionDigits]="col.dataInfo.maxFractionDigits"
+              [step]="col.dataInfo.step"
+              [isLink]="col.dataInfo.isLink"
+              [formControlName]="col.field"
+            ></imp-input-number>
+
+            <!-- DATE -->
+            <p-calendar
+              *ngIf="col.dataInfo.type == 'date'"
+              appendTo="body"
+              dateFormat="dd/mm/yy"
+              [showTime]="col.dataInfo.timeOnly"
+              [timeOnly]="col.dataInfo.timeOnly"
+              [formControlName]="col.field"
+            ></p-calendar>
+
+            <p-dropdown
+              *ngIf="col.dataInfo.type == 'select'"
+              appendTo="body"
+              styleClass="w-full"
+              [options]="col.dataInfo.options"
+              [optionLabel]="col.dataInfo.labelProperty"
+              [optionValue]="col.dataInfo.keyProperty"
+              [formControlName]="col.field"
+            ></p-dropdown>
+
+            <!-- TABLE -->
+
+            <imperia-input-table
+              *ngIf="col.dataInfo.type == 'table'"
+              [(dataInfo)]="col.dataInfo"
+              [formControlName]="col.field"
+            ></imperia-input-table>
+
+            <!-- BOOLEAN -->
+            <p-inputSwitch
+              *ngIf="col.dataInfo.type == 'boolean'"
+              [trueValue]="col.dataInfo.trueValue"
+              [falseValue]="col.dataInfo.falseValue"
+              [formControlName]="col.field"
+            ></p-inputSwitch>
+          </imp-label>
+        </div>
+      </ng-container>
+    </ng-container>
+  </form>
+</imp-dialog>

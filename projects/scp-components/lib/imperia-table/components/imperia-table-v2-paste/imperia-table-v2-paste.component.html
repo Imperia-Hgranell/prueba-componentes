@@ -1,0 +1,33 @@
+<ng-template #confirmationTemplate>
+  <div class="text-center p-2 my-0 mx-auto">
+    {{ TRANSLATION.confirmationMessage }}
+  </div>
+  <div
+    *ngIf="checkIfSomeCellIsNotEditable && (someCellIsNotEditable$ | async)"
+    class="text-center pb-2 my-0 mx-auto text-sm text-color-secondary"
+  >
+    ({{ TRANSLATION.infoMessages.SomeCellNotEditable }})
+  </div>
+  <ng-container *ngIf="data$ | async as data">
+    <div class="clipboard-content-preview-scroller">
+      <table>
+        <tr class="header-row">
+          <th *ngFor="let cell of data.rows[0].cells">
+            {{ cell.col.header }}
+          </th>
+        </tr>
+        <tr class="body-row" *ngFor="let row of data.rows">
+          <td
+            [class.not-editable]="
+              checkIfSomeCellIsNotEditable &&
+              (!row.row.editable || cell.col.dataInfo.readonly)
+            "
+            *ngFor="let cell of row.cells"
+          >
+            {{ cell.pasted }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </ng-container>
+</ng-template>

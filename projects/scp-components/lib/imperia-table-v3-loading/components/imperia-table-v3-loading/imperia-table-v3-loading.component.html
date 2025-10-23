@@ -1,0 +1,67 @@
+<ng-template imperia-table-v3-loading-template="top">
+  <ng-container *ngIf="value$ | async as loading">
+    <tr
+      class="loading-row at-top"
+      [style.top.px]="table.headHeightChange$ | async"
+    >
+      <th
+        class="loading-cell"
+        *ngIf="loading && loading.state && loading.at === 'top'"
+        [@horizontalElementEnterLeave]
+      >
+        <span *ngIf="loading.from === 'startWith'">
+          {{ "IMPERIA_TABLE.loading_messages.initialLoading" | impTranslate }}
+        </span>
+        <span *ngIf="loading.from === 'searchChanges'">
+          {{ "IMPERIA_TABLE.loading_messages.searching" | impTranslate }}
+        </span>
+        <span *ngIf="loading.from === 'filtersChanges'">
+          {{ "IMPERIA_TABLE.loading_messages.applyingFilters" | impTranslate }}
+        </span>
+        <span *ngIf="loading.from === 'columnSortChanges'">
+          {{ "IMPERIA_TABLE.loading_messages.ordering" | impTranslate }}
+        </span>
+        <span *ngIf="!loading.from || loading.from === 'outside'">
+          {{
+            loading.msg ??
+              ("IMPERIA_TABLE.loading_messages.initialLoading" | impTranslate)
+          }}
+        </span>
+        <span *ngIf="loading.from === 'deleteChanges'">
+          {{ "IMPERIA_TABLE.loading_messages.deletingRows" | impTranslate }}
+        </span>
+        <div class="loading-cell-effect-container">
+          <div class="loading-cell-effect"></div>
+        </div>
+      </th>
+    </tr>
+  </ng-container>
+</ng-template>
+
+<ng-template imperia-table-v3-loading-template="bottom">
+  <ng-container *ngIf="value$ | async as loading">
+    <tr
+      class="loading-row at-bottom"
+      [style.bottom.px]="table.footHeightChange$ | async"
+    >
+      <td
+        class="loading-cell"
+        *ngIf="loading && loading.state && loading.at === 'bottom'"
+        [@horizontalElementEnterLeave]
+      >
+        <span *ngIf="loading.from === 'pageChanges'">
+          {{ "IMPERIA_TABLE.loading_messages.loadingMoreRows" | impTranslate }}
+        </span>
+        <span *ngIf="!loading.from || loading.from === 'outside'">
+          {{
+            loading.msg ??
+              ("IMPERIA_TABLE.loading_messages.initialLoading" | impTranslate)
+          }}
+        </span>
+        <div class="loading-cell-effect-container">
+          <div class="loading-cell-effect"></div>
+        </div>
+      </td>
+    </tr>
+  </ng-container>
+</ng-template>

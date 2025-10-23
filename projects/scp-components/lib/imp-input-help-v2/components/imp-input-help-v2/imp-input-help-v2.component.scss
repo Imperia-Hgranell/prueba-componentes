@@ -1,0 +1,136 @@
+.imp-input-help-container {
+  display: flex;
+  height: 29px;
+  border: 1px solid rgb(141, 149, 160);
+  transition: border-color 0.2s ease-in-out;
+  &:hover:not(.disabled, .overlay-opened) {
+    border-color: #3e7bbf;
+  }
+  .input-container {
+    flex: 1;
+    min-width: 0;
+  }
+  imperia-icon-button {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: white;
+  }
+  &.disabled {
+    border-color: #ebedef;
+    imperia-icon-button {
+      background-color: #ebedef;
+    }
+    pointer-events: none;
+  }
+
+  &.overlay-opened {
+    border-color: var(--primary);
+  }
+}
+
+.input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border-radius: 0;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 10.5pt;
+  color: #212121;
+  font-family:
+    "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma,
+    Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  &:disabled,
+  &.disabled {
+    background-color: #ebedef;
+  }
+  &.showing-placeholder {
+    color: #8d95a0;
+  }
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.imp-input-help-options-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  overflow: hidden;
+  .imp-input-help-options-wrapper {
+    min-height: 29px;
+    ::ng-deep cdk-virtual-scroll-viewport .cdk-virtual-scroll-content-wrapper {
+      width: 100%;
+    }
+  }
+  .imp-input-help-option {
+    height: 29px;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 10.5pt;
+    color: #212121;
+    font-family:
+      "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma,
+      Helvetica, Arial, sans-serif;
+    &:hover {
+      background-color: #e6e6e6;
+    }
+    &.disabled {
+      cursor: not-allowed;
+      color: #8d95a0;
+    }
+    span {
+      width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+.loading-options-container {
+  height: 29px;
+  padding: 0.25rem;
+}
+
+.no-available-options-container {
+  height: 29px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 10.5pt;
+  color: #212121;
+  font-family:
+    "Segoe UI", "Segoe WP", Segoe, device-segoe, "Segoe UI TT", Tahoma,
+    Helvetica, Arial, sans-serif;
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.overlay-container {
+  height: max-content;
+  position: absolute;
+  z-index: 999;
+}
+
+.overlay {
+  position: relative;
+  background-color: transparent;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 15px !important;
+  height: 15px !important;
+
+  &:checked {
+    background-color: var(--primary);
+  }
+}

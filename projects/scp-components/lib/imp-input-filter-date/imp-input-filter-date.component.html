@@ -1,0 +1,72 @@
+<ng-container
+  *ngIf="{
+    displayMode: dateDisplay$ | async,
+    column: col | async,
+    filterOperator: filterOperator | async,
+    operator: operator$ | async,
+    value: value$ | async,
+    col: col | async,
+  } as vm"
+>
+  <div>
+    <div
+      *ngIf="vm.col?.dataInfo?.allowFilterByRange ?? false"
+      class="mb-2 pr-2"
+    >
+      <form>
+        <imp-label
+          [label]="TRANSLATIONS.filterByRange"
+          [labelStyle]="{ width: '90%' }"
+          [contentStyle]="{ width: 'auto' }"
+        >
+          <p-inputSwitch
+            [ngModel]="vm.displayMode"
+            [trueValue]="2"
+            [falseValue]="1"
+            (ngModelChange)="dateDisplay.next($event)"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="dateDisplay.next($event)"
+          ></p-inputSwitch>
+        </imp-label>
+      </form>
+    </div>
+
+    <div class="flex">
+      <ng-container *ngIf="vm.displayMode === 1">
+        <div class="flex w-full">
+          <p-dropdown
+            appendTo="body"
+            styleClass="w-full operator-left"
+            [options]="[
+              { label: '=', value: '=' },
+              { label: '<', value: '<' },
+              { label: '>', value: '>' },
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="vm.operator"
+            (ngModelChange)="onOperatorChange.next($event)"
+          ></p-dropdown>
+
+          <p-calendar
+            appendTo="body"
+            class="w-full"
+            dateFormat="dd/mm/yy"
+            styleClass="w-full"
+            [firstDayOfWeek]="1"
+            [ngModel]="vm.value"
+            (ngModelChange)="dateOperatorChange.next($event)"
+          ></p-calendar>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="vm.displayMode === 2">
+        <imp-date-range-filter-selector
+          class="w-full"
+          [value]="vm.value"
+          (onDateChanges)="dateRangeChange.next($event)"
+        ></imp-date-range-filter-selector>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

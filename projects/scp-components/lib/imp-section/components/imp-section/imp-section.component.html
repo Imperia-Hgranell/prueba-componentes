@@ -1,0 +1,44 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div
+    class="header"
+    [style.top.px]="top"
+    (click)="expandable && expanded.next(!expanded.value)"
+  >
+    <div class="flex">
+      <div class="title-container">
+        <div class="title">{{ title }}</div>
+      </div>
+      <ng-content select="[header-start]"></ng-content>
+    </div>
+
+    <div class="flex">
+      <div class="flex-grow-1">
+        <ng-content select="[header-end]"></ng-content>
+      </div>
+      <div class="icon-container">
+        <imperia-icon-button
+          *ngIf="showMoreButton"
+          type="button"
+          icon="plus"
+          [containerSize]="29"
+          (click)="showingMore.next(!showingMore.value)"
+        ></imperia-icon-button>
+        <imperia-icon-button
+          *ngIf="expandable"
+          type="button"
+          [icon]="vm.expanded ? 'chevron-up' : 'chevron-down'"
+          [containerSize]="29"
+        ></imperia-icon-button>
+      </div>
+    </div>
+  </div>
+  <div
+    #contentWrapper
+    class="content-wrapper"
+    [style.height.px]="vm.expanded ? (vm.contentWrapperHeight ?? 0) : 0"
+  >
+    <div #content class="content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-container>

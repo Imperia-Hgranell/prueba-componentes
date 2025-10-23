@@ -1,0 +1,10 @@
+.overlay-container {
+  height: max-content;
+  position: absolute;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.overlay {
+  background-color: transparent;
+}

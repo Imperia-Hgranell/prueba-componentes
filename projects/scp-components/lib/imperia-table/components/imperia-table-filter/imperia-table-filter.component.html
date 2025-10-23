@@ -1,0 +1,215 @@
+<!-- MAIN COMPONENT -->
+<ng-container *ngIf="filtersFormGroupChanges$ | async"></ng-container>
+<ng-container *ngIf="filters$ | async as filters">
+  <div
+    class="filter-drawer"
+    [class.opened]="opened"
+    [style.max-height]="scrollHeight"
+  >
+    <div class="filter-container">
+      <div class="flex justify-content-between align-items-center pl-2">
+        <span>{{ TRANSLATIONS.context_menu.filter_by }}:</span>
+        <imperia-icon-button
+          type="button"
+          icon="back-arrow"
+          (onClick)="onCloseFilters()"
+        ></imperia-icon-button>
+      </div>
+      <!-- FILTERS -->
+      <ng-container
+        *ngFor="let filter of filters.selectedInAllColumns; let i = index"
+      >
+        <div class="m-2">
+          <div class="flex">
+            <imperia-icon-button
+              type="button"
+              [text]="filter.Column.header"
+              icon="x"
+              [containerSize]="30"
+              (onClick)="removeFilterFn(filter, filters.selectedInAllColumns)"
+            ></imperia-icon-button>
+          </div>
+          <form [formGroup]="filter.Column.filterForm">
+            <!-- STRING -->
+            <div
+              class="input-container string"
+              *ngIf="filter.Column.dataInfo.type == 'string'"
+            >
+              <input
+                (paste)="onPaste($event, filter.Column)"
+                pInputText
+                type="text"
+                class="w-full"
+                formControlName="value"
+              />
+            </div>
+
+            <!-- STRING -->
+            <div
+              class="input-container string with-help"
+              *ngIf="filter.Column.dataInfo.type == 'string-with-help'"
+            >
+              <imp-input-help
+                [async]="filter.Column.dataInfo.async"
+                [optionLabel]="filter.Column.dataInfo.optionLabel"
+                [optionValue]="filter.Column.dataInfo.optionValue"
+                [endpoint]="filter.Column.dataInfo.endpoint"
+                [body]="filter.Column.dataInfo.body"
+                [hasFilters]="filter.Column.dataInfo.hasFilters"
+                [options]="filter.Column.dataInfo.options"
+                [valueMapper]="filter.Column.dataInfo.valueMapper"
+                (onPaste)="onPaste($event, filter.Column)"
+                formControlName="value"
+              ></imp-input-help>
+            </div>
+            <!-- NUMBER -->
+            <div
+              class="input-container number"
+              *ngIf="filter.Column.dataInfo.type == 'number'"
+              class="flex"
+            >
+              <div class="input-container w-6 pr-1">
+                <p-dropdown
+                  appendTo="body"
+                  styleClass="w-full"
+                  [options]="[
+                    { label: '=', value: '=' },
+                    { label: '<', value: '<' },
+                    { label: '>', value: '>' },
+                  ]"
+                  optionLabel="label"
+                  optionValue="value"
+                  formControlName="operator"
+                ></p-dropdown>
+              </div>
+              <div class="w-6 pl-1">
+                <imp-input-number
+                  [mode]="filter.Column.dataInfo.mode"
+                  [prefix]="filter.Column.dataInfo.prefix"
+                  [suffix]="filter.Column.dataInfo.suffix"
+                  [min]="filter.Column.dataInfo.min"
+                  [max]="filter.Column.dataInfo.max"
+                  [minFractionDigits]="
+                    filter.Column.dataInfo.minFractionDigits ?? 0
+                  "
+                  [maxFractionDigits]="
+                    filter.Column.dataInfo.maxFractionDigits ?? 3
+                  "
+                  [step]="filter.Column.dataInfo.step"
+                  [isLink]="filter.Column.dataInfo.isLink"
+                  formControlName="value"
+                ></imp-input-number>
+              </div>
+            </div>
+            <!-- DATE -->
+            <div
+              class="input-container date flex"
+              *ngIf="filter.Column.dataInfo.type == 'date'"
+            >
+              <div class="input-container w-6 pr-1">
+                <p-dropdown
+                  appendTo="body"
+                  styleClass="w-full"
+                  [options]="[
+                    { label: '=', value: '=' },
+                    { label: '>', value: '>' },
+                    { label: '<', value: '<' },
+                  ]"
+                  optionLabel="label"
+                  optionValue="value"
+                  formControlName="operator"
+                ></p-dropdown>
+              </div>
+              <div class="w-6 pl-1">
+                <p-calendar
+                  appendTo="body"
+                  class="w-full"
+                  dateFormat="dd/mm/yy"
+                  styleClass="w-full"
+                  [firstDayOfWeek]="1"
+                  formControlName="value"
+                ></p-calendar>
+              </div>
+            </div>
+            <!-- TABLE -->
+            <div
+              class="input-container table"
+              *ngIf="filter.Column.dataInfo.type == 'table'"
+            >
+              <imperia-input-table
+                [(dataInfo)]="filter.Column.dataInfo"
+                formControlName="value"
+              ></imperia-input-table>
+            </div>
+            <!-- SELECT -->
+            <div
+              class="input-container select"
+              *ngIf="filter.Column.dataInfo.type == 'select'"
+            >
+              <p-dropdown
+                #dropdown
+                appendTo="body"
+                styleClass="w-full"
+                panelStyleClass="imperia-table-filters-dropdown-panel"
+                [panelStyle]="{
+                  'min-width': dropdown.el.nativeElement.offsetWidth + 'px',
+                }"
+                [options]="filter.Column.dataInfo.options"
+                [optionLabel]="filter.Column.dataInfo.labelProperty"
+                [optionValue]="filter.Column.dataInfo.keyProperty"
+                [autoDisplayFirst]="false"
+                formControlName="value"
+              ></p-dropdown>
+            </div>
+            <!-- BOOLEAN -->
+            <div
+              class="input-container boolean"
+              *ngIf="filter.Column.dataInfo.type == 'boolean'"
+            >
+              <div class="mt-1">
+                <p-inputSwitch
+                  [trueValue]="filter.Column.dataInfo.trueValue"
+                  [falseValue]="filter.Column.dataInfo.falseValue"
+                  formControlName="value"
+                ></p-inputSwitch>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+      <div class="separator horizontal my-2"></div>
+      <!-- ADD FILTER -->
+      <div class="mx-2">
+        <imperia-icon-button
+          type="button"
+          [text]="TRANSLATIONS.context_menu.add_filter"
+          icon="plus"
+          [active]="dropdownToSelectNewFilterVisible"
+          [disabled]="filters.unselected.length == 0"
+          [containerSize]="29"
+          (onClick)="showDropdownToSelectNewFilter(dropdown)"
+        ></imperia-icon-button>
+      </div>
+      <!-- NEW FILTERS DROPDOWN -->
+      <div
+        [hidden]="!dropdownToSelectNewFilterVisible"
+        class="input-container p-2"
+      >
+        <p-dropdown
+          #dropdown
+          class="w-full"
+          styleClass="w-full"
+          appendTo="body"
+          [ngModel]="dropdownToSelectNewFilterValue"
+          [filter]="true"
+          [options]="filters.unselected"
+          [placeholder]="TRANSLATIONS.context_menu.select_column"
+          (onChange)="
+            addFilter($event.value, filters.selectedInAllColumns, dropdown)
+          "
+          optionLabel="header"
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+</ng-container>

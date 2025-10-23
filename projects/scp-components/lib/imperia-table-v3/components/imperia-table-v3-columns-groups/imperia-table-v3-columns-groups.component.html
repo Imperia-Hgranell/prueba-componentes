@@ -1,0 +1,181 @@
+@let bodyColumnTemplate = bodyColumnTemplate$ | async;
+@let record = record$ | async;
+@if (record) {
+  <ng-container
+    *ngTemplateOutlet="columnsGroupsTemplate; context: { $implicit: record }"
+  ></ng-container>
+  <ng-template
+    #columnsGroupsTemplate
+    dateAmountColumnsGroupsTemplateContext
+    let-record
+  >
+    @for (recordEntry of record | entries; track recordEntry[0]) {
+      @let recordKey = recordEntry[0];
+      @let recordValue = recordEntry[1];
+      @if (!(recordKey | isDateColField)) {
+        <imperia-table-v3-columns-group
+          #parent="imperiaTableV3ColumnsGroup"
+          [header]="recordKey"
+        >
+          @if (recordValue | containsColumnKeyValue) {
+            @for (entry of recordValue | entries; track entry[0]) {
+              @let entryValue = entry[1];
+              @if (entryValue | isColumnPropertiesObject) {
+                <imperia-table-v2-column
+                  [field]="entryValue.field"
+                  [header]="entryValue.header"
+                  [dataInfo]="entryValue.dataInfo"
+                  [width]="entryValue.width"
+                  [optionalColumnProperties]="entryValue"
+                >
+                  <ng-template imperiaTableBodyCell let-ctx>
+                    <ng-container
+                      [ngTemplateOutlet]="bodyColumnTemplate"
+                      [ngTemplateOutletContext]="{ $implicit: ctx }"
+                    ></ng-container>
+                  </ng-template>
+                </imperia-table-v2-column>
+              }
+            }
+          } @else {
+            @for (
+              recordValueEntry1 of recordValue | entries;
+              track recordValueEntry1[0]
+            ) {
+              @let recordKeyLevel1 = recordValueEntry1[0];
+              @let recordValueLevel1 = recordValueEntry1[1];
+              @if (!(recordKeyLevel1 | isDateColField)) {
+                <imperia-table-v3-columns-group
+                  #parent="imperiaTableV3ColumnsGroup"
+                  [header]="recordKeyLevel1"
+                >
+                  @if (recordValueLevel1 | containsColumnKeyValue) {
+                    @for (
+                      entry of recordValueLevel1 | entries;
+                      track entry[0]
+                    ) {
+                      @let entryValue = entry[1];
+                      @if (entryValue | isColumnPropertiesObject) {
+                        <imperia-table-v2-column
+                          [field]="entryValue.field"
+                          [header]="entryValue.header"
+                          [dataInfo]="entryValue.dataInfo"
+                          [width]="entryValue.width"
+                          [optionalColumnProperties]="entryValue"
+                        >
+                          <ng-template imperiaTableBodyCell let-ctx>
+                            <ng-container
+                              [ngTemplateOutlet]="bodyColumnTemplate"
+                              [ngTemplateOutletContext]="{ $implicit: ctx }"
+                            ></ng-container>
+                          </ng-template>
+                        </imperia-table-v2-column>
+                      }
+                    }
+                  } @else {
+                    @for (
+                      recordValueEntry2 of $any(
+                        $any(recordValueLevel1) | entries
+                      );
+                      track recordValueEntry2[0]
+                    ) {
+                      @let recordKeyLevel2 = recordValueEntry2[0];
+                      @let recordValueLevel2 = recordValueEntry2[1];
+                      @if (!(recordKeyLevel2 | isDateColField)) {
+                        <imperia-table-v3-columns-group
+                          #parent="imperiaTableV3ColumnsGroup"
+                          [header]="recordKeyLevel2"
+                        >
+                          @if (recordValueLevel2 | containsColumnKeyValue) {
+                            @for (
+                              entry of recordValueLevel2 | entries;
+                              track entry[0]
+                            ) {
+                              @let entryValue = entry[1];
+                              @if (entryValue | isColumnPropertiesObject) {
+                                <imperia-table-v2-column
+                                  [field]="entryValue.field"
+                                  [header]="entryValue.header"
+                                  [dataInfo]="entryValue.dataInfo"
+                                  [width]="entryValue.width"
+                                  [optionalColumnProperties]="entryValue"
+                                >
+                                  <ng-template imperiaTableBodyCell let-ctx>
+                                    <ng-container
+                                      [ngTemplateOutlet]="bodyColumnTemplate"
+                                      [ngTemplateOutletContext]="{
+                                        $implicit: ctx,
+                                      }"
+                                    ></ng-container>
+                                  </ng-template>
+                                </imperia-table-v2-column>
+                              }
+                            }
+                          } @else {
+                            @for (
+                              recordValueEntry3 of $any(
+                                $any(recordValueLevel2) | entries
+                              );
+                              track recordValueEntry3[0]
+                            ) {
+                              @let recordKeyLevel3 = recordValueEntry3[0];
+                              @let recordValueLevel3 = recordValueEntry3[1];
+                              @if (!(recordKeyLevel3 | isDateColField)) {
+                                <imperia-table-v3-columns-group
+                                  #parent="imperiaTableV3ColumnsGroup"
+                                  [header]="recordKeyLevel3"
+                                >
+                                  @if (
+                                    recordValueLevel3 | containsColumnKeyValue
+                                  ) {
+                                    @for (
+                                      entry of recordValueLevel3 | entries;
+                                      track entry[0]
+                                    ) {
+                                      @let entryValue = entry[1];
+                                      @if (
+                                        entryValue | isColumnPropertiesObject
+                                      ) {
+                                        <imperia-table-v2-column
+                                          [field]="entryValue.field"
+                                          [header]="entryValue.header"
+                                          [dataInfo]="entryValue.dataInfo"
+                                          [width]="entryValue.width"
+                                          [optionalColumnProperties]="
+                                            entryValue
+                                          "
+                                        >
+                                          <ng-template
+                                            imperiaTableBodyCell
+                                            let-ctx
+                                          >
+                                            <ng-container
+                                              [ngTemplateOutlet]="
+                                                bodyColumnTemplate
+                                              "
+                                              [ngTemplateOutletContext]="{
+                                                $implicit: ctx,
+                                              }"
+                                            ></ng-container>
+                                          </ng-template>
+                                        </imperia-table-v2-column>
+                                      }
+                                    }
+                                  }
+                                </imperia-table-v3-columns-group>
+                              }
+                            }
+                          }
+                        </imperia-table-v3-columns-group>
+                      }
+                    }
+                  }
+                </imperia-table-v3-columns-group>
+              }
+            }
+          }
+        </imperia-table-v3-columns-group>
+      }
+    }
+  </ng-template>
+}
