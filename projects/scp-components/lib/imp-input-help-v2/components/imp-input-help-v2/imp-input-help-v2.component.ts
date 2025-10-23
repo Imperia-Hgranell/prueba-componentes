@@ -66,7 +66,7 @@ import {
   ImpDatePipe,
   LocalizedDatePipe,
   StringParsePipe,
-} from '@imperiascm/scp-components/pipes';
+} from '@imperiascm/scp-utils/pipes';
 import {
   ImpTranslatePipe,
   ImpTranslateService,

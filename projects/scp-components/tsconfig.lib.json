@@ -9,8 +9,5 @@
     "inlineSources": true,
     "types": []
   },
-  "angularCompilerOptions": {
-    "compilationMode": "full"
-  },
   "exclude": ["**/*.spec.ts"]
 }

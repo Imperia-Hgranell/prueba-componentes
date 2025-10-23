@@ -91,7 +91,7 @@ import {
 import { ImperiaTableHeaderCellIconsTemplateDirective } from '../../template-directives/imperia-table-header-cell-icons-template.directive';
 import { ImperiaTableHeaderCellTemplateDirective } from '../../template-directives/imperia-table-header-cell-template.directive';
 import { ImperiaTableV2BlockerTemplateDirective } from '../../template-directives/imperia-table-v2-blocker-template.directive';
-import { LocalizedDatePipe } from '../../../../pipes';
+import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 import { UTC, createHash, isTruthy } from '@imperiascm/scp-utils/functions';
 import { FilterOperator } from '@imperiascm/scp-utils/payload';
 import { Sort } from '@imperiascm/scp-utils/payload';

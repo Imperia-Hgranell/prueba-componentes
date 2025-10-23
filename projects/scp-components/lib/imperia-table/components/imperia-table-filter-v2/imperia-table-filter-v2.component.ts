@@ -54,7 +54,7 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { LocalizedDatePipe } from '@imperiascm/scp-components/pipes';
+import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 
 @Component({
   selector: 'imperia-table-filter-v2',

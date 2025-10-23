@@ -1,0 +1,172 @@
+﻿Building Angular Package
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-arrow-controls'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-arrow-controls
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/directives'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/directives
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-input-calendar'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-input-calendar
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-date-range-filter-selector'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-date-range-filter-selector
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-progress-bar'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-progress-bar
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-toggle'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-toggle
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/pipes'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/pipes
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components/imp-overlay'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.
+âœ” Compiling with Angular sources in Ivy partial compilation mode.
+- Writing FESM bundles
+âœ” Writing FESM bundles
+âœ” Built @imperiascm/scp-components/imp-overlay
+
+------------------------------------------------------------------------------
+Building entry point '@imperiascm/scp-components'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in Ivy partial compilation mode.✖ Compiling with Angular sources in Ivy partial compilation mode.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/animated-number.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/capitalize.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/contains-column-key-value.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/entries.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/extract.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/filter.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/find-property.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/format-number-to.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/imp-date.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/includes.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/index.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/inject.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/is-date-col-field.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/is-weekend.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/join.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/localized-date.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/public-api.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/short-number.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/split.pipe.d.ts' because it would overwrite input file.
+error TS5055: Cannot write file 'C:/Proyectos/libraries/scp-components/dist/scp-components/pipes/string-parse.pipe.d.ts' because it would overwrite input file.
+
+projects/scp-components/lib/imperia-table/directives/imperia-table-v2-column.directive.ts:59:10 - error TS4029: Public property 'optionalColumnProperties' of exported class has or is using name 'IImperiaTableColumn' from external module "C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/models/imperia-table-columns.types" but cannot be named.
+
+projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts:135:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+@Component({
+selector: 'imperia-table',
+...
+})
+The component 'ImpDialogComponent' is used in the template but importing it would create a cycle:
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+
+projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts:33:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+The component 'ImperiaTableFilterComponent' is used in the template but importing it would create a cycle:
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+
+projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:24:1 - error NG3003:
+The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle:
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts ->
+C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+
+projects/scp-components/lib/imperia-table/components/imperia-table-filter-v2/imperia-table-filter-v2.component.html:255:40 - error NG8004:
+No pipe found with name 'stringParse'.
+
+projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts:131:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts:30:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts:46:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:38:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+projects/scp-components/lib/imp-section/components/imp-section/imp-section.component.ts:21:44 - error TS2307:
+Cannot find module '../../imperia-icon-button/imperia-icon-button.component' or its corresponding type declarations.
+
+projects/scp-components/lib/imp-section/components/imp-section/imp-section.component.ts:35:27 - error NG1010:
+'imports' must be an array of components, directives, pipes, or NgModules. Value could not be determined statically.
+
+projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3-columns-groups/imperia-table-v3-columns-groups.component.html:23:33 - error NG8004:
+No pipe found with name 'isColumnPropertiesObject'.
+
+projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3-columns-groups/imperia-table-v3-columns-groups.component.html:58:41 - error NG8004:
+No pipe found with name 'isColumnPropertiesObject'.
+
+projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3-columns-groups/imperia-table-v3-columns-groups.component.html:95:49 - error NG8004:
+No pipe found with name 'isColumnPropertiesObject'.
+
+projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3-columns-groups/imperia-table-v3-columns-groups.component.html:137:54 - error NG8004:
+No pipe found with name 'isColumnPropertiesObject'.
+
+projects/scp-components/lib/imperia-table-v3-filters/components/imperia-table-v3-filters/imperia-table-v3-filters.component.html:297:21 - error NG8004:
+No pipe found with name 'stringParse'.
+
+projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts:137:1 - error NG3003:
+One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.

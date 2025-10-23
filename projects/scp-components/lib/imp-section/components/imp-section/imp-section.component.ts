@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,6 +18,7 @@ import {
   of,
   tap,
 } from 'rxjs';
+import { ImperiaIconButtonComponent } from '../../../imperia-icon-button/imperia-icon-button.component';
 import { SECTION_EXPANDED_KEY } from '../../models/imp-section.models';
 
 interface ViewModel {
@@ -29,7 +31,8 @@ interface ViewModel {
   templateUrl: './imp-section.component.html',
   styleUrls: ['./imp-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, ImperiaIconButtonComponent],
 })
 export class ImpSectionComponent {
   //#region VIEWCHILDS

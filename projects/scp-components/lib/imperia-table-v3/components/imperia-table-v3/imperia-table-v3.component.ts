@@ -132,7 +132,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { ImperiaTableV3FiltersComponent } from '../../../imperia-table-v3-filters/components/imperia-table-v3-filters/imperia-table-v3-filters.component';
-import { LocalizedDatePipe } from '@imperiascm/scp-components/pipes';
+import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 
 @Component({
   selector: 'imperia-table-v3',

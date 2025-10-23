@@ -16,7 +16,7 @@ export type TImperiaTableColumnField<TItem> = Extract<keyof TItem, string>;
 /**
  * @description Interfaz que define las propiedades de una columna de la tabla ImperiaTable
  */
-interface IImperiaTableColumn<
+export interface IImperiaTableColumn<
   TItem extends object,
   TDataInfoType extends TImperiaTableColumnDataInfoTypes = TImperiaTableColumnDataInfoTypes
 > {

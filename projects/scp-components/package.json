@@ -10,7 +10,7 @@
     "@imperiascm/dom-utils": "^1.0.2",
     "@imperiascm/http": "^0.0.2",
     "@imperiascm/rxjs-utils": "^1.0.6",
-    "@imperiascm/scp-utils": "^0.0.8",
+    "@imperiascm/scp-utils": "^0.0.9",
     "@imperiascm/translate": "^0.0.3",
     "file-saver": "^2.0.5",
     "primeflex": "^3.2.1",

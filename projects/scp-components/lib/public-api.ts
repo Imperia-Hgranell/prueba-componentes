@@ -1,6 +1,7 @@
 /*
  * Public API Surface of scp-components
  */
+export * from './scp-components.module';
 export * from './imp-tooltip/imp-tooltip.component';
 export * from './imp-label/imp-label.component';
 export * from './imperia-icon-button/imperia-icon-button.component';
@@ -76,10 +77,8 @@ export * from './imperia-table/template-directives/imperia-table-header-cell-tem
 export * from './imperia-table/template-directives/imperia-table-v2-blocker-template.directive';
 export * from './imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive';
 export * from './imperia-table/template-directives/imperia-table-v2-row-selection-context-menu-button-template.directive';
-export * from './imperia-table/imperia-table.module';
 // export * from './imperia-form';
 // IMPERIA FORM
-export * from './imperia-form/imperia-form.module';
 export * from './imperia-form/components/imperia-form/imperia-form.component';
 export * from './imperia-form/directives/imperia-form-menu-template.directive';
 export * from './imperia-form/directives/imperia-form-template.directive';
@@ -99,7 +98,6 @@ export * from './imperia-input-table/imperia-input-table.component';
 export * from './imp-section/models/imp-section.models';
 export * from './imp-section/components/imp-section/imp-section.component';
 export * from './imp-section/directives/imp-section-item/imp-section-item.directive';
-export * from './imp-section/imp-section.module';
 
 // Directives
 export * from './directives/imp-tooltip.directive';
@@ -113,7 +111,6 @@ export * from './primeng/imp-input-textarea/imp-input-textarea.component';
 // export * from './temp/public-api';
 
 // IMP MENU V2
-export * from './imp-menu-v2/imp-menu-v2.module';
 export * from './imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component';
 export * from './imp-menu-v2/directives/imp-menu-v2-item-group.directive';
 export * from './imp-menu-v2/directives/imp-menu-v2-item.directive';
@@ -147,10 +144,8 @@ export * from './imp-input-help-v2/models/imp-input-help.models';
 export * from './imp-menu/components/imp-menu/imp-menu.component';
 export * from './imp-menu/directives/imp-menu-item.directive';
 export * from './imp-menu/models/imp-menu.models';
-export * from './imp-menu/imp-menu.module';
 
 // IMP INPUT HELP
-export * from './imp-input-help/imp-input-help.module';
 export * from './imp-input-help/components/imp-input-help/imp-input-help.component';
 
 export * from './imperia-table-v3-columns-configurator/imperia-table-v3-columns-configurator.component';
@@ -162,12 +157,10 @@ export * from './imperia-table-v3/components/imperia-table-v3-columns-groups/dir
 export * from './imperia-table-v3/directives/imperia-table-v3-columns-group-directive.directive';
 export * from './imperia-table-v3/imperia-table-body-cell-templates-provider';
 export * from './imperia-table-v3/imperia-table-v3-columns-provider';
-export * from './imperia-table-v3/imperia-table-v3.module';
 export * from './imperia-table-v3/interfaces/imperia-table-v3-columns-provider';
 export * from './imperia-table-v3/models/types';
 
 // IMPERIA TABLE V3 FILTERS
-export * from './imperia-table-v3-filters/imperia-table-v3-filters.module';
 export * from './imperia-table-v3-filters/components/imperia-table-v3-filter-date/imperia-table-v3-filter-date.component';
 export * from './imperia-table-v3-filters/components/imperia-table-v3-filter-number/imperia-table-v3-filter-number.component';
 export * from './imperia-table-v3-filters/components/imperia-table-v3-filter-string/imperia-table-v3-filter-string.component';
@@ -184,19 +177,15 @@ export * from './imperia-table-v3-filters/template-directives/imperia-table-v3-f
 // IMPERIA TABLE V3 SORT
 export * from './imperia-table-v3-sort/components/imperia-table-v3-sort/imperia-table-v3-sort.component';
 export * from './imperia-table-v3-sort/template-directives/imperia-table-v3-sort-template.directive';
-export * from './imperia-table-v3-sort/imperia-table-v3-sort.module';
 
 // IMPERI TABLE V3 SEARCH
 export * from './imperia-table-v3-search/components/imperia-table-v3-search/imperia-table-v3-search.component';
-export * from './imperia-table-v3-search/imperia-table-v3-search.module';
 
 // IMPERIA TABLE V3 LOADING
 export * from './imperia-table-v3-loading/components/imperia-table-v3-loading/imperia-table-v3-loading.component';
 export * from './imperia-table-v3-loading/template-directives/imperia-table-v3-loading-template.directive';
-export * from './imperia-table-v3-loading/imperia-table-v3-loading.module';
 
 // IMPERIA TABLE V3 PAGINATION
-export * from './imperia-table-v3-pagination/imperia-table-v3-pagination.module';
 export * from './imperia-table-v3-pagination/components/imperia-table-v3-manual-pagination/imperia-table-v3-manual-pagination.component';
 export * from './imperia-table-v3-pagination/components/imperia-table-v3-pagination/imperia-table-v3-pagination.component';
 export * from './imperia-table-v3-pagination/models/imperia-table-v3-pagination-provider';

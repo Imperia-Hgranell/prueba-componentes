@@ -38,14 +38,15 @@ import {
 } from '@imperiascm/scp-utils/animations';
 import { ImperiaIconButtonComponent } from '../imperia-icon-button/imperia-icon-button.component';
 import { ImpDialogComponent } from '../imp-dialog/imp-dialog.component';
-import { ImpSectionModule } from '../imp-section/imp-section.module';
+import { ImpSectionComponent } from '../imp-section/components/imp-section/imp-section.component';
+import { ImpSectionItemDirective } from '../imp-section/directives/imp-section-item/imp-section-item.directive';
 import { ColumnConfiguration } from '../imperia-table/models/imperia-table-v2-columns-configurator.models';
 import { ImperiaTableColumn } from '../imperia-table/models/imperia-table-columns.models';
 import { ImperiaTableV3Component } from '../imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component';
 import { TImperiaTableColumnDataInfoTypes } from '../imperia-table/models/imperia-table-columns.types';
 import { ImpTooltipDirective } from '../directives/imp-tooltip.directive';
 import { ImperiaTableColumnDefaultConfigurationDirective } from '../directives/imperia-table-column-default-configuration.directive';
-import { EntriesPipe } from '@imperiascm/scp-components/pipes';
+import { EntriesPipe } from '@imperiascm/scp-utils/pipes';
 import { ImperiaTableV3ColumnsConfiguratorTagDirective } from '@imperiascm/scp-components/directives';
 import { ImpTranslateService } from '@imperiascm/translate';
 
@@ -66,7 +67,8 @@ enum frozenPosition {
     DragDropModule,
     CommonModule,
     EntriesPipe,
-    ImpSectionModule,
+    ImpSectionComponent,
+    ImpSectionItemDirective,
     CdkAccordionModule,
   ],
   templateUrl: './imperia-table-v3-columns-configurator.component.html',

@@ -35,7 +35,7 @@ import {
   ImpDatePipe,
   LocalizedDatePipe,
   StringParsePipe,
-} from '@imperiascm/scp-components/pipes';
+} from '@imperiascm/scp-utils/pipes';
 
 @Component({
   selector: 'imp-form-errors',

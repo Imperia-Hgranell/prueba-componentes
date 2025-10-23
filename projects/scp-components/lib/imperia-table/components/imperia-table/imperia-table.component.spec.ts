@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TypedTranslateService } from '@shared/services/typed-translate.service';
 import { ImperiaTableComponent } from './imperia-table.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ImperiaTableModule } from '../../imperia-table.module';
+import { ScpComponentsModule } from '../../scp-components.module';
 import es from '../../../../../../assets/i18n/es.json';
 import { Product } from '@modules/products/models/products.models';
 
@@ -16,8 +16,7 @@ fdescribe('ImperiaTableComponent', () => {
   );
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImperiaTableComponent<Partial<Product>>],
-      imports: [ImperiaTableModule, HttpClientTestingModule],
+      imports: [ScpComponentsModule, HttpClientTestingModule],
       providers: [
         {
           provide: TypedTranslateService,

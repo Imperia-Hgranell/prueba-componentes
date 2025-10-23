@@ -13,7 +13,7 @@ import { ImpSectionComponent } from '../../components/imp-section/imp-section.co
 
 @Directive({
   selector: '[imp-section-item]',
-  standalone: false,
+  standalone: true,
 })
 export class ImpSectionItemDirective implements AfterViewInit, OnDestroy {
   @Input() isShowMore: boolean = false;

@@ -18,11 +18,9 @@ import { LOCALE } from '@imperiascm/scp-utils/functions';
 import { ImperiaFormComponent } from '../imperia-form/components/imperia-form/imperia-form.component';
 import { ImpLabelComponent } from '../imp-label/imp-label.component';
 import { isCanNotBeLessGreaterError } from '../forms/errors/canNotBeLessGreater';
-import { ImperiaFormModule } from '../imperia-form/imperia-form.module';
 import { ImperiaFormDataSyncAction, ImperiaFormDataSyncState } from '../imperia-form/models/imperia-form.types';
 import { ImperiaIconButtonComponent } from '../imperia-icon-button/imperia-icon-button.component';
 import { ImperiaTableComponent } from '../imperia-table/components/imperia-table/imperia-table.component';
-import { ImperiaTableModule } from '../imperia-table/imperia-table.module';
 import { TUNSAVED_DATA, UNSAVED_DATA } from './unsaved-data.token';
 import { ImpTranslateModule, ImpTranslateService } from '@imperiascm/translate';
 
@@ -31,8 +29,6 @@ import { ImpTranslateModule, ImpTranslateService } from '@imperiascm/translate';
   standalone: true,
   imports: [
     CommonModule,
-    ImperiaFormModule,
-    ImperiaTableModule,
     ImperiaIconButtonComponent,
     ProgressSpinnerModule,
     ImpTranslateModule,
