@@ -179,7 +179,6 @@ const IMPERIA_TABLE_DECLARATIONS = [
   CellEditTemplateDirective,
   EditableCellDirective,
   ResizeColumnDirective,
-  ImperiaInputTableComponent,
   CellTemplatePipe,
   CellTemplateContextPipe,
 ];
@@ -303,6 +302,7 @@ const STANDALONE_IMPORTS = [
   TooltipOnHoverDirective,
   ImpMenuV2ItemGroupDirective,
   IsColumnPropertiesObjectPipe,
+  ImperiaInputTableComponent,
 ];
 
 const MODULE_IMPORTS = [

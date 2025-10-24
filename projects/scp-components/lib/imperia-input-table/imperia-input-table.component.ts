@@ -1,4 +1,10 @@
 import {
+  AsyncPipe,
+  CommonModule,
+  NgIf,
+  NgTemplateOutlet,
+} from '@angular/common';
+import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
@@ -10,16 +16,31 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ImperiaTableColumn, ImperiaTableColumnDataTable } from '../imperia-table/models/imperia-table-columns.models';
-import { TImperiaTableColumnProperties } from '../imperia-table/models/imperia-table-columns.types';
-import { ImperiaTableFilterSortScrollEvent, ImperiaTableRowClickEvent } from '../imperia-table/models/imperia-table-outputs.models';
-import { getAsyncDataForCellEditingOrColumnFilterTable, getImperiaTableColumns, onFilterChildImperiaTable, onScrollCompleteChildImperiaTable, onSearchChildImperiaTable, onSortChildImperiaTable } from '../imperia-table/shared/functions';
 import { ImpDialogComponent } from '../imp-dialog/imp-dialog.component';
-import { createHash } from '@imperiascm/scp-utils/functions';
-import { OverlayPanel } from 'primeng/overlaypanel';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { injectPost } from '@imperiascm/http';
+import {
+  ImperiaTableColumn,
+  ImperiaTableColumnDataTable,
+} from '../imperia-table/models/imperia-table-columns.models';
+import { TImperiaTableColumnProperties } from '../imperia-table/models/imperia-table-columns.types';
+import { ImperiaTableLoading } from '../imperia-table/models/imperia-table-loading.models';
+import {
+  getAsyncDataForCellEditingOrColumnFilterTable,
+  getImperiaTableColumns,
+  onFilterChildImperiaTable,
+  onScrollCompleteChildImperiaTable,
+  onSearchChildImperiaTable,
+  onSortChildImperiaTable,
+} from '../imperia-table/shared/functions';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ImpTranslateService } from '@imperiascm/translate';
+import {
+  ImperiaTableFilterSortScrollEvent,
+  ImperiaTableV2ClickEvent,
+  ScpComponentsModule,
+} from '../public-api';
+import { createHash } from '@imperiascm/scp-utils/functions';
 
 @Component({
   selector: 'imperia-input-table',
@@ -33,7 +54,15 @@ import { ImpTranslateService } from '@imperiascm/translate';
       multi: true,
     },
   ],
-  standalone: false,
+  imports: [
+    CommonModule,
+    NgIf,
+    OverlayPanelModule,
+    NgTemplateOutlet,
+    ImpDialogComponent,
+    AsyncPipe,
+    ScpComponentsModule,
+  ],
 })
 export class ImperiaInputTableComponent<TTableItem extends object>
   implements ControlValueAccessor
@@ -97,6 +126,8 @@ export class ImperiaInputTableComponent<TTableItem extends object>
   public tableCaptionVisibility: boolean = false;
   public getAsyncDataForCellEditingOrColumnFilterTable: typeof getAsyncDataForCellEditingOrColumnFilterTable =
     getAsyncDataForCellEditingOrColumnFilterTable;
+
+  public loading = new ImperiaTableLoading(false);
   //#endregion PUBLIC VARIABLES
 
   //#region PRIVATE VARIABLES
@@ -269,7 +300,7 @@ export class ImperiaInputTableComponent<TTableItem extends object>
     this.overlay?.hide();
   }
 
-  public onRowDblClick(event: ImperiaTableRowClickEvent<TTableItem>) {
+  public onRowDblClick(event: ImperiaTableV2ClickEvent<TTableItem>) {
     if (this.dataInfo.selectionMode == 'multiple') return;
     if (this.dataInfo.fullData == true) {
       this.onChange(event.row.data);

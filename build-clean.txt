@@ -67,10 +67,6 @@ Building entry point '@imperiascm/scp-components/imp-overlay'
 Building entry point '@imperiascm/scp-components'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
-projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:47:8 - error TS2307: Cannot find module '../models/imperia-table-v2-cell-selection.models' or its corresponding type declarations.
-
-47 } from '../models/imperia-table-v2-cell-selection.models';
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts:139:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
  139 @Component({
@@ -83,23 +79,42 @@ projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table
 1658 }
      ~
 
-  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:24:1
-     24 @Component({
+  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:45:1
+     45 @Component({
         ~~~~~~~~~~~~
-     25   selector: 'imperia-input-table',
+     46   selector: 'imperia-input-table',
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ... 
-    329   }
+    360   }
         ~~~
-    330 }
+    361 }
         ~
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts:33:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+ 33 @Component({
+    ~~~~~~~~~~~~
+ 34   selector: 'imperia-table-filter',
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+485   }
+    ~~~
+486 }
+    ~
+
+  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:45:1
+     45 @Component({
+        ~~~~~~~~~~~~
+     46   selector: 'imperia-input-table',
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ... 
+    360   }
+        ~~~
+    361 }
+        ~
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts
 
  Compiling with Angular sources in Ivy partial compilation mode.
-projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:47:8 - error TS2307: Cannot find module '../models/imperia-table-v2-cell-selection.models' or its corresponding type declarations.
-
-47 } from '../models/imperia-table-v2-cell-selection.models';
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts:139:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
  139 @Component({
@@ -112,15 +127,38 @@ projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table
 1658 }
      ~
 
-  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:24:1
-     24 @Component({
+  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:45:1
+     45 @Component({
         ~~~~~~~~~~~~
-     25   selector: 'imperia-input-table',
+     46   selector: 'imperia-input-table',
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ... 
-    329   }
+    360   }
         ~~~
-    330 }
+    361 }
         ~
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts:33:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+ 33 @Component({
+    ~~~~~~~~~~~~
+ 34   selector: 'imperia-table-filter',
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+485   }
+    ~~~
+486 }
+    ~
+
+  projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts:45:1
+     45 @Component({
+        ~~~~~~~~~~~~
+     46   selector: 'imperia-input-table',
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ... 
+    360   }
+        ~~~
+    361 }
+        ~
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts
 

@@ -79,17 +79,40 @@ Building entry point '@imperiascm/scp-components'
 [7m1658[0m }
 [7m    [0m [91m~[0m
 
-  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m24[0m:[93m1[0m
-    [7m 24[0m @Component({
+  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m45[0m:[93m1[0m
+    [7m 45[0m @Component({
     [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 25[0m   selector: 'imperia-input-table',
+    [7m 46[0m   selector: 'imperia-input-table',
     [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     [7m...[0m 
-    [7m329[0m   }
+    [7m360[0m   }
     [7m   [0m [96m~~~[0m
-    [7m330[0m }
+    [7m361[0m }
     [7m   [0m [96m~[0m
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+[96mprojects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts[0m:[93m33[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+[7m 33[0m @Component({
+[7m   [0m [91m~~~~~~~~~~~~[0m
+[7m 34[0m   selector: 'imperia-table-filter',
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m485[0m   }
+[7m   [0m [91m~~~[0m
+[7m486[0m }
+[7m   [0m [91m~[0m
+
+  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m45[0m:[93m1[0m
+    [7m 45[0m @Component({
+    [7m   [0m [96m~~~~~~~~~~~~[0m
+    [7m 46[0m   selector: 'imperia-input-table',
+    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m...[0m 
+    [7m360[0m   }
+    [7m   [0m [96m~~~[0m
+    [7m361[0m }
+    [7m   [0m [96m~[0m
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts
 
 ✖ Compiling with Angular sources in Ivy partial compilation mode.
 [1m[31m[96mprojects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts[0m:[93m139[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
@@ -104,15 +127,38 @@ Building entry point '@imperiascm/scp-components'
 [7m1658[0m }
 [7m    [0m [91m~[0m
 
-  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m24[0m:[93m1[0m
-    [7m 24[0m @Component({
+  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m45[0m:[93m1[0m
+    [7m 45[0m @Component({
     [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 25[0m   selector: 'imperia-input-table',
+    [7m 46[0m   selector: 'imperia-input-table',
     [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     [7m...[0m 
-    [7m329[0m   }
+    [7m360[0m   }
     [7m   [0m [96m~~~[0m
-    [7m330[0m }
+    [7m361[0m }
     [7m   [0m [96m~[0m
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
+[96mprojects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts[0m:[93m33[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+
+[7m 33[0m @Component({
+[7m   [0m [91m~~~~~~~~~~~~[0m
+[7m 34[0m   selector: 'imperia-table-filter',
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m485[0m   }
+[7m   [0m [91m~~~[0m
+[7m486[0m }
+[7m   [0m [91m~[0m
+
+  [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m45[0m:[93m1[0m
+    [7m 45[0m @Component({
+    [7m   [0m [96m~~~~~~~~~~~~[0m
+    [7m 46[0m   selector: 'imperia-input-table',
+    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m...[0m 
+    [7m360[0m   }
+    [7m   [0m [96m~~~[0m
+    [7m361[0m }
+    [7m   [0m [96m~[0m
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/public-api.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts
 [39m[22m

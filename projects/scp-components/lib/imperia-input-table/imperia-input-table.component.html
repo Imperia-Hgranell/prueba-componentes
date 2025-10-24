@@ -149,7 +149,36 @@
 
 <!-- TABLE TEMPLATE -->
 <ng-template #imperiaTable>
-  <imperia-table
+  <imperia-table-v2
+    [value]="(value$ | async) ?? []"
+    [columns]="(columns$ | async) ?? []"
+    [dataKey]="dataInfo.dataKey"
+    [allowEdit]="true"
+    [pageSize]="dataInfo.pageSize"
+    (onSearchChanges)="onSearch($event)"
+    (onFilterChanges)="onFilter($event)"
+    (onSortChanges)="onSort($event)"
+    (onPageChanges)="onScrollComplete($event)"
+    [loading]="loading"
+  >
+    @if (dataInfo.endpoint.hasFilters) {
+    <imperia-table-filter-v2></imperia-table-filter-v2>
+    }
+    <imperia-table-v2-cell-selection [mode]="dataInfo.selectionMode">
+    </imperia-table-v2-cell-selection>
+
+    <imperia-table-v2-clicks
+      (dblClick)="onRowDblClick($event)"
+    ></imperia-table-v2-clicks>
+
+    <imperia-table-v2-row-selection
+      [mode]="dataInfo.selectionMode"
+      (selectionChange)="onSelectionChange($event)"
+    >
+    </imperia-table-v2-row-selection>
+  </imperia-table-v2>
+
+  <!-- <imperia-table
     *ngIf="dataInfo$ | async as dataInfo"
     [value]="(value$ | async) ?? []"
     [columns]="(columns$ | async) ?? []"
@@ -171,5 +200,5 @@
     (onSort)="onSort($event)"
     (onScrollComplete)="onScrollComplete($event)"
     (selectionChange)="onSelectionChange($event)"
-  ></imperia-table>
+  ></imperia-table> -->
 </ng-template>
