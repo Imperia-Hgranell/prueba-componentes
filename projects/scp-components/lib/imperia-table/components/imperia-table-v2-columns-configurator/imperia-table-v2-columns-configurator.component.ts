@@ -2,14 +2,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Host,
+  Inject,
   Output,
+  forwardRef,
 } from '@angular/core';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
 import { ImperiaTableLoading } from '../../models/imperia-table-loading.models';
 import { COLUMNS_CONFIGURATOR_TABLE_COLUMNS } from '../../models/imperia-table-v2-columns-configurator.constants';
 import { ColumnConfiguration, ColumnsConfiguratorMoveEvent, ColumnsConfiguratorMoveEventDirection } from '../../models/imperia-table-v2-columns-configurator.models';
 import { getImperiaTableColumns } from '../../shared/functions';
+import {
+  IMPERIA_TABLE_V2_COLUMNS_CONFIGURATOR,
+  IMPERIA_TABLE_V2_HOST,
+} from '../../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
 import { ImpTranslateService } from '@imperiascm/translate';
 import {
   BehaviorSubject,
@@ -31,6 +38,12 @@ import {
   selector: 'imperia-table-v2-columns-configurator',
   templateUrl: './imperia-table-v2-columns-configurator.component.html',
   styleUrls: ['./imperia-table-v2-columns-configurator.component.scss'],
+  providers: [
+    {
+      provide: IMPERIA_TABLE_V2_COLUMNS_CONFIGURATOR,
+      useExisting: forwardRef(() => ImperiaTableV2ColumnsConfiguratorComponent),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
@@ -216,7 +229,8 @@ export class ImperiaTableV2ColumnsConfiguratorComponent<TItem extends object> {
   //#endregion LOADING
 
   constructor(
-    private imperiaTable: ImperiaTableV2Component<TItem>,
+    @Host() @Inject(IMPERIA_TABLE_V2_HOST)
+    private imperiaTable: ImperiaTableV2Host<TItem>,
     private translate: ImpTranslateService
   ) {}
 

@@ -3,6 +3,7 @@ import {
   Component,
   ContentChildren,
   ElementRef,
+  Inject,
   NgZone,
   Optional,
   QueryList,
@@ -11,7 +12,6 @@ import {
 } from '@angular/core';
 import { ImpMenuV2ItemGroupDirective } from '../../directives/imp-menu-v2-item-group.directive';
 import { ImpMenuV2ItemDirective } from '../../directives/imp-menu-v2-item.directive';
-import { ImperiaTableV2Component } from '../../../imperia-table/components/imperia-table-v2/imperia-table-v2.component';
 import {
   Observable,
   ReplaySubject,
@@ -34,6 +34,10 @@ import {
   withLatestFrom,
   zip,
 } from 'rxjs';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  type ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imp-menu-v2',
@@ -314,7 +318,9 @@ export class ImpMenuV2Component {
   //#endregion ITEMS WIDTH CHECKED
 
   constructor(
-    @Optional() private imperiaTable: ImperiaTableV2Component<any> | null,
+    @Optional()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private imperiaTable: ImperiaTableV2Host<any> | null,
     private _ngZone: NgZone,
     public elementRef: ElementRef<HTMLDivElement>
   ) {}

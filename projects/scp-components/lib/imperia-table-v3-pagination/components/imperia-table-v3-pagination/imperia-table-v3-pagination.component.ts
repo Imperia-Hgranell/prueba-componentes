@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Inject,
   input,
   Output,
 } from '@angular/core';
@@ -12,7 +13,7 @@ import {
   filter,
   map,
   merge,
-  Observable,
+  type Observable,
   share,
   shareReplay,
   switchMap,
@@ -22,7 +23,10 @@ import {
 import { IMPERIA_TABLE_V3_PAGINATION_PROVIDER } from '../../models/imperia-table-v3-pagination-provider';
 import { ImperiaTablePagination } from '../../models/imperia-table-v3-pagination.models';
 import { PaginationValue } from '@imperiascm/scp-utils/payload';
-import { ImperiaTableV2Component } from '../../../imperia-table/components/imperia-table-v2/imperia-table-v2.component';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  type ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imperia-table-v3-pagination',
@@ -99,5 +103,7 @@ export class ImperiaTableV3PaginationComponent
   @Output('valueChange') public valueChange$ = this.value$.pipe(share());
   //#endregion VALUE
 
-  constructor(private table: ImperiaTableV2Component<any>) {}
+  constructor(
+    @Inject(IMPERIA_TABLE_V2_HOST) private table: ImperiaTableV2Host<any>
+  ) {}
 }

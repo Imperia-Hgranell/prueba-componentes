@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Host,
+  Inject,
   Input,
   Optional,
   Output,
@@ -16,8 +18,9 @@ import {
   HORIZONTAL_LIST_ELEMENT_ENTER_LEAVE,
   PANEL_OPEN_CLOSE,
 } from './imperia-table-filter-v2.animations';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
+import { IMPERIA_TABLE_V2_HOST } from '../../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
 import { ImperiaTableFilterValue } from '../../models/imperia-table-filters.models';
 import {
   getFiltersFromStorage,
@@ -534,7 +537,10 @@ export class ImperiaTableFilterV2Component<TItem extends object> {
   //#endregion OPENED
 
   constructor(
-    @Optional() private table: ImperiaTableV2Component<TItem> | null,
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private table: ImperiaTableV2Host<TItem> | null,
     private datePipe: LocalizedDatePipe
   ) {}
 

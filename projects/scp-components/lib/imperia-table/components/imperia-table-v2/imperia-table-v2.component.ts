@@ -17,6 +17,7 @@ import {
   ViewChildren,
   ViewContainerRef,
   contentChild,
+  forwardRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ImpResizeEvent } from '@imperiascm/dom-utils';
@@ -38,10 +39,8 @@ import {
 import { ImperiaTableFilterV2Component } from '../imperia-table-filter-v2/imperia-table-filter-v2.component';
 import { ImperiaTableV2CellOverlayPinnedListComponent } from '../imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component';
 import { ImperiaTableV2CellOverlayComponent } from '../imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
-import { ImperiaTableV2ColumnsConfiguratorComponent } from '../imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component';
 import { ImperiaTableV2DeletionComponent } from '../imperia-table-v2-deletion/imperia-table-v2-deletion.component';
 import { ImperiaTableV2PasteComponent } from '../imperia-table-v2-paste/imperia-table-v2-paste.component';
-import { ImperiaTableV2RowsConfiguratorComponent } from '../imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component';
 import {
   ImperiaTableV2CellSelectionComponent,
   _ImperiaTableV2CellInternalSelection,
@@ -78,6 +77,16 @@ import {
 } from '../../models/imperia-table-outputs.models';
 import { ImperiaTableRow } from '../../models/imperia-table-rows.models';
 import { fieldToImperiaTableColumnClass } from '../../pipes/field-to-selectable-class.pipe';
+import {
+  IMPERIA_TABLE_V2_COLUMNS_CONFIGURATOR,
+  IMPERIA_TABLE_V2_HOST,
+  IMPERIA_TABLE_V2_ROWS_CONFIGURATOR,
+} from '../../../shared/template-apis/imperia-table.tokens';
+import type {
+  ImperiaTableV2ColumnsConfigurator,
+  ImperiaTableV2Host,
+  ImperiaTableV2RowsConfigurator,
+} from '../../../shared/template-apis/imperia-table.tokens';
 import {
   getFiltersFromStorage,
   getSortFromStorage,
@@ -145,10 +154,16 @@ import {
     CONTEXT_MENU_ENTER_LEAVE,
     FADE_IN_OUT,
   ],
+  providers: [
+    {
+      provide: IMPERIA_TABLE_V2_HOST,
+      useExisting: forwardRef(() => ImperiaTableV2Component),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ImperiaTableV2Component<TItem extends object> {
+export class ImperiaTableV2Component<TItem extends object> implements ImperiaTableV2Host<TItem> {
   //#region CONTAINER
   @ViewChild('container') set containerSetter(v: ElementRef<HTMLDivElement>) {
     this.container.next(v.nativeElement);
@@ -547,14 +562,14 @@ export class ImperiaTableV2Component<TItem extends object> {
   //#endregion COLUMNS BODY CELLS TEMPLATES
 
   //#region COLUMNS CONFIGURATOR
-  @ContentChild(ImperiaTableV2ColumnsConfiguratorComponent<TItem>)
+  @ContentChild(IMPERIA_TABLE_V2_COLUMNS_CONFIGURATOR)
   set columnsConfiguratorSetter(
-    v: ImperiaTableV2ColumnsConfiguratorComponent<TItem> | undefined
+    v: ImperiaTableV2ColumnsConfigurator<TItem> | undefined
   ) {
     this.columnsConfigurator.next(v);
   }
   private columnsConfigurator = new ReplaySubject<
-    ImperiaTableV2ColumnsConfiguratorComponent<TItem> | undefined
+    ImperiaTableV2ColumnsConfigurator<TItem> | undefined
   >(1);
   public hasColumnsConfigurator$ = this.columnsConfigurator.pipe(
     map((columnsConfigurator) => !!columnsConfigurator)
@@ -569,14 +584,14 @@ export class ImperiaTableV2Component<TItem extends object> {
   //#endregion COLUMNS CONFIGURATOR
 
   //#region ROWS CONFIGURATOR
-  @ContentChild(ImperiaTableV2RowsConfiguratorComponent<TItem>)
+  @ContentChild(IMPERIA_TABLE_V2_ROWS_CONFIGURATOR)
   set rowsConfiguratorSetter(
-    v: ImperiaTableV2RowsConfiguratorComponent<TItem> | undefined
+    v: ImperiaTableV2RowsConfigurator<TItem> | undefined
   ) {
     this.rowsConfigurator.next(v);
   }
   private rowsConfigurator = new ReplaySubject<
-    ImperiaTableV2RowsConfiguratorComponent<TItem> | undefined
+    ImperiaTableV2RowsConfigurator<TItem> | undefined
   >(1);
   public hasRowsConfigurator$ = this.rowsConfigurator.pipe(
     map((rowsConfigurator) => !!rowsConfigurator)

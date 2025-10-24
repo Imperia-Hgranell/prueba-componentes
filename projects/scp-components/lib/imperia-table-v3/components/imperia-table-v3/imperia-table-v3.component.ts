@@ -20,6 +20,7 @@ import {
   computed,
   contentChild,
   contentChildren,
+  forwardRef,
   inject,
   input,
   runInInjectionContext,
@@ -78,7 +79,6 @@ import { ImperiaTableV2BlockerTemplateDirective } from '../../../imperia-table/t
 import { ImperiaTableV2CellOverlayComponent } from '../../../imperia-table/components/imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
 import { ImperiaTableV2ClicksDirective } from '../../../imperia-table/directives/imperia-table-v2-clicks.directive';
 import { ImperiaTableV2ColumnDirective } from '../../../imperia-table/directives/imperia-table-v2-column.directive';
-import { ImperiaTableV2Component } from '../../../imperia-table/components/imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableV2DeletionComponent } from '../../../imperia-table/components/imperia-table-v2-deletion/imperia-table-v2-deletion.component';
 import { ImperiaTableV2PasteComponent } from '../../../imperia-table/components/imperia-table-v2-paste/imperia-table-v2-paste.component';
 import { ImperiaTableV2ReorderDirective } from '../../../imperia-table/directives/imperia-table-v2-reorder.directive';
@@ -133,6 +133,12 @@ import {
 } from 'rxjs';
 import { ImperiaTableV3FiltersComponent } from '../../../imperia-table-v3-filters/components/imperia-table-v3-filters/imperia-table-v3-filters.component';
 import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  IMPERIA_TABLE_V3_HOST,
+  type ImperiaTableV2Host,
+  type ImperiaTableV3Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imperia-table-v3',
@@ -151,14 +157,20 @@ import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
   ],
   providers: [
     {
-      provide: ImperiaTableV2Component,
-      useExisting: ImperiaTableV3Component,
+      provide: IMPERIA_TABLE_V2_HOST,
+      useExisting: forwardRef(() => ImperiaTableV3Component),
+    },
+    {
+      provide: IMPERIA_TABLE_V3_HOST,
+      useExisting: forwardRef(() => ImperiaTableV3Component),
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ImperiaTableV3Component<TItem extends object> {
+export class ImperiaTableV3Component<TItem extends object>
+  implements ImperiaTableV3Host<TItem>
+{
   //#region INJECTOR
   public injector = inject(Injector);
   //#endregion INJECTOR
@@ -323,6 +335,16 @@ export class ImperiaTableV3Component<TItem extends object> {
     this.storageKey.next(v);
   }
   public storageKey = new BehaviorSubject<string>('');
+  public storage$ = this.storageKey.pipe(
+    withLatestFrom(this.pageSize),
+    map(
+      ([, Size]) =>
+        new ImperiaTableFilterSortScrollEvent<TItem>({
+          Pagination: { Size },
+        })
+    ),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
   //#endregion STORAGE
 
   //#region NO DATA TEMPLATE
@@ -2038,6 +2060,7 @@ export class ImperiaTableV3Component<TItem extends object> {
     ),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+  public hasRowDetail$ = of(false);
   //#endregion SELECTION
 
   //#region CLICKS
@@ -2294,6 +2317,7 @@ export class ImperiaTableV3Component<TItem extends object> {
     map((imperiaTableV3FiltersComponent) => !!imperiaTableV3FiltersComponent),
     shareReplay({ bufferSize: 1, refCount: true })
   );
+  public hasImperiaTableFilterV2$ = this.hasImperiaTableV3Filters$;
   public imperiaTableV3FiltersHeaderCellButtonsTemplate$ =
     this.imperiaTableV3FiltersComponent$.pipe(
       switchMap(

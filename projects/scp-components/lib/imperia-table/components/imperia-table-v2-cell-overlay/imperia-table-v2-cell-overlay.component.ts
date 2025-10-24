@@ -4,6 +4,8 @@ import {
   ContentChildren,
   Directive,
   EmbeddedViewRef,
+  Host,
+  Inject,
   input,
   Input,
   OnDestroy,
@@ -18,7 +20,6 @@ import { toObservable } from '@angular/core/rxjs-interop';
 // import { CellForecastConceptsComponent } from '@modules/forecasts/components/cell-forecast-concepts/cell-forecast-concepts.component';
 import { FADEIN_FADEOUT } from '@imperiascm/scp-utils/animations';
 import { ImperiaTableV2CellValueRestorerComponent } from '../imperia-table-v2-cell-value-restorer/imperia-table-v2-cell-value-restorer.component';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableV2ClickEvent } from '../../directives/imperia-table-v2-clicks.directive';
 import { isElementClickedOverlappingParentElement } from '@imperiascm/scp-utils/functions';
 import { DEFAULT_ORDER } from '@imperiascm/scp-utils/payload';
@@ -49,6 +50,10 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { CellCorner } from '@imperiascm/scp-utils/models';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 export type ImperiaTableCellOverlayContext<TItem extends object> = {
   $implicit: {
@@ -335,8 +340,11 @@ export class ImperiaTableV2CellOverlayComponent<TItem extends object>
   //#endregion OVERLAY
 
   constructor(
-    private table: ImperiaTableV2Component<TItem> // private forecastConceptsService: ForecastsConceptsService
-  ) {}
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private table: ImperiaTableV2Host<TItem>
+  ) // private forecastConceptsService: ForecastsConceptsService
+  {}
 
   ngOnInit(): void {
     this.overlay$

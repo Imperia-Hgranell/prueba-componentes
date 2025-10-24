@@ -2,20 +2,30 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
+  Host,
+  Inject,
   input,
   Input,
   Optional,
   Output,
   QueryList,
+  forwardRef,
 } from '@angular/core';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableComponent } from '../imperia-table/imperia-table.component';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
 import { ImperiaTableLoading } from '../../models/imperia-table-loading.models';
 import { ImperiaTableCellSaveEvent } from '../../models/imperia-table-outputs.models';
 import { ROWS_CONFIGURATOR_TABLE_COLUMNS } from '../../models/imperia-table-v2-rows-configurator.constants';
-import { RowsConfiguration, RowsConfiguratorMoveEvent } from '../../models/imperia-table-v2-rows-configurator.models';
+import {
+  RowsConfiguration,
+  RowsConfiguratorMoveEvent,
+} from '../../models/imperia-table-v2-rows-configurator.models';
 import { getImperiaTableColumns } from '../../shared/functions';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  IMPERIA_TABLE_V2_ROWS_CONFIGURATOR,
+} from '../../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
 import { ImperiaTableBodyCellTemplateDirective } from '../../template-directives/imperia-table-body-cell-template.directive';
 import { ImpTranslateService } from '@imperiascm/translate';
 import {
@@ -47,6 +57,12 @@ export type RowsConfiguratorItem = {
   selector: 'imperia-table-v2-rows-configurator',
   templateUrl: './imperia-table-v2-rows-configurator.component.html',
   styleUrls: ['./imperia-table-v2-rows-configurator.component.scss'],
+  providers: [
+    {
+      provide: IMPERIA_TABLE_V2_ROWS_CONFIGURATOR,
+      useExisting: forwardRef(() => ImperiaTableV2RowsConfiguratorComponent),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
@@ -344,7 +360,10 @@ export class ImperiaTableV2RowsConfiguratorComponent<
 
   constructor(
     private typedTranslateService: ImpTranslateService,
-    @Optional() private imperiaTableV2: ImperiaTableV2Component<TItem> | null,
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private imperiaTableV2: ImperiaTableV2Host<TItem> | null,
     @Optional() private imperiaTableV1: ImperiaTableComponent<TItem> | null
   ) {}
 

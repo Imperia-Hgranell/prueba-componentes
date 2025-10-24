@@ -1,7 +1,8 @@
-import { Directive, Output } from '@angular/core';
+import { Directive, Host, Inject, Output } from '@angular/core';
 import { ImperiaTableV2CellOverlayRef } from '../components/imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
+import { IMPERIA_TABLE_V2_HOST } from '../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../shared/template-apis/imperia-table.tokens';
 import { _ImperiaTableV2CellInternalSelection } from '../components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
-import { ImperiaTableV2Component } from '../components/imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../models/imperia-table-columns.models';
 import { ImperiaTableRow } from '../models/imperia-table-rows.models';
 import {
@@ -286,7 +287,7 @@ export class ImperiaTableV2ClicksDirective<TItem extends object> {
   ).pipe(startWith(null), shareReplay({ bufferSize: 1, refCount: true }));
   //#endregion LAST CELL CLICKED
 
-  constructor(private table: ImperiaTableV2Component<TItem>) {}
+  constructor(@Host() @Inject(IMPERIA_TABLE_V2_HOST) private table: ImperiaTableV2Host<TItem>) {}
 
   public click(
     event: MouseEvent,

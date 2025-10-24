@@ -2,12 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Host,
+  Inject,
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { COMPONENT_OPEN_CLOSE, HORIZONTAL_LIST_ELEMENT_ENTER_LEAVE } from '../imperia-table-filter-v2/imperia-table-filter-v2.animations';
+import {
+  COMPONENT_OPEN_CLOSE,
+  HORIZONTAL_LIST_ELEMENT_ENTER_LEAVE,
+} from '../imperia-table-filter-v2/imperia-table-filter-v2.animations';
 import { ImperiaTableCellOverlayContext } from '../imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import {
   EMPTY,
   Observable,
@@ -21,6 +25,10 @@ import {
   switchMap,
   take,
 } from 'rxjs';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imperia-table-v2-cell-overlay-pinned-list',
@@ -108,5 +116,9 @@ export class ImperiaTableV2CellOverlayPinnedListComponent<
       })
     );
 
-  constructor(protected table: ImperiaTableV2Component<TItem>) {}
+  constructor(
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    protected table: ImperiaTableV2Host<TItem>
+  ) {}
 }

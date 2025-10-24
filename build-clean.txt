@@ -135,162 +135,16 @@ projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/
      40 }
         ~
     The directive 'ImperiaTableV2CellSelectionContextMenuButtonTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts:30:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:42:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
- 30 @Component({
+ 42 @Component({
     ~~~~~~~~~~~~
- 31   selector: 'imperia-table-v2-columns-configurator',
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-... 
-398   }
-    ~~~
-399 }
-    ~
-
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1
-     132 @Component({
-         ~~~~~~~~~~~~
-     133   selector: 'imperia-table-v2',
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ... 
-    2941   }
-         ~~~
-    2942 }
-         ~
-    The component 'ImperiaTableV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts:46:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 46 @Component({
-    ~~~~~~~~~~~~
- 47   selector: 'imperia-table-v2-rows-configurator',
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-... 
-374   }
-    ~~~
-375 }
-    ~
-
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1
-     132 @Component({
-         ~~~~~~~~~~~~
-     133   selector: 'imperia-table-v2',
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ... 
-    2941   }
-         ~~~
-    2942 }
-         ~
-    The component 'ImperiaTableV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 132 @Component({
-     ~~~~~~~~~~~~
- 133   selector: 'imperia-table-v2',
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ... 
-2941   }
-     ~~~
-2942 }
-     ~
-
-  projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts:57:1
-     57 @Directive({
-        ~~~~~~~~~~~~
-     58   selector: '[bodyCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    205   }
-        ~~~
-    206 }
-        ~
-    The directive 'BodyCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts:51:1
-     51 @Directive({
-        ~~~~~~~~~~~~
-     52   selector: '[headerCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    160   }
-        ~~~
-    161 }
-        ~
-    The directive 'HeaderCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/directives/imperia-table-v2-virtual-scroll-strategy.directive.ts:11:1
-     11 @Directive({
-        ~~~~~~~~~~~~
-     12   selector: '[imperiaTableV2VirtualScrollStrategy]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-     45   }
-        ~~~
-     46 }
-        ~
-    The directive 'ImperiaTableV2VirtualScrollStrategyDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/imperia-table-v2-virtual-scroll-strategy.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component.ts:25:1
-     25 @Component({
-        ~~~~~~~~~~~~
-     26   selector: 'imperia-table-v2-cell-overlay-pinned-list',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    111   constructor(protected table: ImperiaTableV2Component<TItem>) {}
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    112 }
-        ~
-    The component 'ImperiaTableV2CellOverlayPinnedListComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:38:1
-     38 @Component({
-        ~~~~~~~~~~~~
-     39   selector: 'imp-menu-v2',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    460   }
-        ~~~
-    461 }
-        ~
-    The component 'ImpMenuV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:38:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 38 @Component({
-    ~~~~~~~~~~~~
- 39   selector: 'imp-menu-v2',
+ 43   selector: 'imp-menu-v2',
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ... 
-460   }
+466   }
     ~~~
-461 }
+467 }
     ~
 
   projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts:8:1
@@ -304,40 +158,6 @@ projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.compo
      19 }
         ~
     The directive 'ImpMenuV2GroupTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts
-projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts:137:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 137 @Component({
-     ~~~~~~~~~~~~
- 138   selector: 'imperia-table-v3',
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ... 
-2690   }
-     ~~~
-2691 }
-     ~
-
-  projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts:57:1
-     57 @Directive({
-        ~~~~~~~~~~~~
-     58   selector: '[bodyCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    205   }
-        ~~~
-    206 }
-        ~
-    The directive 'BodyCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts
-  projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts:51:1
-     51 @Directive({
-        ~~~~~~~~~~~~
-     52   selector: '[headerCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    160   }
-        ~~~
-    161 }
-        ~
-    The directive 'HeaderCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts
 
  Compiling with Angular sources in Ivy partial compilation mode.
 projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts:135:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
@@ -408,162 +228,16 @@ projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/
      40 }
         ~
     The directive 'ImperiaTableV2CellSelectionContextMenuButtonTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts:30:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:42:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
- 30 @Component({
+ 42 @Component({
     ~~~~~~~~~~~~
- 31   selector: 'imperia-table-v2-columns-configurator',
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-... 
-398   }
-    ~~~
-399 }
-    ~
-
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1
-     132 @Component({
-         ~~~~~~~~~~~~
-     133   selector: 'imperia-table-v2',
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ... 
-    2941   }
-         ~~~
-    2942 }
-         ~
-    The component 'ImperiaTableV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-columns-configurator/imperia-table-v2-columns-configurator.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts:46:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 46 @Component({
-    ~~~~~~~~~~~~
- 47   selector: 'imperia-table-v2-rows-configurator',
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-... 
-374   }
-    ~~~
-375 }
-    ~
-
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1
-     132 @Component({
-         ~~~~~~~~~~~~
-     133   selector: 'imperia-table-v2',
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ... 
-    2941   }
-         ~~~
-    2942 }
-         ~
-    The component 'ImperiaTableV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-rows-configurator/imperia-table-v2-rows-configurator.component.ts
-projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts:132:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 132 @Component({
-     ~~~~~~~~~~~~
- 133   selector: 'imperia-table-v2',
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ... 
-2941   }
-     ~~~
-2942 }
-     ~
-
-  projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts:57:1
-     57 @Directive({
-        ~~~~~~~~~~~~
-     58   selector: '[bodyCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    205   }
-        ~~~
-    206 }
-        ~
-    The directive 'BodyCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts:51:1
-     51 @Directive({
-        ~~~~~~~~~~~~
-     52   selector: '[headerCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    160   }
-        ~~~
-    161 }
-        ~
-    The directive 'HeaderCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/directives/imperia-table-v2-virtual-scroll-strategy.directive.ts:11:1
-     11 @Directive({
-        ~~~~~~~~~~~~
-     12   selector: '[imperiaTableV2VirtualScrollStrategy]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-     45   }
-        ~~~
-     46 }
-        ~
-    The directive 'ImperiaTableV2VirtualScrollStrategyDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/imperia-table-v2-virtual-scroll-strategy.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts:36:1
-     36 @Directive({
-        ~~~~~~~~~~~~
-     37   selector: 'imp-menu-v2-item-group',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    214   ) {}
-        ~~~~~~
-    215 }
-        ~
-    The directive 'ImpMenuV2ItemGroupDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imperia-table/components/imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component.ts:25:1
-     25 @Component({
-        ~~~~~~~~~~~~
-     26   selector: 'imperia-table-v2-cell-overlay-pinned-list',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    111   constructor(protected table: ImperiaTableV2Component<TItem>) {}
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    112 }
-        ~
-    The component 'ImperiaTableV2CellOverlayPinnedListComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-  projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:38:1
-     38 @Component({
-        ~~~~~~~~~~~~
-     39   selector: 'imp-menu-v2',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    460   }
-        ~~~
-    461 }
-        ~
-    The component 'ImpMenuV2Component' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2/imperia-table-v2.component.ts
-projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts:38:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 38 @Component({
-    ~~~~~~~~~~~~
- 39   selector: 'imp-menu-v2',
+ 43   selector: 'imp-menu-v2',
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ... 
-460   }
+466   }
     ~~~
-461 }
+467 }
     ~
 
   projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts:8:1
@@ -577,38 +251,4 @@ projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.compo
      19 }
         ~
     The directive 'ImpMenuV2GroupTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts
-projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts:137:1 - error NG3003: One or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
- 137 @Component({
-     ~~~~~~~~~~~~
- 138   selector: 'imperia-table-v3',
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ... 
-2690   }
-     ~~~
-2691 }
-     ~
-
-  projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts:57:1
-     57 @Directive({
-        ~~~~~~~~~~~~
-     58   selector: '[bodyCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    205   }
-        ~~~
-    206 }
-        ~
-    The directive 'BodyCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/body-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts
-  projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts:51:1
-     51 @Directive({
-        ~~~~~~~~~~~~
-     52   selector: '[headerCellContextMenu]',
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ... 
-    160   }
-        ~~~
-    161 }
-        ~
-    The directive 'HeaderCellContextMenuDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/directives/header-cell-context-menu.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component.ts
 

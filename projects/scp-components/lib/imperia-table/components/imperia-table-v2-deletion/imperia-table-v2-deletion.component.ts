@@ -1,11 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Host,
+  Inject,
   Input,
   Output,
 } from '@angular/core';
-import { CancelDeletionParams, ImperiaTableV2DeletionEvent, ResultDeletionParams } from './models';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
+import {
+  CancelDeletionParams,
+  ImperiaTableV2DeletionEvent,
+  ResultDeletionParams,
+} from './models';
 import { ImpTranslateService } from '@imperiascm/translate';
 import {
   BehaviorSubject,
@@ -20,6 +25,10 @@ import {
 } from 'rxjs';
 
 import { modal, httpRequest } from '@imperiascm/rxjs-utils';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imperia-table-v2-deletion',
@@ -96,7 +105,9 @@ export class ImperiaTableV2DeletionComponent<TItem extends object> {
 
   constructor(
     private typedTranslateService: ImpTranslateService,
-    private table: ImperiaTableV2Component<TItem>
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private table: ImperiaTableV2Host<TItem>
   ) {}
 
   public delete() {

@@ -1,8 +1,9 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Directive, Input, inject } from '@angular/core';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
 import { ImperiaTableRow } from '../../models/imperia-table-rows.models';
+import { IMPERIA_TABLE_V2_HOST } from '../../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
 import {
   BehaviorSubject,
   Observable,
@@ -21,10 +22,12 @@ import {
 
 @Directive({
   selector: 'imperia-table-v2-base-selection',
-    standalone: false
+  standalone: false,
 })
 export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
-  public readonly table = inject(ImperiaTableV2Component<TItem>);
+  public readonly table = inject<ImperiaTableV2Host<TItem>>(
+    IMPERIA_TABLE_V2_HOST
+  );
   protected readonly clipboard = inject(Clipboard);
 
   //#region IS SHIFT PRESSED
@@ -32,17 +35,17 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
     this.table.container$.pipe(
       switchMap((container) => fromEvent<KeyboardEvent>(container, 'keydown')),
       filter(({ key }) => key == 'Shift'),
-      map(({ shiftKey }) => shiftKey),
+      map(({ shiftKey }) => shiftKey)
     ),
     this.table.container$.pipe(
       switchMap((container) => fromEvent<KeyboardEvent>(container, 'keyup')),
       filter(({ key }) => key == 'Shift'),
-      map(({ shiftKey }) => shiftKey),
-    ),
+      map(({ shiftKey }) => shiftKey)
+    )
   ).pipe(
     startWith(false),
     distinctUntilChanged(),
-    shareReplay({ bufferSize: 1, refCount: true }),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   //#endregion IS SHIFT PRESSED
 
@@ -52,7 +55,7 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
     this.disabled.next(v);
   }
   protected disabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
+    false
   );
   //#endregion DISABLED
 
@@ -62,14 +65,14 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
     this.readonly.next(v);
   }
   protected readonly: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
+    false
   );
   protected ifNotReadonly<T>() {
     return (source$: Observable<T>) =>
       source$.pipe(
         withLatestFrom(this.readonly),
         filter(([_, readonly]) => !readonly),
-        map(([value]) => value),
+        map(([value]) => value)
       );
   }
   //#endregion READONLY
@@ -86,7 +89,7 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
       source$.pipe(
         withLatestFrom(this.mode),
         filter(([_, mode]) => mode == 'single'),
-        map(([value]) => value),
+        map(([value]) => value)
       );
   }
   protected ifMultipleMode<T>() {
@@ -94,7 +97,7 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
       source$.pipe(
         withLatestFrom(this.mode),
         filter(([_, mode]) => mode == 'multiple'),
-        map(([value]) => value),
+        map(([value]) => value)
       );
   }
   //#endregion MODE
@@ -108,8 +111,8 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
   }> = fromEvent<KeyboardEvent>(document, 'keydown').pipe(
     filter(({ code }) =>
       ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Space'].includes(
-        code,
-      ),
+        code
+      )
     ),
     withLatestFrom(this.table.isFocused$, this.table.editCellElementIsClicked$),
     filter(([_, focus, isClicked]) => focus && !isClicked),
@@ -117,7 +120,7 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
     withLatestFrom(
       this.table.orderedColumns$,
       this.table.rows$,
-      this.table.footerRows$,
+      this.table.footerRows$
     ),
     map(([event, { columns }, rows, footerRows]) => ({
       event,
@@ -125,18 +128,18 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
       rows,
       footerRows,
     })),
-    share(),
+    share()
   );
   public onArrowUp$ = this.onKeyDown$.pipe(
-    filter(({ event }) => event.code == 'ArrowUp'),
+    filter(({ event }) => event.code == 'ArrowUp')
   );
   public onArrowDown$ = this.onKeyDown$.pipe(
-    filter(({ event }) => event.code == 'ArrowDown'),
+    filter(({ event }) => event.code == 'ArrowDown')
   );
   //#endregion KEYBOARD EVENTS
 
   protected preventAndStopPropagation<T>(
-    pluckFn: (value: T) => Event = (value) => value as any,
+    pluckFn: (value: T) => Event = (value) => value as any
   ) {
     return (source$: Observable<T>) =>
       source$.pipe(
@@ -148,7 +151,7 @@ export class ImperiaTableV2BaseSelectionDirective<TItem extends object> {
           if ('stopImmediatePropagation' in event) {
             event.stopImmediatePropagation();
           }
-        }),
+        })
       );
   }
 }

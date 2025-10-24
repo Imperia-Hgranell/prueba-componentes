@@ -1,14 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Host,
+  Inject,
   Input,
   Output,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { httpRequestState } from '@imperiascm/rxjs-utils';
-import { ImperiaTableV2Component } from '../imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
+import { IMPERIA_TABLE_V2_HOST } from '../../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
 import { ImperiaTableRow } from '../../models/imperia-table-rows.models';
 import { ImpOverlayService } from '@imperiascm/scp-utils/overlay';
 import { LOCALE } from '@imperiascm/scp-utils/functions';
@@ -252,7 +255,9 @@ export class ImperiaTableV2PasteComponent<TItem extends object> {
   //#endregion ON PASTE END
 
   constructor(
-    private table: ImperiaTableV2Component<TItem>,
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private table: ImperiaTableV2Host<TItem>,
     private typedTranslateService: ImpTranslateService,
     private overlayService: ImpOverlayService
   ) {}

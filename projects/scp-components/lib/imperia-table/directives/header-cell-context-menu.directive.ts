@@ -1,18 +1,19 @@
 import {
   Directive,
   ElementRef,
+  Host,
   Inject,
   Input,
   OnDestroy,
+  Optional,
   SkipSelf,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { ImperiaTableV2Component } from '../components/imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../models/imperia-table-columns.models';
 import { ImperiaTableHeaderCellContextMenuContext } from '../template-directives/imperia-table-header-cell-context-menu-template.directive';
 import {
-  Observable,
+  type Observable,
   defer,
   filter,
   fromEvent,
@@ -23,8 +24,15 @@ import {
   switchMap,
   tap,
   withLatestFrom,
+  EMPTY,
+  type Subscription,
 } from 'rxjs';
-import { ImperiaTableV3Component } from '../../imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  IMPERIA_TABLE_V3_HOST,
+  type ImperiaTableV2Host,
+  type ImperiaTableV3Host,
+} from '../../shared/template-apis/imperia-table.tokens';
 
 class HeaderCellClickElementValue {
   top: number = 0;
@@ -59,43 +67,59 @@ export class HeaderCellContextMenuDirective<TItem extends object>
   template!: TemplateRef<ImperiaTableHeaderCellContextMenuContext<TItem>>;
   @Input('headerCellContextMenuCol') col!: ImperiaTableColumn<TItem>;
 
-  private onCellElementClick$ = merge(
-    fromEvent<MouseEvent>(this.el.nativeElement, 'contextmenu'),
-    fromEvent<MouseEvent>(this.el.nativeElement, 'click')
-  ).pipe(
-    withLatestFrom(
-      defer(() => {
-        if (this.table instanceof ImperiaTableV2Component) {
-          return this.table.hasImperiaTableFilterV2$;
-        } else {
-          return this.table.hasImperiaTableV3Filters$;
-        }
-      }),
-      defer(() => {
-        if (this.table instanceof ImperiaTableV2Component) {
-          return of(true);
-        } else {
-          return this.table.hasImperiaTableV3Sort$;
-        }
-      })
-    ),
-    filter(
-      ([event, hasFilters, hasSort]) =>
-        (this.col.allowFilter && hasFilters) || (this.col.sortable && hasSort)
-    ),
-    tap(([event]) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      this.vcr.clear();
-    }),
-    map(
-      () =>
-        new HeaderCellClickElementValue(this.el, this.vcr.element.nativeElement)
-    )
-  );
+  private readonly onCellElementClick$: Observable<HeaderCellClickElementValue>;
+  private readonly contextMenuContainer$: Observable<HTMLDivElement>;
+  private readonly onOutsideContextMenuClick: Subscription;
 
-  private contextMenuContainer$: Observable<HTMLDivElement> =
-    this.onCellElementClick$.pipe(
+  constructor(
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private readonly v2Host: ImperiaTableV2Host<TItem> | null,
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V3_HOST)
+    private readonly v3Host: ImperiaTableV3Host<TItem> | null,
+    private readonly el: ElementRef<HTMLTableCellElement>,
+    @SkipSelf() private readonly vcr: ViewContainerRef
+  ) {
+    this.onCellElementClick$ = this.createOnCellElementClick$();
+    this.contextMenuContainer$ = this.createContextMenuContainer$();
+    this.onOutsideContextMenuClick = this.createOnOutsideContextMenuClick();
+  }
+
+  ngOnDestroy(): void {
+    this.onOutsideContextMenuClick.unsubscribe();
+  }
+
+  private createOnCellElementClick$(): Observable<HeaderCellClickElementValue> {
+    return merge(
+      fromEvent<MouseEvent>(this.el.nativeElement, 'contextmenu'),
+      fromEvent<MouseEvent>(this.el.nativeElement, 'click')
+    ).pipe(
+      withLatestFrom(this.resolveHasFilters$(), this.resolveHasSort$()),
+      filter(
+        ([, hasFilters, hasSort]) =>
+          (this.col.allowFilter && hasFilters) ||
+          (this.col.sortable && hasSort)
+      ),
+      tap(([event]) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this.vcr.clear();
+      }),
+      map(
+        () =>
+          new HeaderCellClickElementValue(
+            this.el,
+            this.vcr.element.nativeElement
+          )
+      )
+    );
+  }
+
+  private createContextMenuContainer$(): Observable<HTMLDivElement> {
+    return this.onCellElementClick$.pipe(
       map(({ top, left, containerRight }) => ({
         menu: this.vcr.createEmbeddedView(this.template, {
           $implicit: {
@@ -130,32 +154,63 @@ export class HeaderCellContextMenuDirective<TItem extends object>
       }),
       map(({ menuContainer }) => menuContainer)
     );
+  }
 
-  private onOutsideContextMenuClick = this.contextMenuContainer$
-    .pipe(
-      switchMap((menuContainer) =>
-        merge(
-          fromEvent<MouseEvent>(document, 'click').pipe(
-            filter((event) => !menuContainer.contains(event.target as Node))
+  private createOnOutsideContextMenuClick(): Subscription {
+    return this.contextMenuContainer$
+      .pipe(
+        switchMap((menuContainer) =>
+          merge(
+            fromEvent<MouseEvent>(document, 'click').pipe(
+              filter((event) => !menuContainer.contains(event.target as Node))
+            )
+          ).pipe(
+            mergeWith(
+              this.resolveObservable(
+                (host) => host.onHorizontalScroll$,
+                EMPTY as Observable<unknown>
+              )
+            ),
+            tap(() => this.vcr.clear())
           )
-        ).pipe(
-          mergeWith(this.table.onHorizontalScroll$),
-          tap(() => this.vcr.clear())
         )
       )
-    )
-    .subscribe();
+      .subscribe();
+  }
 
-  constructor(
-    @Inject(ImperiaTableV2Component<TItem>)
-    private table:
-      | ImperiaTableV2Component<TItem>
-      | ImperiaTableV3Component<TItem>,
-    private el: ElementRef<HTMLTableCellElement>,
-    @SkipSelf() private vcr: ViewContainerRef
-  ) {}
+  private resolveObservable<TResult>(
+    resolver: (
+      host: ImperiaTableV2Host<TItem> | ImperiaTableV3Host<TItem>
+    ) => Observable<TResult>,
+    fallback: Observable<TResult>
+  ): Observable<TResult> {
+    return defer(() => {
+      const host = this.v2Host ?? this.v3Host;
+      return host ? resolver(host) : fallback;
+    });
+  }
 
-  ngOnDestroy(): void {
-    this.onOutsideContextMenuClick.unsubscribe();
+  private resolveHasFilters$(): Observable<boolean> {
+    return defer(() => {
+      if (this.v3Host) {
+        return this.v3Host.hasImperiaTableV3Filters$;
+      }
+      if (this.v2Host) {
+        return this.v2Host.hasImperiaTableFilterV2$;
+      }
+      return of(false);
+    });
+  }
+
+  private resolveHasSort$(): Observable<boolean> {
+    return defer(() => {
+      if (this.v3Host) {
+        return this.v3Host.hasImperiaTableV3Sort$;
+      }
+      if (this.v2Host) {
+        return of(true);
+      }
+      return of(false);
+    });
   }
 }

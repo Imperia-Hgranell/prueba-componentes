@@ -1,20 +1,21 @@
 import {
   Directive,
   ElementRef,
+  Host,
   Inject,
   Input,
   OnDestroy,
+  Optional,
   SkipSelf,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { ImpResizeEventsDirective } from '@imperiascm/dom-utils';
-import { ImperiaTableV2Component } from '../components/imperia-table-v2/imperia-table-v2.component';
 import { ImperiaTableColumn } from '../models/imperia-table-columns.models';
 import { ImperiaTableRow } from '../models/imperia-table-rows.models';
 import { ImperiaTableBodyCellContextMenuContext } from '../template-directives/imperia-table-body-cell-context-menu-template.directive';
 import {
-  Observable,
+  type Observable,
   defer,
   filter,
   fromEvent,
@@ -26,8 +27,15 @@ import {
   switchMap,
   tap,
   withLatestFrom,
+  EMPTY,
+  type Subscription,
 } from 'rxjs';
-import { ImperiaTableV3Component } from '../../imperia-table-v3/components/imperia-table-v3/imperia-table-v3.component';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  IMPERIA_TABLE_V3_HOST,
+  type ImperiaTableV2Host,
+  type ImperiaTableV3Host,
+} from '../../shared/template-apis/imperia-table.tokens';
 
 class DataCellClickElementValue {
   top: number = 0;
@@ -66,29 +74,45 @@ export class BodyCellContextMenuDirective<TItem extends object>
   @Input('bodyCellContextMenuCol') col!: ImperiaTableColumn<TItem>;
   @Input('bodyCellContextMenuRow') row!: ImperiaTableRow<TItem>;
 
-  private onCellElementClick$: Observable<DataCellClickElementValue> =
-    fromEvent<MouseEvent>(this.el.nativeElement, 'contextmenu').pipe(
+  private readonly onCellElementClick$: Observable<DataCellClickElementValue>;
+  private readonly contextMenuContainer$: Observable<HTMLDivElement>;
+  private readonly onOutsideContextMenuClick: Subscription;
+
+  constructor(
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private readonly v2Host: ImperiaTableV2Host<TItem> | null,
+    @Optional()
+    @Host()
+    @Inject(IMPERIA_TABLE_V3_HOST)
+    private readonly v3Host: ImperiaTableV3Host<TItem> | null,
+    private readonly el: ElementRef<HTMLTableCellElement>,
+    @SkipSelf() private readonly vcr: ViewContainerRef
+  ) {
+    this.onCellElementClick$ = this.createOnCellElementClick$();
+    this.contextMenuContainer$ = this.createContextMenuContainer$();
+    this.onOutsideContextMenuClick = this.createOnOutsideContextMenuClick();
+  }
+
+  ngOnDestroy(): void {
+    this.onOutsideContextMenuClick.unsubscribe();
+  }
+
+  private createOnCellElementClick$(): Observable<DataCellClickElementValue> {
+    return fromEvent<MouseEvent>(this.el.nativeElement, 'contextmenu').pipe(
       withLatestFrom(
-        defer(() => {
-          if (this.table instanceof ImperiaTableV2Component) {
-            return this.table.hasImperiaTableFilterV2$;
-          } else {
-            return this.table.hasImperiaTableV3Filters$;
-          }
-        }),
-        this.table.hasSelection$,
-        this.table.hasRowContextMenuCustomButton$,
-        defer(() => {
-          if (this.table instanceof ImperiaTableV2Component) {
-            return this.table.hasRowDetail$;
-          } else {
-            return of(false);
-          }
-        })
+        this.resolveHasFilters$(),
+        this.resolveObservable((host) => host.hasSelection$, of(false)),
+        this.resolveObservable(
+          (host) => host.hasRowContextMenuCustomButton$,
+          of(false)
+        ),
+        this.resolveV2Observable((host) => host.hasRowDetail$, of(false))
       ),
       filter(
         ([
-          event,
+          ,
           hasFilters,
           hasSelection,
           hasRowContextMenuCustomButtons,
@@ -101,8 +125,10 @@ export class BodyCellContextMenuDirective<TItem extends object>
       ),
       map(([event]) => event),
       tap((event) => event.preventDefault()),
-      withLatestFrom(this.table.canCloseContextMenu$),
-      filter(([event, canCloseContextMenu]) => canCloseContextMenu),
+      withLatestFrom(
+        this.resolveObservable((host) => host.canCloseContextMenu$, of(false))
+      ),
+      filter(([, canCloseContextMenu]) => canCloseContextMenu),
       map(([event]) => event),
       tap(() => this.vcr.clear()),
       map(
@@ -110,9 +136,10 @@ export class BodyCellContextMenuDirective<TItem extends object>
           new DataCellClickElementValue(this.el, this.vcr.element.nativeElement)
       )
     );
+  }
 
-  private contextMenuContainer$: Observable<HTMLDivElement> =
-    this.onCellElementClick$.pipe(
+  private createContextMenuContainer$(): Observable<HTMLDivElement> {
+    return this.onCellElementClick$.pipe(
       map(({ top, left, containerRight, containerBottom }) => ({
         menu: this.vcr.createEmbeddedView(this.template, {
           $implicit: {
@@ -173,34 +200,65 @@ export class BodyCellContextMenuDirective<TItem extends object>
         refCount: true,
       })
     );
+  }
 
-  private onOutsideContextMenuClick = this.contextMenuContainer$
-    .pipe(
-      switchMap((menuContainer) =>
-        merge(
-          fromEvent<MouseEvent>(document, 'click').pipe(
-            filter((event) => !menuContainer.contains(event.target as Node))
+  private createOnOutsideContextMenuClick(): Subscription {
+    return this.contextMenuContainer$
+      .pipe(
+        switchMap((menuContainer) =>
+          merge(
+            fromEvent<MouseEvent>(document, 'click').pipe(
+              filter((event) => !menuContainer.contains(event.target as Node))
+            )
+          ).pipe(
+            withLatestFrom(
+              this.resolveObservable(
+                (host) => host.canCloseContextMenu$,
+                of(false)
+              )
+            ),
+            filter(([, canCloseContextMenu]) => canCloseContextMenu),
+            mergeWith(
+              this.resolveObservable(
+                (host) => host.onScroll,
+                EMPTY as Observable<unknown>
+              )
+            ),
+            tap(() => this.vcr.clear())
           )
-        ).pipe(
-          withLatestFrom(this.table.canCloseContextMenu$),
-          filter(([event, canCloseContextMenu]) => canCloseContextMenu),
-          mergeWith(this.table.onScroll),
-          tap(() => this.vcr.clear())
         )
       )
-    )
-    .subscribe();
+      .subscribe();
+  }
 
-  constructor(
-    @Inject(ImperiaTableV2Component<TItem>)
-    private table:
-      | ImperiaTableV2Component<TItem>
-      | ImperiaTableV3Component<TItem>,
-    private el: ElementRef<HTMLTableCellElement>,
-    @SkipSelf() private vcr: ViewContainerRef
-  ) {}
+  private resolveObservable<TResult>(
+    resolver: (
+      host: ImperiaTableV2Host<TItem> | ImperiaTableV3Host<TItem>
+    ) => Observable<TResult>,
+    fallback: Observable<TResult>
+  ): Observable<TResult> {
+    return defer(() => {
+      const host = this.v2Host ?? this.v3Host;
+      return host ? resolver(host) : fallback;
+    });
+  }
 
-  ngOnDestroy(): void {
-    this.onOutsideContextMenuClick.unsubscribe();
+  private resolveV2Observable<TResult>(
+    resolver: (host: ImperiaTableV2Host<TItem>) => Observable<TResult>,
+    fallback: Observable<TResult>
+  ): Observable<TResult> {
+    return defer(() => (this.v2Host ? resolver(this.v2Host) : fallback));
+  }
+
+  private resolveHasFilters$(): Observable<boolean> {
+    return defer(() => {
+      if (this.v3Host) {
+        return this.v3Host.hasImperiaTableV3Filters$;
+      }
+      if (this.v2Host) {
+        return this.v2Host.hasImperiaTableFilterV2$;
+      }
+      return of(false);
+    });
   }
 }

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Inject,
   Input,
   Output,
   QueryList,
@@ -23,13 +24,16 @@ import {
 } from 'rxjs';
 import { ImperiaTableV3SortTemplateDirective } from '../../template-directives/imperia-table-v3-sort-template.directive';
 import { ImperiaTableColumn } from '../../../imperia-table/models/imperia-table-columns.models';
-import { ImperiaTableV2Component } from '../../../imperia-table/components/imperia-table-v2/imperia-table-v2.component';
 import {
   DEFAULT_ORDER,
   OrderEqual,
   OrderValue,
   Sort,
 } from '@imperiascm/scp-utils/payload';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  type ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 
 @Component({
   selector: 'imperia-table-v3-sort',
@@ -134,5 +138,7 @@ export class ImperiaTableV3SortComponent<TItem extends object> {
   @Output('valueChange') public valueChange$ = this.value$.pipe(share());
   //#endregion VALUE
 
-  constructor(private table: ImperiaTableV2Component<TItem>) {}
+  constructor(
+    @Inject(IMPERIA_TABLE_V2_HOST) private table: ImperiaTableV2Host<TItem>
+  ) {}
 }

@@ -3,9 +3,10 @@ import {
   VIRTUAL_SCROLL_STRATEGY,
   VirtualScrollStrategy,
 } from '@angular/cdk/scrolling';
-import { Directive, Input, forwardRef } from '@angular/core';
-import { ImperiaTableV2Component } from '../components/imperia-table-v2/imperia-table-v2.component';
+import { Directive, Host, Inject, Input, forwardRef } from '@angular/core';
 import { ImperiaTableRow } from '../models/imperia-table-rows.models';
+import { IMPERIA_TABLE_V2_HOST } from '../../shared/template-apis/imperia-table.tokens';
+import type { ImperiaTableV2Host } from '../../shared/template-apis/imperia-table.tokens';
 import { Observable, Subject, distinctUntilChanged } from 'rxjs';
 
 @Directive({
@@ -40,7 +41,7 @@ export class ImperiaTableV2VirtualScrollStrategyDirective<
 
   _scrollStrategy: ImperiaTableV2VirtualScrollStrategy<TItem>;
 
-  constructor(table: ImperiaTableV2Component<TItem>) {
+  constructor(@Host() @Inject(IMPERIA_TABLE_V2_HOST) table: ImperiaTableV2Host<TItem>) {
     this._scrollStrategy = new ImperiaTableV2VirtualScrollStrategy(table);
   }
 }
@@ -68,7 +69,7 @@ class ImperiaTableV2VirtualScrollStrategy<TItem extends object>
     distinctUntilChanged(),
   );
 
-  constructor(private table: ImperiaTableV2Component<TItem>) {}
+  constructor(private table: ImperiaTableV2Host<TItem>) {}
 
   attach(viewport: CdkVirtualScrollViewport): void {
     this.viewport = viewport;

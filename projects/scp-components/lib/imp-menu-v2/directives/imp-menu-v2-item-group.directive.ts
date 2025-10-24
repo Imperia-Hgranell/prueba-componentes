@@ -3,6 +3,7 @@ import {
   Directive,
   ElementRef,
   Host,
+  Inject,
   Input,
   Optional,
   QueryList,
@@ -12,7 +13,6 @@ import { ImpMenuV2Component } from '../components/imp-menu-v2/imp-menu-v2.compon
 import { ImpMenuV2ItemDirective } from './imp-menu-v2-item.directive';
 import { ImpMenuV2ItemPositions, ImpMenuV2SeparatorPositions } from '../models/imp-menu-v2.models';
 import { ICONS_NAMES } from '../../imperia-icon-button/imperia-icon-button.component';
-import { ImperiaTableV2Component } from '../../imperia-table/components/imperia-table-v2/imperia-table-v2.component';
 import { isElementClickedOverlappingParentElement } from '@imperiascm/scp-utils/functions';
 import {
   EMPTY,
@@ -32,6 +32,10 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
+import {
+  IMPERIA_TABLE_V2_HOST,
+  type ImperiaTableV2Host,
+} from '../../shared/template-apis/imperia-table.tokens';
 
 @Directive({
   selector: 'imp-menu-v2-item-group',
@@ -209,7 +213,8 @@ export class ImpMenuV2ItemGroupDirective {
     @Host() @Optional() private menu: ImpMenuV2Component | null,
     @Host()
     @Optional()
-    private imperiaTable: ImperiaTableV2Component<any> | null,
+    @Inject(IMPERIA_TABLE_V2_HOST)
+    private imperiaTable: ImperiaTableV2Host<any> | null,
     @SkipSelf() private container: ElementRef<HTMLDivElement>
   ) {}
 }
