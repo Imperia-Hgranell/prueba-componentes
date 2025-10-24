@@ -2,6 +2,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Host,
   Inject,
   Input,
   OnDestroy,
@@ -15,14 +16,19 @@ import { ToastModule } from 'primeng/toast';
 import { BehaviorSubject, filter, merge, tap } from 'rxjs';
 import { ImpOverlayService } from '@imperiascm/scp-utils/overlay';
 import { LOCALE } from '@imperiascm/scp-utils/functions';
-import { ImperiaFormComponent } from '../imperia-form/components/imperia-form/imperia-form.component';
 import { ImpLabelComponent } from '../imp-label/imp-label.component';
 import { isCanNotBeLessGreaterError } from '../forms/errors/canNotBeLessGreater';
 import { ImperiaFormDataSyncAction, ImperiaFormDataSyncState } from '../imperia-form/models/imperia-form.types';
 import { ImperiaIconButtonComponent } from '../imperia-icon-button/imperia-icon-button.component';
-import { ImperiaTableComponent } from '../imperia-table/components/imperia-table/imperia-table.component';
 import { TUNSAVED_DATA, UNSAVED_DATA } from './unsaved-data.token';
 import { ImpTranslateModule, ImpTranslateService } from '@imperiascm/translate';
+import {
+  IMP_CRUD_MESSAGES_HOST,
+  type ImpCrudMessagesHost,
+  isImpCrudMessagesFormHost,
+  isImpCrudMessagesTableHost,
+} from '../shared/template-apis/imp-crud-messages.tokens';
+import type { Observable } from 'rxjs';
 
 @Component({
   selector: 'imp-data-sync',
@@ -53,7 +59,9 @@ export class ImpCrudMessagesComponent<TItem extends object>
   @ViewChild('statesTemplate', { static: true }) set statesTemplate(
     template: TemplateRef<any>
   ) {
-    this.host.dataStatusTemplate = template;
+    if (this.hostRef) {
+      this.host.dataStatusTemplate = template;
+    }
   }
   @ViewChild('formErrorsTemplate', { static: true })
   formErrorsTemplate!: TemplateRef<any>;
@@ -68,19 +76,23 @@ export class ImpCrudMessagesComponent<TItem extends object>
     controls: { label: string; errors: { name: string; value: any }[] }[];
   }>({ form: [], controls: [] });
   public get canShowFormErrors() {
-    return (
-      (this.host instanceof ImperiaTableComponent &&
-        this.host.modalToAddRowVisible) ||
-      this.host instanceof ImperiaFormComponent
-    );
+    if (!this.hostRef) return false;
+    if (isImpCrudMessagesTableHost(this.host)) {
+      return this.host.modalToAddRowVisible;
+    }
+    return isImpCrudMessagesFormHost(this.host);
   }
   private formErrorsAlertVisible: boolean = false;
   //#endregion FORM ERRORS
 
-  public get host():
-    | ImperiaFormComponent<TItem>
-    | ImperiaTableComponent<TItem> {
-    return this.impForm || this.impTable;
+  private hostRef?: ImpCrudMessagesHost<TItem>;
+  private get host(): ImpCrudMessagesHost<TItem> {
+    if (!this.hostRef) {
+      throw new Error(
+        'ImpCrudMessagesComponent must be used inside an ImperiaForm or ImperiaTable host'
+      );
+    }
+    return this.hostRef;
   }
 
   private outsideState$: BehaviorSubject<ImperiaFormDataSyncState> =
@@ -92,26 +104,38 @@ export class ImpCrudMessagesComponent<TItem extends object>
     this.outsideState$.next(value);
   }
 
-  public dataSyncState$ = merge(
-    this.host.dataSyncState.pipe(filter(() => !this.controlStateFromOutside)),
-    this.outsideState$.pipe(filter(() => this.controlStateFromOutside))
-  ).pipe(
-    tap((state) => {
-      this.markAs(state);
-    })
-  );
+  public dataSyncState$!: Observable<ImperiaFormDataSyncState>;
 
   private readonly unsavedDataId: number = new Date().getTime();
 
   constructor(
-    @Optional() private impForm: ImperiaFormComponent<TItem>,
-    @Optional() private impTable: ImperiaTableComponent<TItem>,
+    @Optional()
+    @Host()
+    @Inject(IMP_CRUD_MESSAGES_HOST)
+    host: ImpCrudMessagesHost<TItem> | null,
     @Inject(UNSAVED_DATA)
     private UNSAVED_DATA$: TUNSAVED_DATA,
     private overlayService: ImpOverlayService,
     public typedTranslateService: ImpTranslateService
   ) {
-    this.host.setDataSyncState = this.setDataSyncState.bind(this);
+    this.hostRef = host ?? undefined;
+    if (this.hostRef) {
+      this.host.setDataSyncState = this.setDataSyncState.bind(this);
+      this.dataSyncState$ = merge(
+        this.host.dataSyncState.pipe(
+          filter(() => !this.controlStateFromOutside)
+        ),
+        this.outsideState$.pipe(filter(() => this.controlStateFromOutside))
+      ).pipe(
+        tap((state) => {
+          this.markAs(state);
+        })
+      );
+    } else {
+      this.dataSyncState$ = this.outsideState$.pipe(
+        tap((state) => this.markAs(state))
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -211,8 +235,9 @@ export class ImpCrudMessagesComponent<TItem extends object>
   }
 
   private getHostColumnsOrFields() {
-    return this.host instanceof ImperiaFormComponent
-      ? this.host.fields
-      : this.host.columns;
+    if (isImpCrudMessagesFormHost(this.host)) {
+      return this.host.fields;
+    }
+    return this.host.columns;
   }
 }

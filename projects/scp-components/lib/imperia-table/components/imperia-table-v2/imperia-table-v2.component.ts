@@ -41,10 +41,8 @@ import { ImperiaTableV2CellOverlayPinnedListComponent } from '../imperia-table-v
 import { ImperiaTableV2CellOverlayComponent } from '../imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
 import { ImperiaTableV2DeletionComponent } from '../imperia-table-v2-deletion/imperia-table-v2-deletion.component';
 import { ImperiaTableV2PasteComponent } from '../imperia-table-v2-paste/imperia-table-v2-paste.component';
-import {
-  ImperiaTableV2CellSelectionComponent,
-  _ImperiaTableV2CellInternalSelection,
-} from '../imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
+import { ImperiaTableV2CellSelectionComponent } from '../imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
+import type { ImperiaTableV2CellInternalSelection as _ImperiaTableV2CellInternalSelection } from '../../models/imperia-table-v2-cell-selection.models';
 import { ImperiaTableV2RowSelectionComponent } from '../imperia-table-v2-selection/imperia-table-v2-row-selection/imperia-table-v2-row-selection.component';
 import { ImpColumnsGroupTemplateDirective } from '../../directives/imp-columns-group-template.directive';
 import { ImperiaTableV2ClicksDirective } from '../../directives/imperia-table-v2-clicks.directive';
@@ -163,7 +161,9 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ImperiaTableV2Component<TItem extends object> implements ImperiaTableV2Host<TItem> {
+export class ImperiaTableV2Component<TItem extends object>
+  implements ImperiaTableV2Host<TItem>
+{
   //#region CONTAINER
   @ViewChild('container') set containerSetter(v: ElementRef<HTMLDivElement>) {
     this.container.next(v.nativeElement);

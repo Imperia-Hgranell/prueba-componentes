@@ -67,40 +67,18 @@ Building entry point '@imperiascm/scp-components/imp-overlay'
 Building entry point '@imperiascm/scp-components'
 ------------------------------------------------------------------------------
 - Compiling with Angular sources in Ivy partial compilation mode.
-[96mprojects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts[0m:[93m135[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+[96mprojects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts[0m:[93m139[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
-[7m 135[0m @Component({
+[7m 139[0m @Component({
 [7m    [0m [91m~~~~~~~~~~~~[0m
-[7m 136[0m   selector: 'imperia-table',
+[7m 140[0m   selector: 'imperia-table',
 [7m    [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 [7m ...[0m 
-[7m1643[0m   }
+[7m1657[0m   }
 [7m    [0m [91m~~~[0m
-[7m1644[0m }
+[7m1658[0m }
 [7m    [0m [91m~[0m
 
-  [96mprojects/scp-components/lib/imp-dialog/imp-dialog.component.ts[0m:[93m48[0m:[93m1[0m
-    [7m 48[0m @Component({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 49[0m   selector: 'imp-dialog',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m427[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m428[0m }
-    [7m   [0m [96m~[0m
-    The component 'ImpDialogComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
-  [96mprojects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts[0m:[93m33[0m:[93m1[0m
-    [7m 33[0m @Component({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 34[0m   selector: 'imperia-table-filter',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m485[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m486[0m }
-    [7m   [0m [96m~[0m
-    The component 'ImperiaTableFilterComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
   [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m24[0m:[93m1[0m
     [7m 24[0m @Component({
     [7m   [0m [96m~~~~~~~~~~~~[0m
@@ -111,89 +89,21 @@ Building entry point '@imperiascm/scp-components'
     [7m   [0m [96m~~~[0m
     [7m330[0m }
     [7m   [0m [96m~[0m
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
-[96mprojects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts[0m:[93m131[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
-[7m 131[0m @Component({
-[7m    [0m [91m~~~~~~~~~~~~[0m
-[7m 132[0m   selector: 'imperia-table-v2-cell-selection',
-[7m    [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m ...[0m 
-[7m2910[0m   }
-[7m    [0m [91m~~~[0m
-[7m2911[0m }
-[7m    [0m [91m~[0m
-
-  [96mprojects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts[0m:[93m29[0m:[93m1[0m
-    [7m 29[0m @Directive({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 30[0m   selector: '[imperiaTableV2CellSelectionContextMenuButtonTemplate]',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m 39[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m 40[0m }
-    [7m   [0m [96m~[0m
-    The directive 'ImperiaTableV2CellSelectionContextMenuButtonTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts
-[96mprojects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts[0m:[93m42[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
-[7m 42[0m @Component({
-[7m   [0m [91m~~~~~~~~~~~~[0m
-[7m 43[0m   selector: 'imp-menu-v2',
-[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m...[0m 
-[7m466[0m   }
-[7m   [0m [91m~~~[0m
-[7m467[0m }
-[7m   [0m [91m~[0m
-
-  [96mprojects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts[0m:[93m8[0m:[93m1[0m
-    [7m  8[0m @Directive({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m  9[0m   selector: '[imp-menu-v2-group-template]',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m 18[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m 19[0m }
-    [7m   [0m [96m~[0m
-    The directive 'ImpMenuV2GroupTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
 
 ✖ Compiling with Angular sources in Ivy partial compilation mode.
-[1m[31m[96mprojects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts[0m:[93m135[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
+[1m[31m[96mprojects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts[0m:[93m139[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
 
-[7m 135[0m @Component({
+[7m 139[0m @Component({
 [7m    [0m [91m~~~~~~~~~~~~[0m
-[7m 136[0m   selector: 'imperia-table',
+[7m 140[0m   selector: 'imperia-table',
 [7m    [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 [7m ...[0m 
-[7m1643[0m   }
+[7m1657[0m   }
 [7m    [0m [91m~~~[0m
-[7m1644[0m }
+[7m1658[0m }
 [7m    [0m [91m~[0m
 
-  [96mprojects/scp-components/lib/imp-dialog/imp-dialog.component.ts[0m:[93m48[0m:[93m1[0m
-    [7m 48[0m @Component({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 49[0m   selector: 'imp-dialog',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m427[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m428[0m }
-    [7m   [0m [96m~[0m
-    The component 'ImpDialogComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
-  [96mprojects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts[0m:[93m33[0m:[93m1[0m
-    [7m 33[0m @Component({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 34[0m   selector: 'imperia-table-filter',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m485[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m486[0m }
-    [7m   [0m [96m~[0m
-    The component 'ImperiaTableFilterComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-filter/imperia-table-filter.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
   [96mprojects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts[0m:[93m24[0m:[93m1[0m
     [7m 24[0m @Component({
     [7m   [0m [96m~~~~~~~~~~~~[0m
@@ -204,51 +114,5 @@ Building entry point '@imperiascm/scp-components'
     [7m   [0m [96m~~~[0m
     [7m330[0m }
     [7m   [0m [96m~[0m
-    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-dialog/imp-dialog.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-form/components/imperia-form/imperia-form.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-data-sync/imp-data-sync.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
-[96mprojects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts[0m:[93m131[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
-[7m 131[0m @Component({
-[7m    [0m [91m~~~~~~~~~~~~[0m
-[7m 132[0m   selector: 'imperia-table-v2-cell-selection',
-[7m    [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m ...[0m 
-[7m2910[0m   }
-[7m    [0m [91m~~~[0m
-[7m2911[0m }
-[7m    [0m [91m~[0m
-
-  [96mprojects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts[0m:[93m29[0m:[93m1[0m
-    [7m 29[0m @Directive({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m 30[0m   selector: '[imperiaTableV2CellSelectionContextMenuButtonTemplate]',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m 39[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m 40[0m }
-    [7m   [0m [96m~[0m
-    The directive 'ImperiaTableV2CellSelectionContextMenuButtonTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/template-directives/imperia-table-v2-cell-selection-context-menu-button-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component.ts
-[96mprojects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts[0m:[93m42[0m:[93m1[0m - [91merror[0m[90m NG3003: [0mOne or more import cycles would need to be created to compile this component, which is not supported by the current compiler configuration.
-
-[7m 42[0m @Component({
-[7m   [0m [91m~~~~~~~~~~~~[0m
-[7m 43[0m   selector: 'imp-menu-v2',
-[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m...[0m 
-[7m466[0m   }
-[7m   [0m [91m~~~[0m
-[7m467[0m }
-[7m   [0m [91m~[0m
-
-  [96mprojects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts[0m:[93m8[0m:[93m1[0m
-    [7m  8[0m @Directive({
-    [7m   [0m [96m~~~~~~~~~~~~[0m
-    [7m  9[0m   selector: '[imp-menu-v2-group-template]',
-    [7m   [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m...[0m 
-    [7m 18[0m   }
-    [7m   [0m [96m~~~[0m
-    [7m 19[0m }
-    [7m   [0m [96m~[0m
-    The directive 'ImpMenuV2GroupTemplateDirective' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/template-directives/imp-menu-v2-group-template.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/directives/imp-menu-v2-item-group.directive.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imp-menu-v2/components/imp-menu-v2/imp-menu-v2.component.ts
+    The component 'ImperiaInputTableComponent' is used in the template but importing it would create a cycle: C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-input-table/imperia-input-table.component.ts -> C:/Proyectos/libraries/scp-components/projects/scp-components/lib/imperia-table/components/imperia-table/imperia-table.component.ts
 [39m[22m

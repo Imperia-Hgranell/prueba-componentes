@@ -29,10 +29,10 @@ import { FormControl } from '@angular/forms';
 import { ImpResizeEvent } from '@imperiascm/dom-utils';
 import { withValueFrom } from '@imperiascm/rxjs-utils';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {
-  _ImperiaTableV2CellInternalSelection,
-  ImperiaTableV2CellSelectionComponent,
-} from '../../../imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
+import { ImperiaTableV2CellSelectionComponent } from '../../../imperia-table/components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
+import type {
+  ImperiaTableV2CellInternalSelection as _ImperiaTableV2CellInternalSelection,
+} from '../../../imperia-table/models/imperia-table-v2-cell-selection.models';
 import {
   CONTEXT_MENU_ENTER_LEAVE,
   FADE_IN_OUT,

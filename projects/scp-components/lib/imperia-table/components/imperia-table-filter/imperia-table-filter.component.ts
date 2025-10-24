@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { DEFAULT_SCROLL_HEIGHT } from '../imperia-table/imperia-table.component';
+import { DEFAULT_SCROLL_HEIGHT } from '../../shared/constants';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
 import { TImperiaTableColumnField } from '../../models/imperia-table-columns.types';
 import { ImperiaTableFilterValue } from '../../models/imperia-table-filters.models';

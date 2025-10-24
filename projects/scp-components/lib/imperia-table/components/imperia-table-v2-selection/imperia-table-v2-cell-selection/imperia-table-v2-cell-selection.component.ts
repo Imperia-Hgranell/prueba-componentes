@@ -23,6 +23,9 @@ import { ImperiaTableV2BaseSelectionDirective } from '../imperia-table-v2-select
 import { ImperiaTableColumn } from '../../../models/imperia-table-columns.models';
 import { TImperiaTableColumnField } from '../../../models/imperia-table-columns.types';
 import { ImperiaTableRow } from '../../../models/imperia-table-rows.models';
+import type {
+  ImperiaTableV2CellInternalSelection as _ImperiaTableV2CellInternalSelection,
+} from '../../../models/imperia-table-v2-cell-selection.models';
 import { ImperiaTableBodyCellContextMenuContext } from '../../../template-directives/imperia-table-body-cell-context-menu-template.directive';
 import { isTruthy } from '@imperiascm/scp-utils/functions';
 import saveAs from 'file-saver';
@@ -68,11 +71,6 @@ import {
   zipWith,
 } from 'rxjs';
 import { CellCorner } from '@imperiascm/scp-utils/models';
-
-export type _ImperiaTableV2CellInternalSelection<TItem extends object> = Map<
-  ImperiaTableRow<TItem>['dataKeyValue'],
-  TImperiaTableColumnField<TItem>[]
->;
 
 export type ImperiaTableV2CellSelection<TItem extends object> = {
   row: ImperiaTableRow<TItem>;

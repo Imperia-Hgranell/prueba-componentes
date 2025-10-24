@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { ImpMenuV2ItemGroupDirective } from '../directives/imp-menu-v2-item-group.directive';
+import type { ImpMenuV2ItemGroupDirective } from '../directives/imp-menu-v2-item-group.directive';
 
 export type ImpMenuV2ItemGroupTemplateContext = {
   $implicit: ImpMenuV2ItemGroupDirective;

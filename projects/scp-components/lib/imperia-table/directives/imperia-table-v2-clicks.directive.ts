@@ -2,7 +2,9 @@ import { Directive, Host, Inject, Output } from '@angular/core';
 import { ImperiaTableV2CellOverlayRef } from '../components/imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
 import { IMPERIA_TABLE_V2_HOST } from '../../shared/template-apis/imperia-table.tokens';
 import type { ImperiaTableV2Host } from '../../shared/template-apis/imperia-table.tokens';
-import { _ImperiaTableV2CellInternalSelection } from '../components/imperia-table-v2-selection/imperia-table-v2-cell-selection/imperia-table-v2-cell-selection.component';
+import type {
+  ImperiaTableV2CellInternalSelection as _ImperiaTableV2CellInternalSelection,
+} from '../models/imperia-table-v2-cell-selection.models';
 import { ImperiaTableColumn } from '../models/imperia-table-columns.models';
 import { ImperiaTableRow } from '../models/imperia-table-rows.models';
 import {
@@ -46,7 +48,7 @@ export type ImperiaTableV2ClickEvent<TItem extends object> = {
 
 @Directive({
   selector: 'imperia-table-v2-clicks',
-    standalone: false
+  standalone: false,
 })
 export class ImperiaTableV2ClicksDirective<TItem extends object> {
   //#region CLICK

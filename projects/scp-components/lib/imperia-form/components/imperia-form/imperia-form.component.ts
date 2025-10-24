@@ -6,9 +6,9 @@ import {
   Input,
   Output,
   TemplateRef,
+  forwardRef,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ImpCrudMessagesComponent } from '../../../imp-data-sync/imp-data-sync.component';
 import { ImperiaFormMenuTemplateDirective } from '../../directives/imperia-form-menu-template.directive';
 import { ImperiaFormTemplateDirective } from '../../directives/imperia-form-template.directive';
 import { ImperiaFormOnFormCreate, ImperiaFormOnSave, ImperiaFormValueChanges } from '../../models/imperia-form-outputs';
@@ -30,6 +30,10 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import {
+  IMP_CRUD_MESSAGES_HOST,
+  type ImpCrudMessagesFormHost,
+} from '../../../shared/template-apis/imp-crud-messages.tokens';
 
 @Component({
   selector: 'imperia-form',
@@ -37,10 +41,19 @@ import {
   styleUrls: ['./imperia-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    {
+      provide: IMP_CRUD_MESSAGES_HOST,
+      useExisting: forwardRef(() => ImperiaFormComponent),
+    },
+  ],
 })
-export class ImperiaFormComponent<TItem extends object> {
+export class ImperiaFormComponent<TItem extends object>
+  implements ImpCrudMessagesFormHost<TItem>
+{
+  public readonly hostType = 'imperia-form' as const;
   //#region ImpCrudMessagesComponent
-  public dataStatusTemplate!: TemplateRef<ImpCrudMessagesComponent<TItem>>;
+  public dataStatusTemplate: TemplateRef<any> | null = null;
   public setDataSyncState: SetDataSyncFn = () =>
     console.error(
       'setDataSyncState is not defined - Check if <imp-data-sync></imp-data-sync> is inside <imperia-form></imperia-form>'

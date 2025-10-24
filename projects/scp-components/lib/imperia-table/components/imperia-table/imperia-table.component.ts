@@ -25,6 +25,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  forwardRef,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ImpColumnsGroupTemplateDirective } from '../../directives/imp-columns-group-template.directive';
@@ -103,7 +104,6 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { ImpTranslateService } from '@imperiascm/translate';
-import { ImpCrudMessagesComponent } from '../../../imp-data-sync/imp-data-sync.component';
 import { ImperiaFormDataSyncState } from '../../../imperia-form/models/imperia-form.types';
 import {
   CellEditTemplateDirective,
@@ -113,6 +113,11 @@ import { ImpColumnCellTemplateDirective } from '../../directives/imp-column-cell
 import { ResizeColumnEvent } from '../../directives/resize-column.directive';
 import { ImperiaTableCellEditEvent } from '../../models/imperia-table-editing.models';
 import { FOOTER_ROW_INDEX } from '../../models/imperia-table-footer.constants';
+import { DEFAULT_SCROLL_HEIGHT } from '../../shared/constants';
+import {
+  IMP_CRUD_MESSAGES_HOST,
+  type ImpCrudMessagesTableHost,
+} from '../../../shared/template-apis/imp-crud-messages.tokens';
 
 export class CustomVirtualScrollStrategy extends FixedSizeVirtualScrollStrategy {
   constructor() {
@@ -128,7 +133,6 @@ export class CustomVirtualScrollStrategy extends FixedSizeVirtualScrollStrategy 
  * Por defecto la altura de la tabla es el 100% de la pantalla menos
  * el alto del header, el menu y el caption de la propia tabla juntos
  */
-export const DEFAULT_SCROLL_HEIGHT = 'calc(100vh - 163px)';
 /**
  * @deprecated
  */
@@ -141,13 +145,23 @@ export const DEFAULT_SCROLL_HEIGHT = 'calc(100vh - 163px)';
       provide: VIRTUAL_SCROLL_STRATEGY,
       useClass: CustomVirtualScrollStrategy,
     },
+    {
+      provide: IMP_CRUD_MESSAGES_HOST,
+      useExisting: forwardRef(() => ImperiaTableComponent),
+    },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class ImperiaTableComponent<TItem extends object>
-  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+  implements
+    OnInit,
+    AfterViewInit,
+    OnChanges,
+    OnDestroy,
+    ImpCrudMessagesTableHost<TItem>
 {
+  public readonly hostType = 'imperia-table' as const;
   public LOCALE = LOCALE();
 
   //#region TRANSLATIONS
@@ -487,7 +501,7 @@ export class ImperiaTableComponent<TItem extends object>
   //#endregion CELL EDIT
 
   //#region ImpCrudMessagesComponent
-  public dataStatusTemplate!: TemplateRef<ImpCrudMessagesComponent<TItem>>;
+  public dataStatusTemplate: TemplateRef<any> | null = null;
   public setDataSyncState: SetDataSyncFn = () =>
     console.error(
       'setDataSyncState is not defined - Check if <imp-data-sync></imp-data-sync> is inside <imperia-table></imperia-table>'
