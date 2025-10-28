@@ -447,7 +447,7 @@
               <!-- COLUMNS -->
               <ng-container
                 *ngFor="
-                  let col of tableVM.columns | filter: 'visible' : true;
+                  let col of tableVM.columns | filter : 'visible' : true;
                   let colIndex = index;
                   trackBy: colTrackByFn
                 "
@@ -551,7 +551,7 @@
                                 : loadingTemplate
                                 : fallbackTemplate
                                 : noEditTemplate;
-                            context: cell | cellTemplateContext: col : row
+                            context: cell | cellTemplateContext : col : row
                           "
                         ></ng-container>
 
@@ -598,14 +598,14 @@
                                     (tableVM.cellEditingState
                                       ? cell.value
                                       : row.data[col.field]
-                                    ) | date: cell.dataInfo.format
+                                    ) | date : cell.dataInfo.format
                                   }}
                                 </span>
                                 <span *ngIf="cell.dataInfo.type == 'number'">
                                   {{
                                     (tableVM.cellEditingState
                                       ? cell.value
-                                      : (row.data[col.field] ?? 0)
+                                      : row.data[col.field] ?? 0
                                     )
                                       | number
                                         : "1." +
@@ -688,7 +688,7 @@
                                 : fallbackTemplate
                                 : noEditTemplate;
                             context: cell
-                              | cellTemplateContext: col : footerVM.row
+                              | cellTemplateContext : col : footerVM.row
                           "
                         ></ng-container>
 
@@ -737,15 +737,14 @@
                                     (tableVM.cellEditingState
                                       ? cell.value
                                       : footerVM.row.data[col.field]) + ""
-                                      | date: cell.dataInfo.format
+                                      | date : cell.dataInfo.format
                                   }}
                                 </span>
                                 <span *ngIf="cell.dataInfo.type == 'number'">
                                   {{
                                     (tableVM.cellEditingState
                                       ? cell.value
-                                      : (footerVM.row.data[col.field] ?? 0)) +
-                                      ""
+                                      : footerVM.row.data[col.field] ?? 0) + ""
                                       | number
                                         : "1." +
                                             (cell.dataInfo.minFractionDigits ??
@@ -889,14 +888,7 @@
 </ng-template>
 <!-- table -->
 <ng-template cell-edit-template="table" let-cell let-col="col">
-  <imperia-input-table
-    container="overlay"
-    [(loaded)]="col.dataInfo.endpoint.loaded"
-    [(columns)]="col.dataInfo.columns"
-    [(value)]="col.dataInfo.value"
-    [(dataInfo)]="cell.dataInfo"
-    [formControl]="cell.control"
-  ></imperia-input-table>
+  <!-- TODO: SE HA ELIMINADO PARA LA DEPENDENCIA CIRCULAR CON IMPERIA-INPUT-TABLE -->
 </ng-template>
 <!-- boolean -->
 <ng-template cell-edit-template="boolean" let-cell>
@@ -946,7 +938,7 @@
     <ng-container *ngIf="addRowDialogVM$ | async as addRowDialogVM">
       <ng-container
         *ngFor="
-          let col of addRowDialogVM.columns | filter: 'showAtForm' : true;
+          let col of addRowDialogVM.columns | filter : 'showAtForm' : true;
           let colIndex = index
         "
       >
@@ -997,11 +989,7 @@
 
             <!-- TABLE -->
 
-            <imperia-input-table
-              *ngIf="col.dataInfo.type == 'table'"
-              [(dataInfo)]="col.dataInfo"
-              [formControlName]="col.field"
-            ></imperia-input-table>
+            <!-- TODO: SE HA ELIMINADO PARA LA DEPENDENCIA CIRCULAR CON IMPERIA-INPUT-TABLE -->
 
             <!-- BOOLEAN -->
             <p-inputSwitch

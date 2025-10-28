@@ -83,13 +83,11 @@ export interface ImperiaTableFilterV2<TItem extends object> {
     | TemplateRef<ImperiaTableHeaderCellContextMenuContext<TItem>>
     | undefined;
   lastAppliedFilters$: Observable<
-    ImperiaTableFilterValue<
-      TItem,
-      string | ImperiaTableColumn<TItem>
-    >[]
+    ImperiaTableFilterValue<TItem, ImperiaTableColumn<TItem>>[]
   >;
   toggleOpened: Subject<void>;
   addFilter: Subject<ImperiaTableFilterValue<TItem> | string>;
+  removeFilter: Subject<string>;
 }
 
 export const IMPERIA_TABLE_FILTER_V2 = new InjectionToken<

@@ -29,13 +29,6 @@ import { LOCALE } from '@imperiascm/scp-utils/functions';
 import { ImpOverlayService } from '@imperiascm/scp-utils/overlay';
 import { ImpTranslateModule, ImpTranslatePipe } from '@imperiascm/translate';
 import { from, Observable, of } from 'rxjs';
-import {
-  FilterPipe,
-  FindPropertyPipe,
-  ImpDatePipe,
-  LocalizedDatePipe,
-  StringParsePipe,
-} from '@imperiascm/scp-utils/pipes';
 
 @Component({
   selector: 'imp-form-errors',

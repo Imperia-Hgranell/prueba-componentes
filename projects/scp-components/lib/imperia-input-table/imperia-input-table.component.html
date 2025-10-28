@@ -177,28 +177,4 @@
     >
     </imperia-table-v2-row-selection>
   </imperia-table-v2>
-
-  <!-- <imperia-table
-    *ngIf="dataInfo$ | async as dataInfo"
-    [value]="(value$ | async) ?? []"
-    [columns]="(columns$ | async) ?? []"
-    [dataKey]="dataInfo.dataKey"
-    [disableFilters]="!dataInfo.endpoint.hasFilters"
-    [filterOnInit]="true"
-    [disableScrollEvents]="!dataInfo.scrollEvents"
-    [enableSelection]="true"
-    [enableColumnReorder]="false"
-    [enableColumnResize]="false"
-    [disableBookmark]="true"
-    [pageSize]="dataInfo.pageSize"
-    [selectionMode]="dataInfo.selectionMode"
-    [scrollHeight]="tableScrollHeight"
-    (captionVisibility)="tableCaptionVisibility = $event"
-    (onRowDblClick)="onRowDblClick($event)"
-    (onSearch)="onSearch($event)"
-    (onFilter)="onFilter($event)"
-    (onSort)="onSort($event)"
-    (onScrollComplete)="onScrollComplete($event)"
-    (selectionChange)="onSelectionChange($event)"
-  ></imperia-table> -->
 </ng-template>

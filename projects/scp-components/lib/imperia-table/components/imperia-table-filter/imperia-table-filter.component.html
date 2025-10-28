@@ -75,7 +75,7 @@
                   [options]="[
                     { label: '=', value: '=' },
                     { label: '<', value: '<' },
-                    { label: '>', value: '>' },
+                    { label: '>', value: '>' }
                   ]"
                   optionLabel="label"
                   optionValue="value"
@@ -113,7 +113,7 @@
                   [options]="[
                     { label: '=', value: '=' },
                     { label: '>', value: '>' },
-                    { label: '<', value: '<' },
+                    { label: '<', value: '<' }
                   ]"
                   optionLabel="label"
                   optionValue="value"
@@ -136,10 +136,7 @@
               class="input-container table"
               *ngIf="filter.Column.dataInfo.type == 'table'"
             >
-              <imperia-input-table
-                [(dataInfo)]="filter.Column.dataInfo"
-                formControlName="value"
-              ></imperia-input-table>
+              <!-- TODO: SE HA ELIMINADO PARA LA DEPENDENCIA CIRCULAR CON IMPERIA-INPUT-TABLE -->
             </div>
             <!-- SELECT -->
             <div
