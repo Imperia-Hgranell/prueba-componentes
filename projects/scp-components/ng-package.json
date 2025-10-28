@@ -11,10 +11,10 @@
     "moment",
     "rxjs",
     "moment",
-    "@imperiascm/translate",
     "@imperiascm/rxjs-utils",
     "@imperiascm/scp-utils",
     "@imperiascm/dom-utils",
-    "file-saver"
+    "file-saver",
+    "@imperiascm/http"
   ]
 }

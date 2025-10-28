@@ -1,17 +1,17 @@
 {
   "name": "@imperiascm/scp-components",
-  "version": "0.0.14",
+  "version": "0.0.24",
   "peerDependencies": {
     "@angular/cdk": "^19.2.18",
     "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0"
+    "@angular/core": "^19.2.0",
+    "@imperiascm/translate": "^0.0.6"
   },
   "dependencies": {
     "@imperiascm/dom-utils": "^1.0.2",
     "@imperiascm/http": "^0.0.2",
     "@imperiascm/rxjs-utils": "^1.0.6",
-    "@imperiascm/scp-utils": "^0.0.9",
-    "@imperiascm/translate": "^0.0.3",
+    "@imperiascm/scp-utils": "^0.0.14",
     "file-saver": "^2.0.5",
     "primeflex": "^3.2.1",
     "primeicons": "^6.0.1",
