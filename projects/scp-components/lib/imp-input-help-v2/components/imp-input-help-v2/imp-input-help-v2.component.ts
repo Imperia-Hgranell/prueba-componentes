@@ -30,7 +30,10 @@ import {
 } from '../../models/imp-input-help.models';
 import { ImperiaIconButtonComponent } from '../../../imperia-icon-button/imperia-icon-button.component';
 import { ImperiaTableFilterValue } from '../../../imperia-table/models/imperia-table-filters.models';
-import { ImperiaTableFilterSortScrollEvent, ImperiaTableScrollValue } from '../../../imperia-table/models/imperia-table-outputs.models';
+import {
+  ImperiaTableFilterSortScrollEvent,
+  ImperiaTableScrollValue,
+} from '../../../imperia-table/models/imperia-table-outputs.models';
 import { paginate } from '../../../imperia-table/shared/functions';
 import {
   getClosestCornerToBoundsCenter,
@@ -62,13 +65,6 @@ import {
 } from 'rxjs';
 import { ImpOverlay } from '@imperiascm/scp-components/imp-overlay';
 import {
-  FilterPipe,
-  ImpDatePipe,
-  LocalizedDatePipe,
-  StringParsePipe,
-} from '@imperiascm/scp-utils/pipes';
-import {
-  ImpTranslatePipe,
   ImpTranslateService,
   TCompleteTranslation,
 } from '@imperiascm/translate';

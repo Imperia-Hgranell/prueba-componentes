@@ -9,6 +9,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  forwardRef,
 } from '@angular/core';
 import { withValueFrom } from '@imperiascm/rxjs-utils';
 import { isHierarchyKey } from '@imperiascm/scp-utils/models';
@@ -19,8 +20,14 @@ import {
   PANEL_OPEN_CLOSE,
 } from './imperia-table-filter-v2.animations';
 import { ImperiaTableColumn } from '../../models/imperia-table-columns.models';
-import { IMPERIA_TABLE_V2_HOST } from '../../../shared/template-apis/imperia-table.tokens';
-import type { ImperiaTableV2Host } from '../../../shared/template-apis/imperia-table.tokens';
+import {
+  IMPERIA_TABLE_FILTER_V2,
+  IMPERIA_TABLE_V2_HOST,
+} from '../../../shared/template-apis/imperia-table.tokens';
+import type {
+  ImperiaTableFilterV2,
+  ImperiaTableV2Host,
+} from '../../../shared/template-apis/imperia-table.tokens';
 import { ImperiaTableFilterValue } from '../../models/imperia-table-filters.models';
 import {
   getFiltersFromStorage,
@@ -57,7 +64,6 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 
 @Component({
   selector: 'imperia-table-filter-v2',
@@ -71,8 +77,16 @@ import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  providers: [
+    {
+      provide: IMPERIA_TABLE_FILTER_V2,
+      useExisting: forwardRef(() => ImperiaTableFilterV2Component),
+    },
+  ],
 })
-export class ImperiaTableFilterV2Component<TItem extends object> {
+export class ImperiaTableFilterV2Component<TItem extends object>
+  implements ImperiaTableFilterV2<TItem>
+{
   //#region VIEWCHILD
   @ViewChild('headerCellIconsTemplate')
   headerCellFilterIconsTemplate!: TemplateRef<
@@ -541,7 +555,6 @@ export class ImperiaTableFilterV2Component<TItem extends object> {
     @Host()
     @Inject(IMPERIA_TABLE_V2_HOST)
     private table: ImperiaTableV2Host<TItem> | null,
-    private datePipe: LocalizedDatePipe
   ) {}
 
   public onPaste(event: ClipboardEvent, column: ImperiaTableColumn<TItem>) {

@@ -132,7 +132,6 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { ImperiaTableV3FiltersComponent } from '../../../imperia-table-v3-filters/components/imperia-table-v3-filters/imperia-table-v3-filters.component';
-import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 import {
   IMPERIA_TABLE_V2_HOST,
   IMPERIA_TABLE_V3_HOST,
@@ -2644,7 +2643,6 @@ export class ImperiaTableV3Component<TItem extends object>
 
   constructor(
     private el: ElementRef,
-    private datePipe: LocalizedDatePipe,
     public cdr: ChangeDetectorRef
   ) {}
 

@@ -36,7 +36,6 @@ import {
   HORIZONTAL_ELEMENT_ENTER_LEAVE,
   HORIZONTAL_LIST_ELEMENT_ENTER_LEAVE,
 } from '../imperia-table-filter-v2/imperia-table-filter-v2.animations';
-import { ImperiaTableFilterV2Component } from '../imperia-table-filter-v2/imperia-table-filter-v2.component';
 import { ImperiaTableV2CellOverlayPinnedListComponent } from '../imperia-table-v2-cell-overlay-pinned-list/imperia-table-v2-cell-overlay-pinned-list.component';
 import { ImperiaTableV2CellOverlayComponent } from '../imperia-table-v2-cell-overlay/imperia-table-v2-cell-overlay.component';
 import { ImperiaTableV2DeletionComponent } from '../imperia-table-v2-deletion/imperia-table-v2-deletion.component';
@@ -76,11 +75,13 @@ import {
 import { ImperiaTableRow } from '../../models/imperia-table-rows.models';
 import { fieldToImperiaTableColumnClass } from '../../pipes/field-to-selectable-class.pipe';
 import {
+  IMPERIA_TABLE_FILTER_V2,
   IMPERIA_TABLE_V2_COLUMNS_CONFIGURATOR,
   IMPERIA_TABLE_V2_HOST,
   IMPERIA_TABLE_V2_ROWS_CONFIGURATOR,
 } from '../../../shared/template-apis/imperia-table.tokens';
 import type {
+  ImperiaTableFilterV2,
   ImperiaTableV2ColumnsConfigurator,
   ImperiaTableV2Host,
   ImperiaTableV2RowsConfigurator,
@@ -98,7 +99,6 @@ import {
 import { ImperiaTableHeaderCellIconsTemplateDirective } from '../../template-directives/imperia-table-header-cell-icons-template.directive';
 import { ImperiaTableHeaderCellTemplateDirective } from '../../template-directives/imperia-table-header-cell-template.directive';
 import { ImperiaTableV2BlockerTemplateDirective } from '../../template-directives/imperia-table-v2-blocker-template.directive';
-import { LocalizedDatePipe } from '@imperiascm/scp-utils/pipes';
 import { UTC, createHash, isTruthy } from '@imperiascm/scp-utils/functions';
 import { FilterOperator } from '@imperiascm/scp-utils/payload';
 import { Sort } from '@imperiascm/scp-utils/payload';
@@ -2355,15 +2355,15 @@ export class ImperiaTableV2Component<TItem extends object>
   //#endregion TITLE
 
   //#region FILTERS
-  @ContentChild(ImperiaTableFilterV2Component) set imperiaTableFilterV2Setter(
-    v: ImperiaTableFilterV2Component<TItem> | undefined
+  @ContentChild(IMPERIA_TABLE_FILTER_V2) set imperiaTableFilterV2Setter(
+    v: ImperiaTableFilterV2<TItem> | undefined
   ) {
     v &&
       this.headerCellFilterIconsTemplate$.next(v.headerCellFilterIconsTemplate);
     this.imperiaTableFilterV2Component.next(v);
   }
   public imperiaTableFilterV2Component = new ReplaySubject<
-    ImperiaTableFilterV2Component<TItem> | undefined
+    ImperiaTableFilterV2<TItem> | undefined
   >(1);
 
   public headerCellFilterIconsTemplate$ = new ReplaySubject<
@@ -2884,11 +2884,7 @@ export class ImperiaTableV2Component<TItem extends object>
   }
   //#endregion GET CELL ELEMENT REF
 
-  constructor(
-    private el: ElementRef,
-    private datePipe: LocalizedDatePipe,
-    public cdr: ChangeDetectorRef
-  ) {}
+  constructor(private el: ElementRef, public cdr: ChangeDetectorRef) {}
 
   public dataKeyValue(
     item: TItem
@@ -2938,7 +2934,7 @@ export class ImperiaTableV2Component<TItem extends object>
   }
 
   public filterByValue(
-    imperiaTableFilterV2Component: ImperiaTableFilterV2Component<TItem>,
+    imperiaTableFilterV2Component: ImperiaTableFilterV2<TItem>,
     col: ImperiaTableColumn<TItem>,
     row: ImperiaTableRow<TItem>,
     close: () => void
