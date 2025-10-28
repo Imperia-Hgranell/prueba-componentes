@@ -30,7 +30,6 @@ import {
   ImpDatePipe,
   InjectPipe,
   IsDateColFieldPipe,
-  LocalizedDatePipe,
   StringParsePipe,
 } from '@imperiascm/scp-utils/pipes';
 import { ImpTranslateModule, ImpTranslatePipe } from '@imperiascm/translate';
@@ -147,6 +146,7 @@ import { DateAmountColumnsGroupsTemplateContextDirective } from './imperia-table
 import { ImperiaTableV3ColumnsConfiguratorComponent } from './imperia-table-v3-columns-configurator/imperia-table-v3-columns-configurator.component';
 import { FieldToImperiaTableColumnClassPipe } from './imperia-table/pipes/field-to-selectable-class.pipe';
 import { IsColumnPropertiesObjectPipe } from './imperia-table/pipes/is-column-properties-object.pipe';
+import { ImpTimeTypeComponent } from './imp-time-type/imp-time-type.component';
 
 const IMPERIA_TABLE_DECLARATIONS = [
   ImperiaTableComponent,
@@ -296,13 +296,13 @@ const STANDALONE_IMPORTS = [
   IsContentOverflowingDirective,
   IsDateColFieldPipe,
   IsFilterSelectedPipe,
-  LocalizedDatePipe,
   NoMouseWheelDirective,
   ResizableColumnV2Directive,
   TooltipOnHoverDirective,
   ImpMenuV2ItemGroupDirective,
   IsColumnPropertiesObjectPipe,
   ImperiaInputTableComponent,
+  ImpTimeTypeComponent,
 ];
 
 const MODULE_IMPORTS = [
@@ -339,6 +339,6 @@ const MODULE_IMPORTS = [
   declarations: DECLARATIONS,
   imports: [...MODULE_IMPORTS, ...STANDALONE_IMPORTS],
   exports: [...DECLARATIONS, ...STANDALONE_IMPORTS],
-  providers: [LocalizedDatePipe, ImperiaTableV2ColumnDirective],
+  providers: [ImperiaTableV2ColumnDirective],
 })
 export class ScpComponentsModule {}

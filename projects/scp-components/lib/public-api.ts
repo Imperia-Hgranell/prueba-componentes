@@ -196,3 +196,8 @@ export * from './imp-icon/imp-icon.component';
 
 // IMPERIA ICON BUTTON
 export * from './imperia-icon-button/imperia-icon-button.component';
+
+// IMP TIME TYPE
+export * from './imp-time-type/imp-time-type.component';
+export * from './imp-time-type/models/imp-time-type.models';
+export * from './imp-time-type/pipes/time-type-to-string.pipe';

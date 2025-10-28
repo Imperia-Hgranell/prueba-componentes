@@ -1,0 +1,25 @@
+@if (
+  {
+    valueState: (value | async),
+    disabledState: (disabled | async),
+    options: (options$ | async) ?? [],
+  };
+  as vm
+) {
+  <imp-label
+    [label]="'IMP_TIME_TYPE.label.text' | impTranslate"
+    type="select"
+    [labelStyle]="{ minWidth: '60px' }"
+    [contentStyle]="{ minWidth: '140px' }"
+  >
+    <p-dropdown
+      appendTo="body"
+      styleClass="w-full"
+      [options]="vm.options"
+      optionLabel="Label"
+      optionValue="Key"
+      [ngModel]="vm.valueState"
+      (onChange)="onChangeValue($event)"
+    ></p-dropdown>
+  </imp-label>
+}
