@@ -16,14 +16,14 @@ import { Observable, Subject, distinctUntilChanged } from 'rxjs';
     {
       provide: VIRTUAL_SCROLL_STRATEGY,
       useFactory: <TItem extends object>(
-        d: ImperiaTableV2VirtualScrollStrategyDirective<TItem>,
+        d: ImperiaTableV2VirtualScrollStrategyDirective<TItem>
       ) => d._scrollStrategy,
       deps: [forwardRef(() => ImperiaTableV2VirtualScrollStrategyDirective)],
     },
   ],
 })
 export class ImperiaTableV2VirtualScrollStrategyDirective<
-  TItem extends object,
+  TItem extends object
 > {
   @Input('headerHeight') set headerHeightSetter(v: number | null) {
     if (v === null) return;
@@ -41,7 +41,7 @@ export class ImperiaTableV2VirtualScrollStrategyDirective<
 
   _scrollStrategy: ImperiaTableV2VirtualScrollStrategy<TItem>;
 
-  constructor(@Host() @Inject(IMPERIA_TABLE_V2_HOST) table: ImperiaTableV2Host<TItem>) {
+  constructor(@Inject(IMPERIA_TABLE_V2_HOST) table: ImperiaTableV2Host<TItem>) {
     this._scrollStrategy = new ImperiaTableV2VirtualScrollStrategy(table);
   }
 }
@@ -66,7 +66,7 @@ class ImperiaTableV2VirtualScrollStrategy<TItem extends object>
 
   _scrolledIndexChange = new Subject<number>();
   scrolledIndexChange: Observable<number> = this._scrolledIndexChange.pipe(
-    distinctUntilChanged(),
+    distinctUntilChanged()
   );
 
   constructor(private table: ImperiaTableV2Host<TItem>) {}
@@ -190,7 +190,7 @@ class ImperiaTableV2VirtualScrollStrategy<TItem extends object>
       dataLength,
       firstVisibleRowIndex +
         this.numOfVisibleRows(firstVisibleRowIndex) +
-        preRenderRowsBelow,
+        preRenderRowsBelow
     );
 
     this.viewport && this.viewport.setRenderedRange(range);

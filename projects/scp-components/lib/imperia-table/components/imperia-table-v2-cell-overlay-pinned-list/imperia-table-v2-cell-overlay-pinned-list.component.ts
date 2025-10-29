@@ -4,6 +4,7 @@ import {
   ElementRef,
   Host,
   Inject,
+  Optional,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -117,7 +118,6 @@ export class ImperiaTableV2CellOverlayPinnedListComponent<
     );
 
   constructor(
-    @Host()
     @Inject(IMPERIA_TABLE_V2_HOST)
     protected table: ImperiaTableV2Host<TItem>
   ) {}

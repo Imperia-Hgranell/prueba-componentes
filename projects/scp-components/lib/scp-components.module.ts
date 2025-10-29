@@ -4,7 +4,7 @@ import { CdkMenuModule } from '@angular/cdk/menu';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkTableModule } from '@angular/cdk/table';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImpResizeEventsDirective } from '@imperiascm/dom-utils';
@@ -339,6 +339,19 @@ const MODULE_IMPORTS = [
   declarations: DECLARATIONS,
   imports: [...MODULE_IMPORTS, ...STANDALONE_IMPORTS],
   exports: [...DECLARATIONS, ...STANDALONE_IMPORTS],
-  providers: [ImperiaTableV2ColumnDirective],
+  providers: [
+    ImperiaTableV2ColumnDirective,
+    AnimatedNumberPipe,
+    CapitalizePipe,
+    ContainsColumnKeyValuePipe,
+    EntriesPipe,
+    FilterPipe,
+    FindPropertyPipe,
+    FormatNumberToPipe,
+    ImpDatePipe,
+    InjectPipe,
+    IsDateColFieldPipe,
+    StringParsePipe,
+  ],
 })
 export class ScpComponentsModule {}
