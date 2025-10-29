@@ -1,6 +1,6 @@
 {
   "name": "@imperiascm/scp-components",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "peerDependencies": {
     "@angular/cdk": "^19.2.18",
     "@angular/common": "^19.2.0",
