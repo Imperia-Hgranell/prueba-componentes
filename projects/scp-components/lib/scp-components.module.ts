@@ -147,6 +147,7 @@ import { ImperiaTableV3ColumnsConfiguratorComponent } from './imperia-table-v3-c
 import { FieldToImperiaTableColumnClassPipe } from './imperia-table/pipes/field-to-selectable-class.pipe';
 import { IsColumnPropertiesObjectPipe } from './imperia-table/pipes/is-column-properties-object.pipe';
 import { ImpTimeTypeComponent } from './imp-time-type/imp-time-type.component';
+import { ComponentCreator } from '@imperiascm/scp-utils';
 
 const IMPERIA_TABLE_DECLARATIONS = [
   ImperiaTableComponent,
@@ -352,6 +353,7 @@ const MODULE_IMPORTS = [
     InjectPipe,
     IsDateColFieldPipe,
     StringParsePipe,
+    ComponentCreator,
   ],
 })
 export class ScpComponentsModule {}

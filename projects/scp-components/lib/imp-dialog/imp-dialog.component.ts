@@ -55,7 +55,6 @@ import { ImpOverlayService } from '@imperiascm/scp-utils/overlay';
     ImpTranslateModule,
     A11yModule,
   ],
-  providers: [ImpTranslateService],
   templateUrl: './imp-dialog.component.html',
   styleUrls: ['./imp-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
